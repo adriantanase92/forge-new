@@ -44,15 +44,8 @@ export const colors = {
 };
 
 export const fonts = {
-	'primary-regular': ['Syne-regular', 'sans-serif'],
-	'primary-medium': ['Syne-medium', 'sans-serif'],
-	'primary-semibold': ['Syne-semibold', 'sans-serif'],
-	'primary-bold': ['Syne-bold', 'sans-serif'],
-	'secondary-light': ['Inter-light', 'sans-serif'],
-	'secondary-regular': ['Inter-regular', 'sans-serif'],
-	'secondary-medium': ['Inter-medium', 'sans-serif'],
-	'secondary-semibold': ['Inter-semibold', 'sans-serif'],
-	'secondary-bold': ['Inter-bold', 'sans-serif']
+	primary: ['Syne', 'sans-serif'],
+	secondary: ['Inter', 'sans-serif']
 };
 
 export const breakpoints = {
