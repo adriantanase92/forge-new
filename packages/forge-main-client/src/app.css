@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	@font-face {
+		font-family: 'Syne-regular';
+		src:
+			local('Syne'),
+			url('/fonts/Syne/Syne-Regular.woff2') format('woff2'),
+			url('/fonts/Syne/Syne-Regular.woff') format('woff');
+		font-weight: normal;
+		font-style: normal;
+	}
+	@font-face {
+		font-family: 'Syne-medium';
+		src:
+			local('Syne'),
+			url('/fonts/Syne/Syne-Medium.woff2') format('woff2'),
+			url('/fonts/Syne/Syne-Medium.woff') format('woff');
+		font-weight: normal;
+		font-style: normal;
+	}
+	@font-face {
+		font-family: 'Syne-semibold';
+		src:
+			local('Syne'),
+			url('/fonts/Syne/Syne-SemiBold.woff2') format('woff2'),
+			url('/fonts/Syne/Syne-SemiBold.woff') format('woff');
+		font-weight: normal;
+		font-style: normal;
+	}
+	@font-face {
+		font-family: 'Syne-bold';
+		src:
+			local('Syne'),
+			url('/fonts/Syne/Syne-Bold.woff2') format('woff2'),
+			url('/fonts/Syne/Syne-Bold.woff') format('woff');
+		font-weight: normal;
+		font-style: normal;
+	}
+	@font-face {
+		font-family: 'Inter-light';
+		src:
+			local('Inter'),
+			url('/fonts/Inter/Inter-Light.woff2') format('woff2'),
+			url('/fonts/Inter/Inter-Light.woff') format('woff');
+		font-weight: normal;
+		font-style: normal;
+	}
+	@font-face {
+		font-family: 'Inter-regular';
+		src:
+			local('Inter'),
+			url('/fonts/Inter/Inter-Regular.woff2') format('woff2'),
+			url('/fonts/Inter/Inter-Regular.woff') format('woff');
+		font-weight: normal;
+		font-style: normal;
+	}
+	@font-face {
+		font-family: 'Inter-medium';
+		src:
+			local('Inter'),
+			url('/fonts/Inter/Inter-Medium.woff2') format('woff2'),
+			url('/fonts/Inter/Inter-Medium.woff') format('woff');
+		font-weight: normal;
+		font-style: normal;
+	}
+	@font-face {
+		font-family: 'Inter-semibold';
+		src:
+			local('Inter'),
+			url('/fonts/Inter/Inter-SemiBold.woff2') format('woff2'),
+			url('/fonts/Inter/Inter-SemiBold.woff') format('woff');
+		font-weight: normal;
+		font-style: normal;
+	}
+	@font-face {
+		font-family: 'Inter-bold';
+		src:
+			local('Inter'),
+			url('/fonts/Inter/Inter-Bold.woff2') format('woff2'),
+			url('/fonts/Inter/Inter-Bold.woff') format('woff');
+		font-weight: normal;
+		font-style: normal;
+	}
+}

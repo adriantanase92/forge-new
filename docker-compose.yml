@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  forge-main-server:
+    build: ./packages/forge-main-server
+    ports:
+      - "3010:3010"
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+  forge-main-client:
+    build: ./packages/forge-main-client
+    ports:
+      - "5173:3000"
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
