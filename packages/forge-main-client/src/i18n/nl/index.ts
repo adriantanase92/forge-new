@@ -10,7 +10,8 @@ export default {
 			permissions: 'Rechten',
 			roles: 'Rollen',
 			projects: 'Projecten',
-			tasks: 'Taken'
+			tasks: 'Taken',
+			noItemsFoundMessage: 'Geen zijbalkmenu-items gevonden!'
 		}
 	},
 	pages: {},

@@ -43,6 +43,8 @@ export const colors = {
 	}
 };
 
+export type color = 'forge-primary' | 'forge-secondary' | 'forge-accent';
+
 export const fonts = {
 	primary: ['Syne', 'sans-serif'],
 	secondary: ['Inter', 'sans-serif']

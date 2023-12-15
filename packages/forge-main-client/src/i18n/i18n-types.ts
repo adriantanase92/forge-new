@@ -37,6 +37,7 @@ export type MenusTranslations = {
 		roles: string;
 		projects: string;
 		tasks: string;
+		noItemsFoundMessage: string;
 	}
 };
 
@@ -141,6 +142,7 @@ export type TranslationFunctions = {
 			roles: () => LocalizedString;
 			projects: () => LocalizedString;
 			tasks: () => LocalizedString;
+			noItemsFoundMessage: () => LocalizedString;
 		};
 	},
 	pages: {},

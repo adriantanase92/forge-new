@@ -38,7 +38,7 @@
 						</a>
 					</li>
 				{:else}
-					<p>No sidebar menu items found!</p>
+					<li>{$LL.menus.sidebar.noItemsFoundMessage()}</li>
 				{/each}
 			</ul>
 		</div>
