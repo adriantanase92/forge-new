@@ -1,1 +1,1 @@
-dashboard page
+Dashboard page

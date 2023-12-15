@@ -30,30 +30,35 @@ export const sidebarUserMenuItems = (t: TranslationFunctions): allLanguagesMenuI
 		type: 'link',
 		url: t.routes.protected.users(),
 		text: t.menus.sidebar.users(),
-		id: 'users'
+		id: 'users',
+		icon: 'people'
 	},
 	{
 		type: 'link',
 		url: t.routes.protected.permissions(),
 		text: t.menus.sidebar.permissions(),
-		id: 'permissions'
+		id: 'permissions',
+		icon: 'key'
 	},
 	{
 		type: 'link',
 		url: t.routes.protected.roles(),
 		text: t.menus.sidebar.roles(),
-		id: 'roles'
+		id: 'roles',
+		icon: 'accessibility'
 	},
 	{
 		type: 'link',
 		url: t.routes.protected.projects(),
 		text: t.menus.sidebar.projects(),
-		id: 'projects'
+		id: 'projects',
+		icon: 'gallery-vertical'
 	},
 	{
 		type: 'link',
 		url: t.routes.protected.tasks(),
 		text: t.menus.sidebar.tasks(),
-		id: 'tasks'
+		id: 'tasks',
+		icon: 'tiles-list'
 	}
 ];

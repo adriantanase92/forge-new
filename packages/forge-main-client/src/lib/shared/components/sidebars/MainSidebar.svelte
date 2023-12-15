@@ -30,9 +30,10 @@
 				{#each sidebarUserMenuItems($LL) as item}
 					<li>
 						<a
-							href={$LL.routes.protected.dashboard()}
-							class="active flex items-center py-3 pl-12 pr-6 mb-1 leading-none gap-2.5 rounded-full hover-icon [&amp;.active]:text-gray-900 dark:[&amp;.active]:text-gray-100 [&amp;.active]:bg-primary-600/[0.08] dark:[&amp;.active]:bg-primary-200/10 hover:bg-primary-600/[0.08] dark:hover:bg-primary-200/[0.08]"
+							href={item.url}
+							class="active flex items-center py-3 pl-12 pr-6 mb-1 leading-none gap-2.5 rounded-full hover-icon [&amp;.active]:text-gray-900 [&amp;.active]:bg-primary-600/[0.08] hover:bg-primary-600/[0.08]"
 						>
+							<SvgIcon name={item.icon} width="24" height="24" />
 							{item.text}
 						</a>
 					</li>
