@@ -3,7 +3,8 @@
 	import { icons, type iconName } from './icons';
 
 	export let name: iconName = 'default';
-	export let color = colors['forge-accent'][700];
+	export let color = colors.rhino;
+	export let fill = colors.rhino;
 	export let width = '2rem';
 	export let height = '2rem';
 	export let focusable: string | number | null | undefined = undefined;
@@ -18,7 +19,7 @@
 <svg
 	class={$$props.class}
 	stroke-width={$$props.strokeWidth}
-	fill={$$props.fill}
+	{fill}
 	{focusable}
 	{width}
 	{height}

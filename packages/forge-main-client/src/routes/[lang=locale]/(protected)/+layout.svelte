@@ -7,10 +7,7 @@
 <MainHeader />
 <main class="lg:flex">
 	<MainSidebar />
-	<div
-		id="main-content"
-		class="bg-forge-primary-50 flex-grow min-h-full py-20 relative px-4 lg:px-5"
-	>
+	<div id="main-content" class="bg-gallery flex-grow min-h-full py-20 relative px-4 lg:px-5">
 		<slot />
 		<MainFooter />
 	</div>

@@ -1,55 +1,190 @@
+// ----------------- Colors
+const transformColorsObjectToArray = (colorsObject: Record<string, string>) => {
+	return Object.entries(colorsObject).map(([name, code]) => ({
+		name,
+		code
+	}));
+};
+
+export const primaryColors = {
+	gallery: '#f0f3ff',
+	cobalt: '#0e62be',
+	cobaltAlt: '#62b3f4',
+	rhino: '#2e3767',
+	rhinoAlt: '#7984a9'
+};
+export const primaryColorsArray = transformColorsObjectToArray(primaryColors);
+
+export const secondaryColors = {
+	curious: '#4db3ff',
+	eucalyptus: '#24a749',
+	cucumber: '#bae089',
+	lime: '#99d62f',
+	malibu: '#9cddff'
+};
+export const secondaryColorsArray = transformColorsObjectToArray(secondaryColors);
+
+export const informColors = {
+	success: '#58c322',
+	successAlt: '#ecf8e6',
+	warning: '#fa9600',
+	warningAlt: '#fef3e0',
+	error: '#d41111',
+	errorAlt: '#ffebed'
+};
+export const informColorsArray = transformColorsObjectToArray(informColors);
+
+export const greyColors = {
+	greyGallery: '#BFCDFF'
+};
+
+export const greyColorsArray = transformColorsObjectToArray(greyColors);
+
+export const monochromeColors = {
+	white: '#ffffff',
+	black: '#000000'
+};
+
+export const monochromeColorsArray = transformColorsObjectToArray(monochromeColors);
+
+export const otherUtilityColors = {
+	transparent: 'transparent',
+	none: 'none'
+};
+export const otherUtilityColorsArray = transformColorsObjectToArray(otherUtilityColors);
+
 export const colors = {
-	// `forge-primary` is designed to be used most extensively (60%), such as for backgrounds or large UI elements.
-	'forge-primary': {
-		50: '#f9f9f9',
-		100: '#f4f5f9',
-		200: '#dbdeea',
-		300: '#c5c9dc',
-		400: '#adb0cc',
-		500: '#adb0cc',
-		600: '#8381aa',
-		700: '#716e94',
-		800: '#5d5b78',
-		900: '#4e4d62',
-		950: '#2e2d39'
+	...primaryColors,
+	...secondaryColors,
+	...informColors,
+	...greyColors,
+	...monochromeColors,
+	...otherUtilityColors
+};
+
+export const colorsArray = Object.entries(colors).map(([name, color]) => ({ name, color }));
+
+export type color =
+	| 'gallery'
+	| 'cobalt'
+	| 'cobaltAlt'
+	| 'rhino'
+	| 'rhinoAlt'
+	| 'success'
+	| 'successAlt'
+	| 'error'
+	| 'errorAlt'
+	| 'warning'
+	| 'warningAlt'
+	| 'curious'
+	| 'eucalyptus'
+	| 'transparent'
+	| 'white';
+
+// ----------------- Color Options per Color
+export type colorOptions = {
+	backGround: string;
+	text: string;
+	border: string;
+};
+
+export type colorOptionsPerColor = Record<string, colorOptions>;
+
+export const colorOptionsPerColor: colorOptionsPerColor = {
+	gallery: {
+		backGround: 'bg-gallery',
+		text: 'text-gallery',
+		border: 'border-gallery'
 	},
-	// 'forge-secondary' should be used less than the primary color (30%), suitable for secondary elements or smaller areas.
-	'forge-secondary': {
-		50: '#fdf4ef',
-		100: '#fbe6d9',
-		200: '#f6c9b2',
-		300: '#f0a581',
-		400: '#fa844e',
-		500: '#e55b33',
-		600: '#d53d21',
-		700: '#b12d1d',
-		800: '#8d261f',
-		900: '#72221c',
-		950: '#3d0e0d'
+	cobalt: {
+		backGround: 'bg-cobalt',
+		text: 'text-cobalt',
+		border: 'border-cobalt'
 	},
-	// 'forge-accent' is the least used color (10%), ideal for calls to action, buttons, or highlighting important elements.
-	'forge-accent': {
-		50: '#f0f2fd',
-		100: '#e3e7fc',
-		200: '#cdd2f8',
-		300: '#aeb5f3',
-		400: '#8e8feb',
-		500: '#7872e2',
-		600: '#6757d4',
-		700: '#5847bb',
-		800: '#493c97',
-		900: '#493c97',
-		950: '#252046'
+	cobaltAlt: {
+		backGround: 'bg-cobalt-alt',
+		text: 'text-cobalt-alt',
+		border: 'border-cobalt-alt'
+	},
+	rhino: {
+		backGround: 'bg-rhino',
+		text: 'text-rhino',
+		border: 'border-rhino'
+	},
+	rhinoAlt: {
+		backGround: 'bg-rhino-alt',
+		text: 'text-rhino-alt',
+		border: 'border-rhino-alt'
+	},
+	success: {
+		backGround: 'bg-success',
+		text: 'text-success',
+		border: 'border-success'
+	},
+	successAlt: {
+		backGround: 'bg-success-alt',
+		text: 'text-success-alt',
+		border: 'border-success-alt'
+	},
+	error: {
+		backGround: 'bg-error',
+		text: 'text-error',
+		border: 'border-error'
+	},
+	errorAlt: {
+		backGround: 'bg-error-alt',
+		text: 'text-error-alt',
+		border: 'border-error-alt'
+	},
+	warning: {
+		backGround: 'bg-warning',
+		text: 'text-warning',
+		border: 'border-warning'
+	},
+	warningAlt: {
+		backGround: 'bg-warning-alt',
+		text: 'text-warning-alt',
+		border: 'border-warning-alt'
+	},
+	curious: {
+		backGround: 'bg-curious',
+		text: 'text-curious',
+		border: 'border-curious'
+	},
+	cucumber: {
+		backGround: 'bg-cucumber',
+		text: 'text-cucumber',
+		border: 'border-cucumber'
+	},
+	eucalyptus: {
+		backGround: 'bg-eucalyptus',
+		text: 'text-eucalyptus',
+		border: 'border-eucalyptus'
+	},
+	lime: {
+		backGround: 'bg-lime',
+		text: 'text-lime',
+		border: 'border-lime'
+	},
+	malibu: {
+		backGround: 'bg-malibu',
+		text: 'text-malibu',
+		border: 'border-malibu'
+	},
+	white: {
+		backGround: 'bg-white',
+		text: 'text-white',
+		border: 'border-white'
 	}
 };
 
-export type color = 'forge-primary' | 'forge-secondary' | 'forge-accent';
-
+// ----------------- Fonts Exports
 export const fonts = {
 	primary: ['Syne', 'sans-serif'],
 	secondary: ['Inter', 'sans-serif']
 };
 
+// ----------------- Breakpoints Exports
 export const breakpoints = {
 	'3xs': `360px`,
 	'2xs': `420px`,

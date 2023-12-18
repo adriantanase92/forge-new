@@ -7,14 +7,14 @@
 	// Specify the height of the loading icon
 	export let height: string = '30';
 	// Specify the color of the loading icon
-	export let color: string = colors['forge-accent'][700];
+	export let color: string = colors.black;
 	// Set to `false` to disable the overlay
 	export let withOverlay: boolean = false;
 </script>
 
 <div
 	class={withOverlay
-		? 'bg-yoboo-rhino-alt fixed bottom-0 left-0 right-0 top-0 z-[100] grid h-full w-full place-items-center opacity-70'
+		? 'bg-rhino-alt fixed bottom-0 left-0 right-0 top-0 z-[100] grid h-full w-full place-items-center opacity-70'
 		: ''}
 >
 	<div class={$$slots.default ? 'flex items-center' : ''}>

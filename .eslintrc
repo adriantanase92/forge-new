@@ -36,6 +36,7 @@
     ],
     "ignorePatterns": ["*.cjs"],
     "rules": {
-        "svelte/no-at-html-tags": "off"
+        "@svelte/no-at-html-tags": "off",
+		"@typescript-eslint/no-import-assign": "off"
     }
 }

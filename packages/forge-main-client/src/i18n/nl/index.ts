@@ -22,7 +22,7 @@ export default {
 		required_date: 'Selecteer een datum.',
 		invalid_date: 'Voer een correcte datum in.',
 		invalid_form: 'Ongeldig formulier.',
-		invalid_email: 'Oeps, fout format (juist: naam@yoboo.be).',
+		invalid_email: 'Oeps, fout format (juist: naam@forge.be).',
 		invalid_password:
 			'Je paswoord moet minimaal 8 tekens bevatten, één hoofdletter, één cijfer en één van deze symbolen (!@#$%^&*).',
 		invalid_combination: 'Oeps, deze combinatie herkennen we niet.',
