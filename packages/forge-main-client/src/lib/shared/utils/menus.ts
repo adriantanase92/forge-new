@@ -10,7 +10,7 @@ export type menuItem = {
 	type: 'link' | 'dropdown';
 	text: string;
 	url?: string;
-	id?: string;
+	id: string;
 	dropdownItems?: dropdownItem[];
 	icon?: iconName;
 	isExternal?: boolean;

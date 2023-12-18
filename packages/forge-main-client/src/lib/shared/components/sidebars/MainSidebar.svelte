@@ -1,8 +1,15 @@
 <script lang="ts">
-	import { sidebarUserMenuItems } from '$lib/shared';
+	import { colors, sidebarUserMenuItems } from '$lib/shared';
 	import { LL } from '$i18n/i18n-svelte';
 	import SvgIcon from '../general/svg/SvgIcon.svelte';
 	import Logo from '../logo/Logo.svelte';
+	import { page } from '$app/stores';
+
+	const activeLink = (linkName: string) =>
+		$page.url.pathname.includes(linkName) ? 'bg-cobalt text-white' : 'text-rhino';
+
+	const activeLinkIcon = (linkName: string) =>
+		$page.url.pathname.includes(linkName) ? colors.white : colors.rhino;
 </script>
 
 <aside
@@ -31,9 +38,19 @@
 					<li>
 						<a
 							href={item.url}
-							class="active flex items-center py-3 pl-12 pr-6 mb-1 leading-none gap-2.5 rounded-full hover-icon [&amp;.active]:text-gray-900 [&amp;.active]:bg-primary-600/[0.08] hover:bg-primary-600/[0.08]"
+							class="flex items-center py-3 pl-12 pr-6 mb-1 leading-none gap-2.5 rounded-full hover:bg-gallery {activeLink(
+								item.id
+							)}"
+							target={item.isExternal ? '_blank' : '_self'}
 						>
-							<SvgIcon name={item.icon} width="24" height="24" />
+							{#key activeLinkIcon(item.id)}
+								<SvgIcon
+									name={item.icon}
+									width="24"
+									height="24"
+									color={activeLinkIcon(item.id)}
+								/>
+							{/key}
 							{item.text}
 						</a>
 					</li>

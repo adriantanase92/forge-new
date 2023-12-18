@@ -4,7 +4,6 @@
 
 	export let name: iconName = 'default';
 	export let color = colors.rhino;
-	export let fill = colors.rhino;
 	export let width = '2rem';
 	export let height = '2rem';
 	export let focusable: string | number | null | undefined = undefined;
@@ -19,7 +18,7 @@
 <svg
 	class={$$props.class}
 	stroke-width={$$props.strokeWidth}
-	{fill}
+	fill={$$props.fill}
 	{focusable}
 	{width}
 	{height}
