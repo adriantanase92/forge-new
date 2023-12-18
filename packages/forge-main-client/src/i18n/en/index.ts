@@ -14,7 +14,11 @@ export default {
 			noItemsFoundMessage: 'No sidebar menu items found!'
 		}
 	},
-	pages: {},
+	pages: {
+		users: {
+			entity: 'users'
+		}
+	},
 	warnings: {},
 	errors: {
 		required: 'You forgot to fill in { field }.',

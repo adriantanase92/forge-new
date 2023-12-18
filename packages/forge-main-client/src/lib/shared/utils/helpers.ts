@@ -1,3 +1,6 @@
+export const capitalize = (text: string = ''): string =>
+	text.length > 0 ? text.charAt(0).toUpperCase() + text.slice(1) : '';
+
 export const clickOutside = (node: Node) => {
 	const handleClick = (event: Event) => {
 		const { target } = event;

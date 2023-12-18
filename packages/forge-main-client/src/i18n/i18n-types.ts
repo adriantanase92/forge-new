@@ -41,7 +41,11 @@ export type MenusTranslations = {
 	}
 };
 
-export type PagesTranslations = {};
+export type PagesTranslations = {
+	users: {
+		entity: string;
+	}
+};
 
 export type WarningsTranslations = {};
 
@@ -145,7 +149,11 @@ export type TranslationFunctions = {
 			noItemsFoundMessage: () => LocalizedString;
 		};
 	},
-	pages: {},
+	pages: {
+		users: {
+			entity: () => LocalizedString;
+		}
+	},
 	warnings: {};
 	errors: {
 		required: ({field}: GenericStringParameter) => LocalizedString;

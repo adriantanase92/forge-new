@@ -14,7 +14,11 @@ export default {
 			noItemsFoundMessage: 'Aucun élément de menu de la barre latérale trouvé!'
 		}
 	},
-	pages: {},
+	pages: {
+		users: {
+			entity: 'utilisateurs'
+		}
+	},
 	warnings: {},
 	errors: {
 		required: 'Vous avez oublié de renseigner votre { field }.',

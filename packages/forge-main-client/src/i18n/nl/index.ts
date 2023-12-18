@@ -14,7 +14,11 @@ export default {
 			noItemsFoundMessage: 'Geen zijbalkmenu-items gevonden!'
 		}
 	},
-	pages: {},
+	pages: {
+		users: {
+			entity: 'gebruikers'
+		}
+	},
 	warnings: {},
 	errors: {
 		required: 'Je bent vergeten om { field } in te vullen.',
