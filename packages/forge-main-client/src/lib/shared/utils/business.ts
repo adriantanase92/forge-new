@@ -1,12 +1,49 @@
-export type UserRole = 'admin' | 'client' | 'manager' | 'worker';
-export type PreferredLanguage = 'en' | 'fr' | 'nl';
+export enum Modules {
+	USERS = 'users',
+	ROLES = 'roles',
+	PERMISSIONS = 'permissions',
+	PROJECTS = 'projects',
+	TASKS = 'tasks'
+}
+
+export enum UserRole {
+	ADMIN = 'admin',
+	CLIENT = 'client',
+	MANAGER = 'manager',
+	WORKER = 'worker'
+}
+
+export enum PreferredLanguage {
+	EN = 'en',
+	FR = 'fr',
+	NL = 'nl'
+}
+
+export type Role = {
+	id: string;
+	name: UserRole;
+};
+
+export type Permission = {
+	id: string;
+	name: Modules;
+};
+
+export type PermissionOptions = {
+	read: boolean;
+	write: boolean;
+};
+
+export type UserPermission = Permission & PermissionOptions;
 
 export type User = {
+	id: string;
 	firstName: string;
 	lastName: string;
 	email: string;
 	phone: string;
 	role: UserRole;
+	permissions: UserPermission[];
 	preferredLanguage: PreferredLanguage;
 	projects: string[];
 	address: {
@@ -28,4 +65,18 @@ export type Project = {
 	tasks: string[];
 	description: string;
 	createdAt: string;
+};
+
+export enum TaskStatus {
+	TO_DO = 'to-do',
+	IN_PROGRESS = 'in-progress',
+	DONE = 'done'
+}
+
+export type Task = {
+	title: string;
+	description: string;
+	project: string;
+	responsible: string[];
+	status: TaskStatus;
 };

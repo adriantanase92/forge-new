@@ -6,7 +6,7 @@
 
 <header
 	id="main-header"
-	class="[&.show]:translate-y-0 top-0 fixed h-16 px-4 lg:px-5 left-0 lg:left-72 right-0 flex flex-row items-center justify-between lg:justify-end gap-3 z-50 transition-all duration-300 ease-in-out"
+	class="[&.show]:translate-y-0 top-0 fixed h-16 px-4 lg:px-5 left-0 lg:left-72 right-0 flex flex-row items-center justify-between lg:justify-end gap-3 z-50 transition-all duration-300 ease-in-out shadow-sm bg-white"
 >
 	<!-- trigger sidebar -->
 	<Button

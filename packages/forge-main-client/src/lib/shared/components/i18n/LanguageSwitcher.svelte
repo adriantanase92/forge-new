@@ -34,9 +34,7 @@
 	<Button
 		kind="custom"
 		color="transparent"
-		class="font-primary font-medium {color === 'rhino'
-			? 'text-yoboo-rhino'
-			: 'text-yoboo-white'}"
+		class="font-primary font-medium {color === 'rhino' ? 'text-rhino' : 'text-white'}"
 		on:click={() => (open = !open)}
 	>
 		<Language language={$locale} {color} />
@@ -49,8 +47,8 @@
 						kind="custom"
 						color="transparent"
 						class="font-primary font-medium {color === 'rhino'
-							? 'text-yoboo-rhino'
-							: 'text-yoboo-white'} px-5 py-2 hover:bg-gray-100 hover:first:rounded-t-lg hover:last:rounded-b-lg"
+							? 'text-rhino'
+							: 'text-white'} px-5 py-2 hover:bg-gray-100 hover:first:rounded-t-lg hover:last:rounded-b-lg"
 						on:click={() => switchLanguage(lang)}
 					>
 						<Language language={lang} color="rhino" />

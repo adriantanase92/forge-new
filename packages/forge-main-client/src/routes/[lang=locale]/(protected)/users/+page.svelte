@@ -7,7 +7,9 @@
 		TableOnClickDispatcherEvent
 	} from '$lib/shared/components/general/table/types.js';
 	import LL from '$i18n/i18n-svelte';
-	import PageTitle from '$lib/shared/components/page-title/PageTitle.svelte';
+	import PageTitle from '$lib/shared/components/panel/PageTitle.svelte';
+	import Box from '$lib/shared/components/panel/Box.svelte';
+	import { capitalize, UserRole } from '$lib/shared/index.js';
 
 	export let data;
 
@@ -17,9 +19,10 @@
 	});
 
 	const headers = [
-		{ key: 'email', text: 'fsdfs' },
 		{ key: 'firstName', text: 'sdfsfs' },
 		{ key: 'lastName', text: 'sdfsfs' },
+		{ key: 'role', text: 'fsdfs' },
+		{ key: 'email', text: 'fsdfs' },
 		{ key: 'phone', text: 'sdfsf' }
 	];
 
@@ -44,6 +47,20 @@
 		// }
 	};
 
+	const getColorForUserRole = (role: UserRole) => {
+		let color: string = 'text-rhino';
+
+		if (role === UserRole.ADMIN) {
+			color = 'text-error';
+		} else if (role === UserRole.CLIENT) {
+			color = 'text-curious';
+		} else if (role === UserRole.MANAGER) {
+			color = 'text-warning';
+		}
+
+		return color;
+	};
+
 	const formatItemsForTable = (unformattedTableItems: any[]): TableItem[] => {
 		return unformattedTableItems.map((item) => {
 			return {
@@ -52,6 +69,10 @@
 				},
 				email: {
 					value: item.email
+				},
+				role: {
+					value: item.role,
+					stylingClasses: `${getColorForUserRole(item.role)} font-secondary font-medium`
 				},
 				firstName: {
 					value: item.firstName
@@ -70,16 +91,18 @@
 	$: console.log('items: ', items);
 </script>
 
-<Table
-	{headers}
-	{items}
-	{actions}
-	{noDataFoundMessage}
-	striped
-	withPagination
-	withSearch
-	on:clickActionTriggered={handleAction}
->
-	<PageTitle slot="title" text={$LL.pages.users.entity()} />
-	<div slot="actions"></div>
-</Table>
+<Box>
+	<Table
+		{headers}
+		{items}
+		{actions}
+		{noDataFoundMessage}
+		striped
+		withPagination
+		withSearch
+		on:clickActionTriggered={handleAction}
+	>
+		<PageTitle slot="title" text={capitalize($LL.pages.users.entity())} />
+		<div slot="actions"></div>
+	</Table>
+</Box>

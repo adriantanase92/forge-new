@@ -19,9 +19,9 @@
 	export let pagesWrapper: string = 'hidden 2xs:flex gap-2';
 	// Specify the css classes for all the page button elements
 	export let pageButtonClasses: string =
-		'w-[40px] h-[40px] leading-[40px] text-center rounded-lg font-primary-regular';
+		'w-[40px] h-[40px] leading-[40px] text-center rounded-lg font-primary';
 	export let ellipsisClasses: string =
-		'inline-block w-[40px] h-[40px] leading-[40px] text-center rounded-lg font-primary-regular bg-yoboo-gallery text-yoboo-rhino';
+		'inline-block w-[40px] h-[40px] leading-[40px] text-center rounded-lg font-primary bg-gallery text-rhino';
 
 	const goToPage = (page: number) => {
 		currentPage = page;
@@ -36,9 +36,7 @@
 	};
 
 	const activePage = (page: number, currentPage: number) =>
-		currentPage === page
-			? 'bg-yoboo-rhino text-yoboo-white'
-			: 'bg-yoboo-gallery text-yoboo-rhino';
+		currentPage === page ? 'bg-rhino text-white' : 'bg-gallery !text-rhino';
 </script>
 
 {#if pageCount > 1}
