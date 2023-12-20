@@ -37,25 +37,24 @@ export default {
 	warnings: {},
 	errors: {
 		required: 'Je bent vergeten om { field } in te vullen.',
-		required_select: 'Je bent vergeten een optie te selecteren.',
-		required_date: 'Selecteer een datum.',
-		invalid_date: 'Voer een correcte datum in.',
-		invalid_form: 'Ongeldig formulier.',
-		invalid_email: 'Oeps, fout format (juist: naam@forge.be).',
-		invalid_password:
+		requiredSelect: 'Je bent vergeten een optie te selecteren.',
+		requiredDate: 'Selecteer een datum.',
+		invalidDate: 'Voer een correcte datum in.',
+		invalidForm: 'Ongeldig formulier.',
+		invalidEmail: 'Oeps, fout format (juist: naam@forge.be).',
+		invalidPassword:
 			'Je paswoord moet minimaal 8 tekens bevatten, één hoofdletter, één cijfer en één van deze symbolen (!@#$%^&*).',
-		invalid_combination: 'Oeps, deze combinatie herkennen we niet.',
-		min_characters: 'Minimaal { number } tekens vereist.',
-		max_characters: 'Maximum van { number } tekens overschreden.',
-		min_value: 'Waarde mag niet lager zijn dan { number }.',
-		max_value: 'Waarde mag niet hoger zijn dan { number }.',
-		no_something_found: '{ something } niet gevonden.',
-		internal_server_error: 'Oeps, er is een interne serverfout.',
-		email_not_found: 'Oeps, we kunnen dit e-mailadres niet vinden.',
-		email_address_already_in_use: 'Dit e-mailadres bestaat al.',
-		no_data_found: 'Geen data gevonden!',
-		no_entity_found: 'Geen { entity } gevonden!',
-		no_information: 'Geen informatie.'
+		invalidCombination: 'Oeps, deze combinatie herkennen we niet.',
+		minCharacters: 'Minimaal { number } tekens vereist.',
+		maxCharacters: 'Maximum van { number } tekens overschreden.',
+		minValue: 'Waarde mag niet lager zijn dan { number }.',
+		maxValue: 'Waarde mag niet hoger zijn dan { number }.',
+		noSomethingFound: '{ something } niet gevonden.',
+		internalServerError: 'Oeps, er is een interne serverfout.',
+		emailNotFound: 'Oeps, we kunnen dit e-mailadres niet vinden.',
+		emailAddressAlreadyInUse: 'Dit e-mailadres bestaat al.',
+		noDataFound: 'Geen data gevonden!',
+		noInformation: 'Geen informatie.'
 	},
 	fields: {
 		fullName: {
@@ -84,7 +83,7 @@ export default {
 		}
 	},
 	buttonsOrLinks: {
-		add_something: '{ something } toevoegen'
+		addSomething: '{ something } toevoegen'
 	},
 	components: {
 		modal: {

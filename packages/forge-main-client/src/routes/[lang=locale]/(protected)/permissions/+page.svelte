@@ -25,7 +25,7 @@
 			iconColor={colors.white}
 			on:click={() => console.log('open add modal')}
 		>
-			{$LL.buttonsOrLinks.add_something({
+			{$LL.buttonsOrLinks.addSomething({
 				something: $LL.pages.permissions.entity()
 			})}
 		</Button>
@@ -67,7 +67,7 @@
 				</div>
 			</div>
 		{:else}
-			<p>{$LL.errors.no_entity_found({ entity: $LL.pages.permissions.entity() })}</p>
+			<p>{$LL.errors.noSomethingFound({ something: $LL.pages.permissions.entity() })}</p>
 		{/each}
 	</DynamicDataRenderer>
 </Box>

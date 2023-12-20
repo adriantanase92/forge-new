@@ -66,24 +66,23 @@ export type WarningsTranslations = {};
 
 export type ErrorsTranslations = {
     required: string;
-    required_select: string;
-    required_date: string;
-    invalid_date: string;
-    invalid_form: string;
-    invalid_email: string;
-    invalid_password: string;
-    invalid_combination: string;
-    min_characters: string;
-    max_characters: string;
-    min_value: string;
-    max_value: string;
-    no_something_found: string;
-    internal_server_error: string;
-    email_not_found: string;
-    email_address_already_in_use: string;
-    no_data_found: string;
-    no_entity_found: string;
-    no_information: string;
+    requiredSelect: string;
+    requiredDate: string;
+    invalidDate: string;
+    invalidForm: string;
+    invalidEmail: string;
+    invalidPassword: string;
+    invalidCombination: string;
+    minCharacters: string;
+    maxCharacters: string;
+    minValue: string;
+    maxValue: string;
+    noSomethingFound: string;
+    internalServerError: string;
+    emailNotFound: string;
+    emailAddressAlreadyInUse: string;
+    noDataFound: string;
+    noInformation: string;
 };
 
 export type FieldsTranslations = {
@@ -114,7 +113,7 @@ export type FieldsTranslations = {
 };
 
 export type ButtonsOrLinksTranslations = {
-	add_something: string;
+	addSomething: string;
 };
 
 export type ComponentsTranslations = {
@@ -189,26 +188,25 @@ export type TranslationFunctions = {
 	warnings: {};
 	errors: {
 		required: ({field}: GenericStringParameter) => LocalizedString;
-        required_select: () => LocalizedString;
-        required_date: () => LocalizedString;
-        invalid_date: () => LocalizedString;
-        invalid_form: () => LocalizedString;
-        invalid_email: () => LocalizedString;
-        invalid_password: () => LocalizedString;
-        invalid_combination: () => LocalizedString;
-        min_characters: ({ number }: GenericNumberParameter) => LocalizedString;
-        max_characters: ({ number }: GenericNumberParameter) => LocalizedString;
-        min_value: ({ number }: GenericNumberParameter) => LocalizedString;
-        max_value: ({ number }: GenericNumberParameter) => LocalizedString;
-        no_something_found: ({ something }: GenericStringParameter) => LocalizedString;
-        internal_server_error: () => LocalizedString;
-        email_not_found: () => LocalizedString;
+        requiredSelect: () => LocalizedString;
+        requiredDate: () => LocalizedString;
+        invalidDate: () => LocalizedString;
+        invalidForm: () => LocalizedString;
+        invalidEmail: () => LocalizedString;
+        invalidPassword: () => LocalizedString;
+        invalidCombination: () => LocalizedString;
+        minCharacters: ({ number }: GenericNumberParameter) => LocalizedString;
+        maxCharacters: ({ number }: GenericNumberParameter) => LocalizedString;
+        minValue: ({ number }: GenericNumberParameter) => LocalizedString;
+        maxValue: ({ number }: GenericNumberParameter) => LocalizedString;
+        noSomethingFound: ({ something }: GenericStringParameter) => LocalizedString;
+        internalServerError: () => LocalizedString;
+        emailNotFound: () => LocalizedString;
         security_code_not_found: () => LocalizedString;
         security_code_expired: () => LocalizedString;
-        email_address_already_in_use: () => LocalizedString;
-        no_data_found: () => LocalizedString;
-        no_entity_found: ({ entity }: GenericStringParameter) => LocalizedString;
-        no_information: () => LocalizedString;
+        emailAddressAlreadyInUse: () => LocalizedString;
+        noDataFound: () => LocalizedString;
+        noInformation: () => LocalizedString;
     };
     fields: {
         fullName: {
@@ -237,7 +235,7 @@ export type TranslationFunctions = {
 		};
     };
     buttonsOrLinks: {
-		add_something: ({ something }: GenericStringParameter) => LocalizedString;
+		addSomething: ({ something }: GenericStringParameter) => LocalizedString;
 	};
     components: {
         modal: {

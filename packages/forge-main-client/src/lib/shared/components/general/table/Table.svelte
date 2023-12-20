@@ -26,7 +26,7 @@
 	export let stripedClass: string = 'even:bg-slate-50';
 	export let hoverable: boolean = false;
 	export let hoverableClass: string = 'hover:bg-none sm:hover:bg-gray-300';
-	export let noDataFoundMessage: string = $LL.errors.no_data_found();
+	export let noDataFoundMessage: string = $LL.errors.noDataFound();
 
 	let search = '';
 	let currentPage = 1;

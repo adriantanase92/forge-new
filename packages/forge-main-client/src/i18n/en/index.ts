@@ -37,25 +37,24 @@ export default {
 	warnings: {},
 	errors: {
 		required: 'You forgot to fill in { field }.',
-		required_select: 'You forgot to select an option.',
-		required_date: 'Please select a date.',
-		invalid_date: 'Please enter a valid date.',
-		invalid_form: 'Invalid form.',
-		invalid_email: 'Oops, wrong format (try "name@forge.com").',
-		invalid_password:
+		requiredSelect: 'You forgot to select an option.',
+		requiredDate: 'Please select a date.',
+		invalidDate: 'Please enter a valid date.',
+		invalidForm: 'Invalid form.',
+		invalidEmail: 'Oops, wrong format (try "name@forge.com").',
+		invalidPassword:
 			'Your password must contain at least 8 characters, one uppercase letter, one number and one of these symbols (!@#$%^&*).',
-		invalid_combination: 'Oops, this combination is not correct.',
-		min_characters: 'Minimum of { number } characters required',
-		max_characters: 'Maximum { number } characters exceeded.',
-		min_value: 'Value must not be less than { number }.',
-		max_value: 'Value must not be more than { number }.',
-		no_something_found: 'No { something } found.',
-		internal_server_error: 'There was an internal server error. Please try again.',
-		email_not_found: 'This email address was not found.',
-		email_address_already_in_use: 'This email address already exists.',
-		no_data_found: 'No data found!',
-		no_entity_found: 'No { entity } found!',
-		no_information: 'No information'
+		invalidCombination: 'Oops, this combination is not correct.',
+		minCharacters: 'Minimum of { number } characters required',
+		maxCharacters: 'Maximum { number } characters exceeded.',
+		minValue: 'Value must not be less than { number }.',
+		maxValue: 'Value must not be more than { number }.',
+		noSomethingFound: 'No { something } found.',
+		internalServerError: 'There was an internal server error. Please try again.',
+		emailNotFound: 'This email address was not found.',
+		emailAddressAlreadyInUse: 'This email address already exists.',
+		noDataFound: 'No data found!',
+		noInformation: 'No information'
 	},
 	fields: {
 		fullName: {
@@ -84,7 +83,7 @@ export default {
 		}
 	},
 	buttonsOrLinks: {
-		add_something: 'Add { something }'
+		addSomething: 'Add { something }'
 	},
 	components: {
 		modal: {

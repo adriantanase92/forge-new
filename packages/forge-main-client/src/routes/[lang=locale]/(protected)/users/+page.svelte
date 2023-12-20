@@ -14,8 +14,8 @@
 	export let data;
 
 	// Setup for Table ------------------------------------------------------------------------
-	const noDataFoundMessage = $LL.errors.no_entity_found({
-		entity: $LL.pages.users.entity()
+	const noDataFoundMessage = $LL.errors.noSomethingFound({
+		something: $LL.pages.users.entity()
 	});
 
 	const headers = [
