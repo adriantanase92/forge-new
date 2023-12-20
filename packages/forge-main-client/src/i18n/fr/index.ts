@@ -15,8 +15,23 @@ export default {
 		}
 	},
 	pages: {
+		dashboard: {
+			title: 'Mon tableau de bord'
+		},
+		roles: {
+			entity: 'rôles'
+		},
+		permissions: {
+			entity: 'autorisations'
+		},
 		users: {
 			entity: 'utilisateurs'
+		},
+		projects: {
+			entity: 'projets'
+		},
+		tasks: {
+			entity: 'tâches'
 		}
 	},
 	warnings: {},
@@ -68,7 +83,9 @@ export default {
 			text: 'téléphone'
 		}
 	},
-	buttonsOrLinks: {},
+	buttonsOrLinks: {
+		add_something: 'Ajoute { something }'
+	},
 	components: {
 		modal: {
 			edit: 'Modifier { something }',

@@ -42,7 +42,22 @@ export type MenusTranslations = {
 };
 
 export type PagesTranslations = {
+	dashboard: {
+		title: string;
+	};
+	roles: {
+		entity: string;
+	};
+	permissions: {
+		entity: string;
+	};
 	users: {
+		entity: string;
+	}
+	projects: {
+		entity: string;
+	};
+	tasks: {
 		entity: string;
 	}
 };
@@ -98,7 +113,9 @@ export type FieldsTranslations = {
 	};
 };
 
-export type ButtonsOrLinksTranslations = {};
+export type ButtonsOrLinksTranslations = {
+	add_something: string;
+};
 
 export type ComponentsTranslations = {
     modal: {
@@ -148,12 +165,27 @@ export type TranslationFunctions = {
 			tasks: () => LocalizedString;
 			noItemsFoundMessage: () => LocalizedString;
 		};
-	},
+	};
 	pages: {
+		dashboard: {
+			title: () => LocalizedString;
+		};
+		roles: {
+			entity: () => LocalizedString;
+		};
+		permissions: {
+			entity: () => LocalizedString;
+		};
 		users: {
 			entity: () => LocalizedString;
 		}
-	},
+		projects: {
+			entity: () => LocalizedString;
+		};
+		tasks: {
+			entity: () => LocalizedString;
+		}
+	};
 	warnings: {};
 	errors: {
 		required: ({field}: GenericStringParameter) => LocalizedString;
@@ -204,7 +236,9 @@ export type TranslationFunctions = {
 			text: () => LocalizedString;
 		};
     };
-    buttonsOrLinks: {};
+    buttonsOrLinks: {
+		add_something: ({ something }: GenericStringParameter) => LocalizedString;
+	};
     components: {
         modal: {
             edit: ({ something }: GenericStringParameter) => LocalizedString;

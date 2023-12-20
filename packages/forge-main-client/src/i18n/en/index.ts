@@ -15,8 +15,23 @@ export default {
 		}
 	},
 	pages: {
+		dashboard: {
+			title: 'My Dashboard'
+		},
+		roles: {
+			entity: 'roles'
+		},
+		permissions: {
+			entity: 'permissions'
+		},
 		users: {
 			entity: 'users'
+		},
+		projects: {
+			entity: 'projects'
+		},
+		tasks: {
+			entity: 'tasks'
 		}
 	},
 	warnings: {},
@@ -68,7 +83,9 @@ export default {
 			text: 'phone'
 		}
 	},
-	buttonsOrLinks: {},
+	buttonsOrLinks: {
+		add_something: 'Add { something }'
+	},
 	components: {
 		modal: {
 			edit: 'Edit { something }',

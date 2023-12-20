@@ -15,8 +15,23 @@ export default {
 		}
 	},
 	pages: {
+		dashboard: {
+			title: 'Mijn Dashboard'
+		},
+		roles: {
+			entity: 'rollen'
+		},
+		permissions: {
+			entity: 'rechten'
+		},
 		users: {
 			entity: 'gebruikers'
+		},
+		projects: {
+			entity: 'projecten'
+		},
+		tasks: {
+			entity: 'taken'
 		}
 	},
 	warnings: {},
@@ -68,7 +83,9 @@ export default {
 			text: 'telefoon'
 		}
 	},
-	buttonsOrLinks: {},
+	buttonsOrLinks: {
+		add_something: '{ something } toevoegen'
+	},
 	components: {
 		modal: {
 			edit: 'Bewerk { something }',
