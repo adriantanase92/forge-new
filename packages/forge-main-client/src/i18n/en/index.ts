@@ -17,21 +17,6 @@ export default {
 	pages: {
 		dashboard: {
 			title: 'My Dashboard'
-		},
-		roles: {
-			entity: 'roles'
-		},
-		permissions: {
-			entity: 'permissions'
-		},
-		users: {
-			entity: 'users'
-		},
-		projects: {
-			entity: 'projects'
-		},
-		tasks: {
-			entity: 'tasks'
 		}
 	},
 	warnings: {},
@@ -92,6 +77,38 @@ export default {
 		},
 		table: {
 			actions: 'actions'
+		}
+	},
+	modules: {
+		roles: {
+			entity: {
+				single: 'role',
+				multiple: 'roles'
+			}
+		},
+		permissions: {
+			entity: {
+				single: 'permission',
+				multiple: 'permissions'
+			}
+		},
+		users: {
+			entity: {
+				single: 'user',
+				multiple: 'users'
+			}
+		},
+		projects: {
+			entity: {
+				single: 'project',
+				multiple: 'projects'
+			}
+		},
+		tasks: {
+			entity: {
+				single: 'task',
+				multiple: 'tasks'
+			}
 		}
 	}
 } satisfies BaseTranslation;

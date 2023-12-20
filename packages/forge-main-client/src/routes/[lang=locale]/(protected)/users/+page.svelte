@@ -15,7 +15,7 @@
 
 	// Setup for Table ------------------------------------------------------------------------
 	const noDataFoundMessage = $LL.errors.noSomethingFound({
-		something: $LL.pages.users.entity()
+		something: $LL.modules.users.entity.multiple()
 	});
 
 	const headers = [
@@ -102,7 +102,7 @@
 		withSearch
 		on:clickActionTriggered={handleAction}
 	>
-		<PageTitle slot="title" text={capitalize($LL.pages.users.entity())} />
+		<PageTitle slot="title" text={capitalize($LL.modules.users.entity.multiple())} />
 		<div slot="actions"></div>
 	</Table>
 </Box>

@@ -44,21 +44,6 @@ export type MenusTranslations = {
 export type PagesTranslations = {
 	dashboard: {
 		title: string;
-	};
-	roles: {
-		entity: string;
-	};
-	permissions: {
-		entity: string;
-	};
-	users: {
-		entity: string;
-	}
-	projects: {
-		entity: string;
-	};
-	tasks: {
-		entity: string;
 	}
 };
 
@@ -126,6 +111,41 @@ export type ComponentsTranslations = {
     };
 };
 
+export type ModulesTranslations = {
+	modules: {
+		roles: {
+			entity: {
+				single: string;
+				multiple: string;
+			}
+		};
+		permissions: {
+			entity: {
+				single: string;
+				multiple: string;
+			}
+		};
+		users: {
+			entity: {
+				single: string;
+				multiple: string;
+			}
+		};
+		projects: {
+			entity: {
+				single: string;
+				multiple: string;
+			}
+		};
+		tasks: {
+			entity: {
+				single: string;
+				multiple: string;
+			}
+		};
+	}
+}
+
 type RootTranslation = {
     routes: RoutesTranslations;
     menus: MenusTranslations;
@@ -135,6 +155,7 @@ type RootTranslation = {
     fields: FieldsTranslations;
     buttonsOrLinks: ButtonsOrLinksTranslations;
     components: ComponentsTranslations;
+    modules: ModulesTranslations;
 };
 
 export type TranslationFunctions = {
@@ -169,21 +190,6 @@ export type TranslationFunctions = {
 		dashboard: {
 			title: () => LocalizedString;
 		};
-		roles: {
-			entity: () => LocalizedString;
-		};
-		permissions: {
-			entity: () => LocalizedString;
-		};
-		users: {
-			entity: () => LocalizedString;
-		}
-		projects: {
-			entity: () => LocalizedString;
-		};
-		tasks: {
-			entity: () => LocalizedString;
-		}
 	};
 	warnings: {};
 	errors: {
@@ -246,5 +252,37 @@ export type TranslationFunctions = {
             actions: () => LocalizedString;
         };
     };
+	modules: {
+		roles: {
+			entity: {
+				single: () => LocalizedString;
+				multiple: () => LocalizedString;
+			}
+		};
+		permissions: {
+			entity: {
+				single: () => LocalizedString;
+				multiple: () => LocalizedString;
+			}
+		};
+		users: {
+			entity: {
+				single: () => LocalizedString;
+				multiple: () => LocalizedString;
+			}
+		};
+		projects: {
+			entity: {
+				single: () => LocalizedString;
+				multiple: () => LocalizedString;
+			}
+		};
+		tasks: {
+			entity: {
+				single: () => LocalizedString;
+				multiple: () => LocalizedString;
+			}
+		};
+	}
 };
 export type Formatters = {};

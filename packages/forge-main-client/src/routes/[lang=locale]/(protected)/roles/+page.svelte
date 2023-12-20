@@ -14,7 +14,7 @@
 
 <Box>
 	<div class="flex justify-between items-center mb-8">
-		<PageTitle text={capitalize($LL.pages.roles.entity())} />
+		<PageTitle text={capitalize($LL.modules.roles.entity.multiple())} />
 		<Button
 			class="py-2 px-4"
 			kind="fill"
@@ -26,7 +26,7 @@
 			on:click={() => console.log('open add modal')}
 		>
 			{$LL.buttonsOrLinks.addSomething({
-				something: $LL.pages.roles.entity()
+				something: $LL.modules.roles.entity.single()
 			})}
 		</Button>
 	</div>
@@ -67,7 +67,7 @@
 				</div>
 			</div>
 		{:else}
-			<p>{$LL.errors.noSomethingFound({ something: $LL.pages.roles.entity() })}</p>
+			<p>{$LL.errors.noSomethingFound({ something: $LL.modules.roles.entity.multiple() })}</p>
 		{/each}
 	</DynamicDataRenderer>
 </Box>
