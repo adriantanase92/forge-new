@@ -77,7 +77,9 @@
 			</span>
 		{/if}
 
-		<slot />
+		<div class="font-secondary font-medium">
+			<slot />
+		</div>
 
 		{#if delayed}
 			<Loading

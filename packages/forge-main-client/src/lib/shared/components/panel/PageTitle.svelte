@@ -2,6 +2,8 @@
 	export let text: string = 'Title';
 </script>
 
-<h2 class="font-primary font-semibold block text-2xl {$$restProps.class ? $$restProps.class : ''}">
+<h2
+	class="font-secondary font-semibold block text-3xl {$$restProps.class ? $$restProps.class : ''}"
+>
 	{text}
 </h2>

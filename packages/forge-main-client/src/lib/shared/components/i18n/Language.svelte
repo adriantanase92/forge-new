@@ -23,7 +23,7 @@
 	{/key}
 
 	<span
-		class="font-primary ml-2 text-base capitalize {color === 'rhino'
+		class="font-secondary ml-2 text-base capitalize font-medium {color === 'rhino'
 			? 'text-rhino'
 			: 'text-white'}"
 	>

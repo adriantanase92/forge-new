@@ -152,7 +152,7 @@
 											{item[header.key].value}
 										</span>
 									{:else}
-										<span class="font-secondary-light italic">/</span>
+										<span class="font-primary italic">/</span>
 									{/if}
 								</td>
 							{/each}

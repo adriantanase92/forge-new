@@ -38,7 +38,7 @@
 					<li>
 						<a
 							href={item.url}
-							class="flex items-center py-3 pl-12 pr-6 mb-1 leading-none gap-2.5 rounded-full hover:bg-gallery {activeLink(
+							class="flex items-center py-3 pl-12 pr-6 mb-1 leading-none gap-2.5 font-secondary font-medium rounded-full hover:bg-gallery {activeLink(
 								item.id
 							)}"
 							target={item.isExternal ? '_blank' : '_self'}

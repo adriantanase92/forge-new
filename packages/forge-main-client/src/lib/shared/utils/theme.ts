@@ -180,8 +180,8 @@ export const colorOptionsPerColor: colorOptionsPerColor = {
 
 // ----------------- Fonts Exports
 export const fonts = {
-	primary: ['Syne', 'sans-serif'],
-	secondary: ['Inter', 'sans-serif']
+	primary: ['Inter', 'sans-serif'],
+	secondary: ['Syne', 'sans-serif']
 };
 
 // ----------------- Breakpoints Exports
