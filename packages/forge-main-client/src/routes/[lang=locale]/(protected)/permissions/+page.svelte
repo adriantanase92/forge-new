@@ -5,6 +5,7 @@
 	import { capitalize, colors } from '$lib/shared/index.js';
 	import LL from '$i18n/i18n-svelte';
 	import Button from '$lib/shared/components/general/button/Button.svelte';
+	import Permission from '$lib/shared/components/modules/permissions/Permission.svelte';
 
 	export let data;
 
@@ -37,35 +38,7 @@
 		gridClasses="grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
 	>
 		{#each permissions as permission}
-			<div
-				class="rounded-xl group p-6 shadow-sm border border-rhino hover:border-cobalt border-solid flex justify-between items-center"
-			>
-				<div class="capitalize text-xl font-semibold group-hover:text-cobalt">
-					{permission.name}
-				</div>
-				<div class="flex gap-2">
-					<Button
-						class="p-2"
-						kind="icon"
-						color="rhino"
-						icon="pencil"
-						iconHeight="18"
-						iconWidth="18"
-						iconColor={colors.white}
-						on:click={() => console.log(`edit permission ${permission.id}`)}
-					/>
-					<Button
-						class="p-2"
-						kind="icon"
-						color="error"
-						icon="bin"
-						iconHeight="18"
-						iconWidth="18"
-						iconColor={colors.white}
-						on:click={() => console.log(`delete permission ${permission.id}`)}
-					/>
-				</div>
-			</div>
+			<Permission {permission} />
 		{:else}
 			<p>
 				{$LL.errors.noSomethingFound({

@@ -102,6 +102,10 @@ export type ButtonsOrLinksTranslations = {
 };
 
 export type ComponentsTranslations = {
+	footer: {
+		copyright: string;
+		slogan: string;
+	};
     modal: {
         edit: string;
         add: string;
@@ -244,6 +248,10 @@ export type TranslationFunctions = {
 		addSomething: ({ something }: GenericStringParameter) => LocalizedString;
 	};
     components: {
+		footer: {
+			copyright: () => LocalizedString;
+			slogan: () => LocalizedString;
+		};
         modal: {
             edit: ({ something }: GenericStringParameter) => LocalizedString;
             add: ({ something }: GenericStringParameter) => LocalizedString;

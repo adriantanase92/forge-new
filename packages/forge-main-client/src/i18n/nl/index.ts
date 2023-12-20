@@ -71,6 +71,10 @@ export default {
 		addSomething: '{ something } toevoegen'
 	},
 	components: {
+		footer: {
+			copyright: 'Alle rechten voorbehouden.',
+			slogan: 'forge - Uw onmisbare assistent'
+		},
 		modal: {
 			edit: 'Bewerk { something }',
 			add: 'Voeg { something } toe'

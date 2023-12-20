@@ -57,6 +57,7 @@
 			kind && getCssKindClassesFromKind(kind),
 			color && getCssColorClassesFromColor(color, kind),
 			disabled && 'disabled:opacity-75',
+			'font-secondary font-medium',
 			$$restProps.class
 		]
 			.filter(Boolean)
@@ -77,9 +78,7 @@
 			</span>
 		{/if}
 
-		<div class="font-secondary font-medium">
-			<slot />
-		</div>
+		<slot />
 
 		{#if delayed}
 			<Loading

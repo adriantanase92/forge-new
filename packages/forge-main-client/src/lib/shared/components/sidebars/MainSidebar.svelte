@@ -6,7 +6,9 @@
 	import { page } from '$app/stores';
 
 	const activeLink = (linkName: string) =>
-		$page.url.pathname.includes(linkName) ? 'bg-cobalt text-white' : 'text-rhino';
+		$page.url.pathname.includes(linkName)
+			? 'bg-cobalt text-white'
+			: 'text-rhino hover:bg-gallery';
 
 	const activeLinkIcon = (linkName: string) =>
 		$page.url.pathname.includes(linkName) ? colors.white : colors.rhino;
@@ -38,7 +40,7 @@
 					<li>
 						<a
 							href={item.url}
-							class="flex items-center py-3 pl-12 pr-6 mb-1 leading-none gap-2.5 font-secondary font-medium rounded-full hover:bg-gallery {activeLink(
+							class="flex items-center py-3 pl-12 pr-6 mb-1 leading-none gap-2.5 font-secondary font-medium rounded-full {activeLink(
 								item.id
 							)}"
 							target={item.isExternal ? '_blank' : '_self'}

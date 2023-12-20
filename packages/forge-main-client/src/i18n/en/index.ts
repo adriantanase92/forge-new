@@ -71,6 +71,10 @@ export default {
 		addSomething: 'Add { something }'
 	},
 	components: {
+		footer: {
+			copyright: 'All rights reserved.',
+			slogan: 'forge - Your indispensable assistant'
+		},
 		modal: {
 			edit: 'Edit { something }',
 			add: 'Add { something }'
