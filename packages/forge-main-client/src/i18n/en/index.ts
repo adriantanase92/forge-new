@@ -68,7 +68,8 @@ export default {
 		}
 	},
 	buttonsOrLinks: {
-		addSomething: 'Add { something }'
+		addSomething: 'Add { something }',
+		editSomething: 'Edit { something }'
 	},
 	components: {
 		footer: {

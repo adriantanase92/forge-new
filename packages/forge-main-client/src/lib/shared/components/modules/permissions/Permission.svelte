@@ -1,11 +1,13 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte';
 	import { colors, type Permission } from '$lib/shared';
 	import Button from '../../general/button/Button.svelte';
-	import Modal from '../../general/modal/Modal.svelte';
 
 	export let permission: Permission;
 
-	let openEditPermissionModal: boolean = false;
+	const dispatch = createEventDispatcher();
+	const onClickAction = ({ permission }: { permission: Permission }) =>
+		dispatch('clickActionTriggered', { permission });
 </script>
 
 {#if permission}
@@ -24,7 +26,7 @@
 				iconHeight="18"
 				iconWidth="18"
 				iconColor={colors.white}
-				on:click={() => (openEditPermissionModal = true)}
+				on:click={(e) => onClickAction({ permission })}
 			/>
 			<Button
 				class="p-2"
@@ -38,20 +40,4 @@
 			/>
 		</div>
 	</div>
-{/if}
-
-{#if openEditPermissionModal}
-	<Modal
-		noFooter
-		size="md"
-		bind:open={openEditPermissionModal}
-		title={'asta e titlul'}
-		class="overflow-y-auto"
-		modalHeaderClasses="flex justify-between items-center shrink-0 max-h-[64px] mb-6"
-		modalTitleClasses="text-3xl font-primary-semibold text-yoboo-rhino"
-		modalContainerClasses="flex flex-col p-8"
-		modalBodyClasses="grow"
-	>
-		sadadad
-	</Modal>
 {/if}

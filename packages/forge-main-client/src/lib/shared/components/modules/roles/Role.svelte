@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { colors, type Role } from '$lib/shared';
+	import { createEventDispatcher } from 'svelte';
 	import Button from '../../general/button/Button.svelte';
 
 	export let role: Role;
+
+	const dispatch = createEventDispatcher();
+	const onClickAction = ({ role }: { role: Role }) => dispatch('clickActionTriggered', { role });
 </script>
 
 {#if role}
@@ -21,7 +25,7 @@
 				iconHeight="18"
 				iconWidth="18"
 				iconColor={colors.white}
-				on:click={() => console.log(`edit role ${role.id}`)}
+				on:click={(e) => onClickAction({ role })}
 			/>
 			<Button
 				class="p-2"

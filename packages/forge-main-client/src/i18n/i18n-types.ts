@@ -99,6 +99,7 @@ export type FieldsTranslations = {
 
 export type ButtonsOrLinksTranslations = {
 	addSomething: string;
+	editSomething: string;
 };
 
 export type ComponentsTranslations = {
@@ -246,6 +247,7 @@ export type TranslationFunctions = {
     };
     buttonsOrLinks: {
 		addSomething: ({ something }: GenericStringParameter) => LocalizedString;
+		editSomething: ({ something }: GenericStringParameter) => LocalizedString;
 	};
     components: {
 		footer: {

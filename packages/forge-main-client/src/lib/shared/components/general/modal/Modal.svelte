@@ -16,11 +16,11 @@
 	export let persistent: boolean = false;
 	// Set the css classes for dialog element
 	export let dialogClasses: string =
-		'backdrop:bg-rhino/50 min-h-min max-h-[80vh] px-4 rounded-3xl overflow-hidden';
+		'backdrop:bg-rhino/50 min-h-min max-h-[80vh] px-4 rounded-3xl overflow-hidden overflow-y-auto';
 	// Set the css classes for the modal title wrapper
-	export let modalTitleClasses: string = 'font-secondary-bold';
+	export let modalTitleClasses: string = 'font-secondary font-bold text-3xl';
 	// Set the css classes for the modal container, this is the direct child of the dialog element
-	export let modalContainerClasses: string = 'flex flex-col';
+	export let modalContainerClasses: string = 'flex flex-col px-4 pb-4 pt-2';
 	// Set the css classes for teh modal header
 	export let modalHeaderClasses: string =
 		'flex justify-between items-center py-4 shrink-0 max-h-[64px]';

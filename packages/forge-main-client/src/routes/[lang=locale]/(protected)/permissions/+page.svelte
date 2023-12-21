@@ -6,11 +6,29 @@
 	import LL from '$i18n/i18n-svelte';
 	import Button from '$lib/shared/components/general/button/Button.svelte';
 	import Permission from '$lib/shared/components/modules/permissions/Permission.svelte';
+	import AddEditModal from '$lib/shared/components/general/modal/AddEditModal.svelte';
+	import type { ModalState } from '$lib/shared/components/general/modal/types.js';
 
 	export let data;
 
 	$: permissions = data.permissions ?? [];
 	$: console.log('permissions: ', permissions);
+
+	// Setup for Modals ------------------------------------------------------------------------
+	let openAddEditModal: boolean = false;
+	let modalState: ModalState = 'add';
+	let editPermissionData: Permission | null = null;
+
+	const handleAction = (event: CustomEvent<{ permission: Permission }>) => {
+		const { permission } = event.detail;
+		editPermissionData = structuredClone(permission);
+		modalState = 'edit';
+		openAddEditModal = true;
+	};
+
+	// Setup for Add Form ----------------------------------------------------------------------
+
+	// Setup for Edit Form ---------------------------------------------------------------------
 </script>
 
 <Box>
@@ -24,7 +42,10 @@
 			iconHeight="24"
 			iconWidth="24"
 			iconColor={colors.white}
-			on:click={() => console.log('open add modal')}
+			on:click={() => {
+				openAddEditModal = true;
+				modalState = 'add';
+			}}
 		>
 			{$LL.buttonsOrLinks.addSomething({
 				something: $LL.modules.permissions.entity.single()
@@ -38,7 +59,7 @@
 		gridClasses="grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
 	>
 		{#each permissions as permission}
-			<Permission {permission} />
+			<Permission {permission} on:clickActionTriggered={handleAction} />
 		{:else}
 			<p>
 				{$LL.errors.noSomethingFound({
@@ -48,3 +69,16 @@
 		{/each}
 	</DynamicDataRenderer>
 </Box>
+
+{#if openAddEditModal}
+	<AddEditModal
+		bind:open={openAddEditModal}
+		{modalState}
+		entity={modalState === 'add'
+			? $LL.modules.permissions.entity.single()
+			: `${editPermissionData?.name} ${$LL.modules.permissions.entity.single()}`}
+	>
+		<div slot="add-form">add form</div>
+		<div slot="edit-form">edit form</div>
+	</AddEditModal>
+{/if}

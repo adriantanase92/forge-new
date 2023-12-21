@@ -6,11 +6,29 @@
 	import LL from '$i18n/i18n-svelte';
 	import Button from '$lib/shared/components/general/button/Button.svelte';
 	import Role from '$lib/shared/components/modules/roles/Role.svelte';
+	import AddEditModal from '$lib/shared/components/general/modal/AddEditModal.svelte';
+	import type { ModalState } from '$lib/shared/components/general/modal/types.js';
 
 	export let data;
 
 	$: roles = data.roles ?? [];
 	$: console.log('roles: ', roles);
+
+	// Setup for Modals ------------------------------------------------------------------------
+	let openAddEditModal: boolean = false;
+	let modalState: ModalState = 'add';
+	let editRoleData: Role | null = null;
+
+	const handleAction = (event: CustomEvent<{ role: Role }>) => {
+		const { role } = event.detail;
+		editRoleData = structuredClone(role);
+		modalState = 'edit';
+		openAddEditModal = true;
+	};
+
+	// Setup for Add Form ----------------------------------------------------------------------
+
+	// Setup for Edit Form ---------------------------------------------------------------------
 </script>
 
 <Box>
@@ -24,7 +42,10 @@
 			iconHeight="24"
 			iconWidth="24"
 			iconColor={colors.white}
-			on:click={() => console.log('open add modal')}
+			on:click={() => {
+				openAddEditModal = true;
+				modalState = 'add';
+			}}
 		>
 			{$LL.buttonsOrLinks.addSomething({
 				something: $LL.modules.roles.entity.single()
@@ -34,9 +55,22 @@
 
 	<DynamicDataRenderer layout="list" gap="gap-6">
 		{#each roles as role}
-			<Role {role} />
+			<Role {role} on:clickActionTriggered={handleAction} />
 		{:else}
 			<p>{$LL.errors.noSomethingFound({ something: $LL.modules.roles.entity.multiple() })}</p>
 		{/each}
 	</DynamicDataRenderer>
 </Box>
+
+{#if openAddEditModal}
+	<AddEditModal
+		bind:open={openAddEditModal}
+		{modalState}
+		entity={modalState === 'add'
+			? $LL.modules.roles.entity.single()
+			: `${editRoleData?.name} ${$LL.modules.roles.entity.single()}`}
+	>
+		<div slot="add-form">add form</div>
+		<div slot="edit-form">edit form</div>
+	</AddEditModal>
+{/if}
