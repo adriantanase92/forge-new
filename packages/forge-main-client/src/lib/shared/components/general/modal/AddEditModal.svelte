@@ -7,7 +7,6 @@
 	export let modalState: ModalState = 'add';
 	export let entity: string = 'item';
 
-	$: console.log('modalState: ', modalState);
 	$: title =
 		modalState === 'add'
 			? $LL.buttonsOrLinks.addSomething({ something: entity })

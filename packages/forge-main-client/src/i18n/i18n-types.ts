@@ -98,8 +98,11 @@ export type FieldsTranslations = {
 };
 
 export type ButtonsOrLinksTranslations = {
+	cancel: string;
+	confirm: string;
 	addSomething: string;
 	editSomething: string;
+	deleteSomething: string;
 };
 
 export type ComponentsTranslations = {
@@ -108,8 +111,11 @@ export type ComponentsTranslations = {
 		slogan: string;
 	};
     modal: {
-        edit: string;
-        add: string;
+		placeholders: {
+			title: string;
+			body: string;
+		};
+		deleteMessage: string;
     };
     table: {
         actions: string;
@@ -246,8 +252,11 @@ export type TranslationFunctions = {
 		};
     };
     buttonsOrLinks: {
+		cancel: () => LocalizedString;
+		confirm: () => LocalizedString;
 		addSomething: ({ something }: GenericStringParameter) => LocalizedString;
 		editSomething: ({ something }: GenericStringParameter) => LocalizedString;
+		deleteSomething: ({ something }: GenericStringParameter) => LocalizedString;
 	};
     components: {
 		footer: {
@@ -255,8 +264,11 @@ export type TranslationFunctions = {
 			slogan: () => LocalizedString;
 		};
         modal: {
-            edit: ({ something }: GenericStringParameter) => LocalizedString;
-            add: ({ something }: GenericStringParameter) => LocalizedString;
+			placeholders: {
+				title: () => LocalizedString;
+				body: () => LocalizedString;
+			};
+			deleteMessage: ({ entity }: GenericStringParameter) => LocalizedString;
         };
         table: {
             actions: () => LocalizedString;

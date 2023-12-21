@@ -6,8 +6,13 @@
 	export let permission: Permission;
 
 	const dispatch = createEventDispatcher();
-	const onClickAction = ({ permission }: { permission: Permission }) =>
-		dispatch('clickActionTriggered', { permission });
+	const onClickAction = ({
+		action,
+		permission
+	}: {
+		action: 'edit' | 'delete';
+		permission: Permission;
+	}) => dispatch('clickActionTriggered', { action, permission });
 </script>
 
 {#if permission}
@@ -26,7 +31,7 @@
 				iconHeight="18"
 				iconWidth="18"
 				iconColor={colors.white}
-				on:click={(e) => onClickAction({ permission })}
+				on:click={(e) => onClickAction({ action: 'edit', permission })}
 			/>
 			<Button
 				class="p-2"
@@ -36,7 +41,7 @@
 				iconHeight="18"
 				iconWidth="18"
 				iconColor={colors.white}
-				on:click={() => console.log(`delete permission ${permission.id}`)}
+				on:click={(e) => onClickAction({ action: 'delete', permission })}
 			/>
 		</div>
 	</div>

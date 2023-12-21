@@ -8,6 +8,8 @@
 	import Permission from '$lib/shared/components/modules/permissions/Permission.svelte';
 	import AddEditModal from '$lib/shared/components/general/modal/AddEditModal.svelte';
 	import type { ModalState } from '$lib/shared/components/general/modal/types.js';
+	import DeleteModal from '$lib/shared/components/general/modal/DeleteModal.svelte';
+	import { formatEntityForModal } from '$lib/shared/components/general/modal/utils.js';
 
 	export let data;
 
@@ -15,20 +17,38 @@
 	$: console.log('permissions: ', permissions);
 
 	// Setup for Modals ------------------------------------------------------------------------
+	let openDeleteModal: boolean = false;
 	let openAddEditModal: boolean = false;
 	let modalState: ModalState = 'add';
-	let editPermissionData: Permission | null = null;
+	let permissionData: Permission | null = null;
 
-	const handleAction = (event: CustomEvent<{ permission: Permission }>) => {
-		const { permission } = event.detail;
-		editPermissionData = structuredClone(permission);
-		modalState = 'edit';
-		openAddEditModal = true;
+	const handleAction = (
+		event: CustomEvent<{ action: 'edit' | 'delete'; permission: Permission }>
+	) => {
+		const { action, permission } = event.detail;
+		if (action === 'edit') {
+			permissionData = structuredClone(permission);
+			modalState = 'edit';
+			openAddEditModal = true;
+		} else {
+			permissionData = structuredClone(permission);
+			openDeleteModal = true;
+		}
 	};
 
 	// Setup for Add Form ----------------------------------------------------------------------
 
 	// Setup for Edit Form ---------------------------------------------------------------------
+
+	// Setup for Delete Action -----------------------------------------------------------------
+	const deleteItem = (event: CustomEvent<{ confirm: boolean }>) => {
+		const { confirm } = event.detail;
+
+		if (confirm) {
+			console.log('permission to be deleted: ', permissionData);
+			openDeleteModal = false;
+		}
+	};
 </script>
 
 <Box>
@@ -76,9 +96,25 @@
 		{modalState}
 		entity={modalState === 'add'
 			? $LL.modules.permissions.entity.single()
-			: `${editPermissionData?.name} ${$LL.modules.permissions.entity.single()}`}
+			: formatEntityForModal({
+					modalType: 'edit',
+					entity: $LL.modules.permissions.entity.single(),
+					itemName: permissionData?.name
+			  })}
 	>
 		<div slot="add-form">add form</div>
 		<div slot="edit-form">edit form</div>
 	</AddEditModal>
+{/if}
+
+{#if openDeleteModal}
+	<DeleteModal
+		bind:open={openDeleteModal}
+		entity={formatEntityForModal({
+			modalType: 'delete',
+			entity: $LL.modules.permissions.entity.single(),
+			itemName: permissionData?.name
+		})}
+		on:clickConfirmBtnTriggered={deleteItem}
+	/>
 {/if}

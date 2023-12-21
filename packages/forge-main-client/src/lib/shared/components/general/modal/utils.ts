@@ -13,3 +13,16 @@ export const getSizeBasedClasses = (size: size) => {
 
 	return classes;
 };
+
+export const formatEntityForModal = ({
+	modalType,
+	entity,
+	itemName
+}: {
+	modalType: 'edit' | 'delete';
+	entity: string;
+	itemName: string;
+}) =>
+	`<span class='${
+		modalType === 'delete' ? 'text-error font-bold' : 'text-cobalt'
+	}'>${itemName}</span> ${entity}`;

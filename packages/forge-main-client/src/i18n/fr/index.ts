@@ -68,8 +68,11 @@ export default {
 		}
 	},
 	buttonsOrLinks: {
+		cancel: 'Annuler',
+		confirm: 'Confirmer',
 		addSomething: 'Ajoute { something }',
-		editSomething: 'Modifier { something }'
+		editSomething: 'Modifier { something }',
+		deleteSomething: 'Supprimer { something }'
 	},
 	components: {
 		footer: {
@@ -77,8 +80,11 @@ export default {
 			slogan: 'forge - Votre assistant indispensable'
 		},
 		modal: {
-			edit: 'Modifier { something }',
-			add: 'Ajouter { something }'
+			placeholders: {
+				title: 'Titre modal',
+				body: 'Contenu modal'
+			},
+			deleteMessage: "Êtes-vous d'accord pour supprimer ceci { entity }?"
 		},
 		table: {
 			actions: 'actions'

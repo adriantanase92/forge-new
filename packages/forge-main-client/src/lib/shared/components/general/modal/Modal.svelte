@@ -1,4 +1,5 @@
 <script lang="ts">
+	import LL from '$i18n/i18n-svelte';
 	import { colors } from '$lib/shared/utils';
 	import Button from '../button/Button.svelte';
 	import type { size } from './types';
@@ -11,7 +12,7 @@
 	// Set the size of the modal
 	export let size: size = 'md';
 	// Set the title of the modal
-	export let title: string = 'Modal Title';
+	export let title: string = $LL.components.modal.placeholders.title();
 	// Set to `true` if modal should not close on outside click
 	export let persistent: boolean = false;
 	// Set the css classes for dialog element
@@ -79,7 +80,7 @@
 				{#if hasTitleIcon && $$slots.titleIcon}
 					<slot name="titleIcon" />
 				{/if}
-				{title}
+				{@html title}
 			</div>
 			<Button
 				icon="x"
@@ -96,7 +97,7 @@
 			{#if $$slots.default}
 				<slot />
 			{:else}
-				<p>Modal content</p>
+				<p>{$LL.components.modal.placeholders.body()}</p>
 			{/if}
 		</div>
 
@@ -106,9 +107,11 @@
 					<slot name="footer" />
 				{:else}
 					<Button class="px-4 py-2" kind="outline" on:click={() => (open = false)}
-						>Cancel</Button
+						>{$LL.buttonsOrLinks.cancel()}</Button
 					>
-					<Button class="px-4 py-2" on:click={() => (open = false)}>Confirm</Button>
+					<Button class="px-4 py-2" on:click={() => (open = false)}
+						>{$LL.buttonsOrLinks.confirm()}</Button
+					>
 				{/if}
 			</div>
 		{/if}
