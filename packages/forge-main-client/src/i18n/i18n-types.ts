@@ -30,7 +30,7 @@ export type RoutesTranslations = {
 };
 
 export type AppTranslations = {
-	version: string;
+	versionInfo: string;
 }
 
 export type MenusTranslations = {
@@ -198,7 +198,7 @@ export type TranslationFunctions = {
         };
     };
 	app: {
-		version: ({ versionNumber }: GenericStringParameter) => LocalizedString;
+		versionInfo: ({ version }: GenericStringParameter) => LocalizedString;
 	};
 	menus: {
 		sidebar: {

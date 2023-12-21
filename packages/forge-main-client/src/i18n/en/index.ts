@@ -4,7 +4,7 @@ import { localeRoutes } from '$i18n/routes';
 export default {
 	routes: localeRoutes('en'),
 	app: {
-		version: 'Version { versionNumber }'
+		versionInfo: 'Version { version }'
 	},
 	menus: {
 		sidebar: {

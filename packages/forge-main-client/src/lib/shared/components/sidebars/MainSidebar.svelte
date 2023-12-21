@@ -5,8 +5,6 @@
 	import Logo from '../logo/Logo.svelte';
 	import { page } from '$app/stores';
 	import Button from '../general/button/Button.svelte';
-	import { version } from 'dompurify';
-	import { number } from 'zod';
 
 	const activeLink = (linkName: string) =>
 		$page.url.pathname.includes(linkName)
@@ -78,7 +76,7 @@
 					</div>
 				</Button>
 
-				<div class="text-xs opacity-50">{$LL.app.version({ versionNumber: '1.0.0' })}</div>
+				<div class="text-xs opacity-50">{$LL.app.versionInfo({ version: '1.0.0' })}</div>
 			</footer>
 		</div>
 	</div>
