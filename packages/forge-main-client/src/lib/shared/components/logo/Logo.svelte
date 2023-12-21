@@ -6,7 +6,7 @@
 	export let anchorCssClasses: string = 'flex flex-col gap-2 items-center w-full';
 	export let iconCssClasses: string = 'max-w-[100px]';
 	export let textCssClasses: string =
-		'text-2xl font-medium tracking-wide text-gray-900 compact-hide ml-2 uppercase';
+		'text-2xl font-secondary font-bold tracking-wide text-cobalt compact-hide ml-2 uppercase';
 </script>
 
 <a {id} href={$LL.routes.protected.dashboard()} class={anchorCssClasses}>

@@ -120,6 +120,11 @@ export type ComponentsTranslations = {
     table: {
         actions: string;
     };
+	form: {
+		placeholders: {
+			selectEmptyOptionText: string;
+		}
+	};
 };
 
 export type ModulesTranslations = {
@@ -273,6 +278,11 @@ export type TranslationFunctions = {
         table: {
             actions: () => LocalizedString;
         };
+		form: {
+			placeholders: {
+				selectEmptyOptionText: () => LocalizedString;
+			}
+		};
     };
 	modules: {
 		roles: {

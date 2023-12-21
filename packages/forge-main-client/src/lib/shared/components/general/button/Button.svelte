@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { kind, type } from './types';
-	import type { iconPlacement } from './types';
+	import type { iconPlacement } from '../../types';
 	import { SvgIcon } from '../svg';
 	import { getCssColorClassesFromColor, getCssKindClassesFromKind } from './utils';
 	import Loading from '../loading/Loading.svelte';

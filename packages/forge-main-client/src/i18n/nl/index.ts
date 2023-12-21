@@ -88,6 +88,11 @@ export default {
 		},
 		table: {
 			actions: 'acties'
+		},
+		form: {
+			placeholders: {
+				selectEmptyOptionText: 'Kies een optie'
+			}
 		}
 	},
 	modules: {
