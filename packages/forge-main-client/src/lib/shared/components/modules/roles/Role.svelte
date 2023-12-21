@@ -7,7 +7,7 @@
 
 {#if role}
 	<div
-		class="rounded-xl group p-6 shadow-sm border border-rhino hover:border-cobalt border-solid flex justify-between items-center"
+		class="bg-gallery rounded-xl group p-6 shadow-sm border border-rhino hover:border-cobalt border-solid flex justify-between items-center"
 	>
 		<div class="capitalize text-xl font-semibold group-hover:text-cobalt">
 			{role.name}
