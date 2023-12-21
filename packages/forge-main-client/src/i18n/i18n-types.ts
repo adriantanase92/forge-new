@@ -29,6 +29,10 @@ export type RoutesTranslations = {
 	}
 };
 
+export type AppTranslations = {
+	version: string;
+}
+
 export type MenusTranslations = {
 	sidebar: {
 		dashboard: string;
@@ -103,6 +107,7 @@ export type ButtonsOrLinksTranslations = {
 	addSomething: string;
 	editSomething: string;
 	deleteSomething: string;
+	logOut: string;
 };
 
 export type ComponentsTranslations = {
@@ -164,6 +169,7 @@ export type ModulesTranslations = {
 
 type RootTranslation = {
     routes: RoutesTranslations;
+	app: AppTranslations;
     menus: MenusTranslations;
     pages: PagesTranslations;
     warnings: WarningsTranslations;
@@ -191,6 +197,9 @@ export type TranslationFunctions = {
 			profile: () => LocalizedString;
         };
     };
+	app: {
+		version: ({ versionNumber }: GenericStringParameter) => LocalizedString;
+	};
 	menus: {
 		sidebar: {
 			dashboard: () => LocalizedString;
@@ -209,7 +218,7 @@ export type TranslationFunctions = {
 	};
 	warnings: {};
 	errors: {
-		required: ({field}: GenericStringParameter) => LocalizedString;
+		required: ({ field }: GenericStringParameter) => LocalizedString;
         requiredSelect: () => LocalizedString;
         requiredDate: () => LocalizedString;
         invalidDate: () => LocalizedString;
@@ -262,6 +271,7 @@ export type TranslationFunctions = {
 		addSomething: ({ something }: GenericStringParameter) => LocalizedString;
 		editSomething: ({ something }: GenericStringParameter) => LocalizedString;
 		deleteSomething: ({ something }: GenericStringParameter) => LocalizedString;
+		logOut: () => LocalizedString;
 	};
     components: {
 		footer: {

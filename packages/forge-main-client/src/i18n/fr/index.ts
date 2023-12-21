@@ -3,6 +3,9 @@ import { localeRoutes } from '$i18n/routes';
 
 export default {
 	routes: localeRoutes('fr'),
+	app: {
+		version: 'Version { versionNumber }'
+	},
 	menus: {
 		sidebar: {
 			dashboard: 'Tableau de bord',
@@ -72,7 +75,8 @@ export default {
 		confirm: 'Confirmer',
 		addSomething: 'Ajoute { something }',
 		editSomething: 'Modifier { something }',
-		deleteSomething: 'Supprimer { something }'
+		deleteSomething: 'Supprimer { something }',
+		logOut: 'Se déconnecter'
 	},
 	components: {
 		footer: {
