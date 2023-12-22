@@ -26,17 +26,17 @@ export const getIconColor = (type: notificationType): string => {
 
 export const getCssClasses = (kind: notificationKind, type: notificationType) => {
 	const bgClasses = {
-		success: 'bg-yoboo-success-alt',
-		error: 'bg-yoboo-error-alt',
-		warning: 'bg-yoboo-warning-alt',
-		info: 'bg-yoboo-cobalt-alt'
+		success: 'bg-success-alt',
+		error: 'bg-error-alt',
+		warning: 'bg-warning-alt',
+		info: 'bg-cobalt-alt'
 	};
 
 	const borderClasses = {
-		success: 'border-yoboo-success',
-		error: 'border-yoboo-error',
-		warning: 'border-yoboo-warning',
-		info: 'border-yoboo-cobalt'
+		success: 'border-success',
+		error: 'border-error',
+		warning: 'border-warning',
+		info: 'border-cobalt'
 	};
 
 	const styleClasses = {
@@ -46,10 +46,10 @@ export const getCssClasses = (kind: notificationKind, type: notificationType) =>
 	};
 
 	const textClasses = {
-		success: 'text-yoboo-success',
-		error: 'text-yoboo-error',
-		warning: 'text-yoboo-warning',
-		info: 'text-yoboo-cobalt'
+		success: 'text-success',
+		error: 'text-error',
+		warning: 'text-warning',
+		info: 'text-cobalt'
 	};
 
 	return `${styleClasses[kind]} ${kind === 'fill' ? bgClasses[type] : ''} ${

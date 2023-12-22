@@ -10,15 +10,15 @@
 	import type { ModalState } from '$lib/shared/components/general/modal/types.js';
 	import DeleteModal from '$lib/shared/components/general/modal/DeleteModal.svelte';
 	import { formatEntityForModal } from '$lib/shared/components/general/modal/utils.js';
-	import { superForm } from 'sveltekit-superforms/client';
+	import { superForm, superValidateSync } from 'sveltekit-superforms/client';
 	import FormError from '$lib/shared/components/general/form/FormError.svelte';
 	import FieldError from '$lib/shared/components/general/form/FieldError.svelte';
 	import Input from '$lib/shared/components/general/form/Input.svelte';
+	import { permissionSchema } from './schema.js';
 
 	export let data;
 
 	$: permissions = data.permissions ?? [];
-	$: console.log('permissions: ', permissions);
 
 	// Setup for Modals ------------------------------------------------------------------------
 	let openDeleteModal: boolean = false;
@@ -41,7 +41,19 @@
 	};
 
 	// Setup for Form --------------------------------------------------------------------------
-	const form = superForm(data.form, {
+	const getFormDataFromPermissionData = (permissionData: Permission): { name: string } => {
+		const { name } = permissionData;
+		return { name };
+	};
+	$: superFormData =
+		modalState === 'add'
+			? data.form
+			: superValidateSync(
+					getFormDataFromPermissionData(permissionData as Permission),
+					permissionSchema($LL)
+			  );
+
+	const form = superForm(superFormData, {
 		validators: {
 			name: (name) =>
 				textValidator({
