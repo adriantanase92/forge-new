@@ -14,9 +14,5 @@
 </script>
 
 <Modal noFooter size="md" bind:open {title}>
-	{#if modalState === 'edit'}
-		<slot name="edit-form" />
-	{:else}
-		<slot name="add-form" />
-	{/if}
+	<slot />
 </Modal>

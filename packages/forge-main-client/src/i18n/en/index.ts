@@ -45,6 +45,9 @@ export default {
 		noInformation: 'No information'
 	},
 	fields: {
+		name: {
+			text: 'name'
+		},
 		fullName: {
 			text: 'full name'
 		},
@@ -76,6 +79,7 @@ export default {
 		addSomething: 'Add { something }',
 		editSomething: 'Edit { something }',
 		deleteSomething: 'Delete { something }',
+		saveSomething: 'Save { something }',
 		logOut: 'Log out'
 	},
 	components: {

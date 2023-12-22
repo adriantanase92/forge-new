@@ -75,6 +75,9 @@ export type ErrorsTranslations = {
 };
 
 export type FieldsTranslations = {
+	name: {
+		text: string;
+	};
     fullName: {
         text: string;
     };
@@ -107,6 +110,7 @@ export type ButtonsOrLinksTranslations = {
 	addSomething: string;
 	editSomething: string;
 	deleteSomething: string;
+	saveSomething: string;
 	logOut: string;
 };
 
@@ -240,6 +244,9 @@ export type TranslationFunctions = {
         noInformation: () => LocalizedString;
     };
     fields: {
+		name: {
+			text: () => LocalizedString;
+		};
         fullName: {
             text: () => LocalizedString;
         };
@@ -271,6 +278,7 @@ export type TranslationFunctions = {
 		addSomething: ({ something }: GenericStringParameter) => LocalizedString;
 		editSomething: ({ something }: GenericStringParameter) => LocalizedString;
 		deleteSomething: ({ something }: GenericStringParameter) => LocalizedString;
+		saveSomething: ({ something }: GenericStringParameter) => LocalizedString;
 		logOut: () => LocalizedString;
 	};
     components: {

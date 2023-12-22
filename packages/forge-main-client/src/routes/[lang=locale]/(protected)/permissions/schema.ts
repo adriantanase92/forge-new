@@ -5,7 +5,9 @@ export const permissionSchema = (t: TranslationFunctions) =>
 	z
 		.object({
 			name: z
-				.string()
+				.string({
+					required_error: t.errors.required({ field: t.fields.name.text() })
+				})
 				.trim()
 				.toLowerCase()
 				.min(2, t.errors.minCharacters({ number: 2 }))
