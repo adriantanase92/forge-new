@@ -5,9 +5,12 @@ export const roleSchema = (t: TranslationFunctions) =>
 	z
 		.object({
 			name: z
-				.string()
+				.string({
+					required_error: t.errors.required({
+						field: `${t.modules.roles.entity.single()} ${t.fields.name.text()}`
+					})
+				})
 				.trim()
-				.toLowerCase()
 				.min(2, t.errors.minCharacters({ number: 2 }))
 				.max(60, t.errors.maxCharacters({ number: 60 }))
 		})

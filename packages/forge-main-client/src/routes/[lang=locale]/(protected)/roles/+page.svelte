@@ -6,29 +6,54 @@
 	import LL from '$i18n/i18n-svelte';
 	import Button from '$lib/shared/components/general/button/Button.svelte';
 	import Role from '$lib/shared/components/modules/roles/Role.svelte';
-	import AddEditModal from '$lib/shared/components/general/modal/AddEditModal.svelte';
+	import AddEditRoleModal from '$lib/shared/components/modules/roles/AddEditRoleModal.svelte';
 	import type { ModalState } from '$lib/shared/components/general/modal/types.js';
+	import { superValidateSync } from 'sveltekit-superforms/client';
+	import { roleSchema } from './schema.js';
+	import { formatEntityForModal } from '$lib/shared/components/general/modal/utils.js';
+	import DeleteModal from '$lib/shared/components/general/modal/DeleteModal.svelte';
 
 	export let data;
 
 	$: roles = data.roles ?? [];
-	$: console.log('roles: ', roles);
+
+	// Setup for Form --------------------------------------------------------------------------
+	const getFormDataFromRoleData = (roleData: Role): { name: string } => {
+		const { name } = roleData;
+		return { name };
+	};
+	$: superFormData =
+		modalState === 'add'
+			? data.form
+			: superValidateSync(getFormDataFromRoleData(roleData as Role), roleSchema($LL));
 
 	// Setup for Modals ------------------------------------------------------------------------
+	let openDeleteModal: boolean = false;
 	let openAddEditModal: boolean = false;
 	let modalState: ModalState = 'add';
-	let editRoleData: Role | null = null;
+	let roleData: Role | null = null;
 
-	const handleAction = (event: CustomEvent<{ role: Role }>) => {
-		const { role } = event.detail;
-		editRoleData = structuredClone(role);
-		modalState = 'edit';
-		openAddEditModal = true;
+	const handleAction = (event: CustomEvent<{ action: 'edit' | 'delete'; role: Role }>) => {
+		const { action, role } = event.detail;
+		roleData = structuredClone(role);
+
+		if (action === 'edit') {
+			modalState = 'edit';
+			openAddEditModal = true;
+		} else {
+			openDeleteModal = true;
+		}
 	};
 
-	// Setup for Add Form ----------------------------------------------------------------------
+	// Setup for Delete Action -----------------------------------------------------------------
+	const deleteItem = (event: CustomEvent<{ confirm: boolean }>) => {
+		const { confirm } = event.detail;
 
-	// Setup for Edit Form ---------------------------------------------------------------------
+		if (confirm) {
+			console.log('role to be deleted: ', roleData);
+			openDeleteModal = false;
+		}
+	};
 </script>
 
 <Box>
@@ -63,14 +88,28 @@
 </Box>
 
 {#if openAddEditModal}
-	<AddEditModal
+	<AddEditRoleModal
 		bind:open={openAddEditModal}
 		{modalState}
+		{superFormData}
 		entity={modalState === 'add'
 			? $LL.modules.roles.entity.single()
-			: `${editRoleData?.name} ${$LL.modules.roles.entity.single()}`}
-	>
-		<div slot="add-form">add form</div>
-		<div slot="edit-form">edit form</div>
-	</AddEditModal>
+			: formatEntityForModal({
+					modalType: 'edit',
+					entity: $LL.modules.roles.entity.single(),
+					itemName: roleData?.name
+			  })}
+	/>
+{/if}
+
+{#if openDeleteModal}
+	<DeleteModal
+		bind:open={openDeleteModal}
+		entity={formatEntityForModal({
+			modalType: 'delete',
+			entity: $LL.modules.permissions.entity.single(),
+			itemName: roleData?.name
+		})}
+		on:clickConfirmBtnTriggered={deleteItem}
+	/>
 {/if}

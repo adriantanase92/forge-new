@@ -6,7 +6,8 @@
 	export let role: Role;
 
 	const dispatch = createEventDispatcher();
-	const onClickAction = ({ role }: { role: Role }) => dispatch('clickActionTriggered', { role });
+	const onClickAction = ({ action, role }: { action: 'edit' | 'delete'; role: Role }) =>
+		dispatch('clickActionTriggered', { action, role });
 </script>
 
 {#if role}
@@ -25,7 +26,7 @@
 				iconHeight="18"
 				iconWidth="18"
 				iconColor={colors.white}
-				on:click={(e) => onClickAction({ role })}
+				on:click={(e) => onClickAction({ action: 'edit', role })}
 			/>
 			<Button
 				class="p-2"
@@ -35,7 +36,7 @@
 				iconHeight="18"
 				iconWidth="18"
 				iconColor={colors.white}
-				on:click={() => console.log(`delete role ${role.id}`)}
+				on:click={(e) => onClickAction({ action: 'delete', role })}
 			/>
 		</div>
 	</div>

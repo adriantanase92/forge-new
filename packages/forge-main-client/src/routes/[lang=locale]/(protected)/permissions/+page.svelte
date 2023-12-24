@@ -40,12 +40,12 @@
 		event: CustomEvent<{ action: 'edit' | 'delete'; permission: Permission }>
 	) => {
 		const { action, permission } = event.detail;
+		permissionData = structuredClone(permission);
+
 		if (action === 'edit') {
-			permissionData = structuredClone(permission);
 			modalState = 'edit';
 			openAddEditModal = true;
 		} else {
-			permissionData = structuredClone(permission);
 			openDeleteModal = true;
 		}
 	};

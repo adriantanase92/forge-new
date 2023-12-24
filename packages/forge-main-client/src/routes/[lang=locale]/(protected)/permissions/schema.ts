@@ -6,10 +6,11 @@ export const permissionSchema = (t: TranslationFunctions) =>
 		.object({
 			name: z
 				.string({
-					required_error: t.errors.required({ field: t.fields.name.text() })
+					required_error: t.errors.required({
+						field: `${t.modules.permissions.entity.single()} ${t.fields.name.text()}`
+					})
 				})
 				.trim()
-				.toLowerCase()
 				.min(2, t.errors.minCharacters({ number: 2 }))
 				.max(60, t.errors.maxCharacters({ number: 60 }))
 		})
