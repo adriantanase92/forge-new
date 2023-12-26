@@ -8,19 +8,17 @@ export const createCollections = async (dbClient: MongoClient, db: Db) => {
     // 'roles'
     if (!collections.some((e) => e.name === 'roles')) await dbClient.db().createCollection('roles');
     await db.roles.createIndex(
-        { email: 1, deleted: 1 },
+        { name: 1, deleted: 1 },
         { unique: true, collation: { locale: 'en', strength: 2 } }
     );
-    await db.roles.createIndex({ name: 'text', email: 'text' });
 
     // 'permissions'
     if (!collections.some((e) => e.name === 'permissions'))
         await dbClient.db().createCollection('permissions');
     await db.permissions.createIndex(
-        { email: 1, deleted: 1 },
+        { name: 1, deleted: 1 },
         { unique: true, collation: { locale: 'en', strength: 2 } }
     );
-    await db.permissions.createIndex({ name: 'text', email: 'text' });
 
     // 'users'
     if (!collections.some((e) => e.name === 'users')) await dbClient.db().createCollection('users');
@@ -29,22 +27,27 @@ export const createCollections = async (dbClient: MongoClient, db: Db) => {
         { unique: true, collation: { locale: 'en', strength: 2 } }
     );
     await db.users.createIndex({ passwordRecoveryCode: 1 });
-    await db.users.createIndex({ name: 'text', email: 'text' });
+    await db.users.createIndex({
+        firstName: 'text',
+        lastName: 'text',
+        email: 'text',
+        phone: 'text'
+    });
 
     // 'projects'
     if (!collections.some((e) => e.name === 'projects'))
         await dbClient.db().createCollection('projects');
     await db.projects.createIndex(
-        { email: 1, deleted: 1 },
+        { name: 1, deleted: 1 },
         { unique: true, collation: { locale: 'en', strength: 2 } }
     );
-    await db.projects.createIndex({ name: 'text', email: 'text' });
+    await db.projects.createIndex({ name: 'text', description: 'text' });
 
     // 'tasks'
     if (!collections.some((e) => e.name === 'tasks')) await dbClient.db().createCollection('tasks');
     await db.tasks.createIndex(
-        { email: 1, deleted: 1 },
+        { title: 1, deleted: 1 },
         { unique: true, collation: { locale: 'en', strength: 2 } }
     );
-    await db.tasks.createIndex({ name: 'text', email: 'text' });
+    await db.tasks.createIndex({ name: 'text', description: 'text' });
 };
