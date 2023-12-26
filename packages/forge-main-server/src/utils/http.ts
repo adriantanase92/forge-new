@@ -1,5 +1,5 @@
 import { FastifyRequest, RouteGenericInterface } from 'fastify';
-import { Collection, ObjectId, Document, WithId, Filter } from 'mongodb';
+import { Collection, ObjectId, Document, WithId, Filter, OptionalUnlessRequiredId } from 'mongodb';
 import { formErrorObject, type Error } from './error-handling';
 
 export type ResponseData<T> = { data: WithId<T> | WithId<T>[] | { messageKey: string } };
@@ -112,25 +112,22 @@ export const createOne = async <T extends Document, B>({
     collection
 }: HttpParams<T, undefined, undefined, B>): Promise<Response<T>> => {
     try {
-        const newUser = request.body as B;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const result = await collection.insertOne(newUser as any);
+        const newItem = request.body as B;
+        const result = await collection.insertOne(newItem as OptionalUnlessRequiredId<T>);
 
         if (!result.acknowledged) {
             return { error: formErrorObject({ errorKey: 'insert_operation_failed' }) };
         }
 
-        // Retrieve the inserted document using the insertedId
-        const insertedUser = await collection.findOne({ _id: result.insertedId } as Filter<T>);
+        const insertedItem = await collection.findOne({ _id: result.insertedId } as Filter<T>);
 
-        // If the insertedUser is null, handle the error appropriately
-        if (!insertedUser) {
+        if (!insertedItem) {
             return {
                 error: formErrorObject({ errorKey: 'failed_to_retrieve_the_inserted_document' })
             };
         }
 
-        return { data: insertedUser };
+        return { data: insertedItem };
     } catch (e) {
         return { error: formErrorObject({ errorKey: 'server_http_error_occured', error: e }) };
     }
