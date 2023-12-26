@@ -34,7 +34,8 @@ const boot = async () => {
     await fastify.register(rateLimit, { max: 100, timeWindow: '1 minute' });
     fastify.register(helmet);
 
-    fastify.register(userRoutes);
+    const globalRotuesPrefix = '/api';
+    fastify.register(userRoutes, { prefix: globalRotuesPrefix, ...db });
 
     fastify.listen({
         port: parseInt(process.env.PORT_MAIN_SERVER!, 10),
