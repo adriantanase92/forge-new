@@ -1,15 +1,11 @@
+import { ObjectId } from 'mongodb';
 import { z } from 'zod';
+import { TaskStatus } from '../enums/Task';
 
 export const zTask = z.object({
-    firstName: z.string().min(1).max(50),
-    lastName: z.string().min(1).max(50),
-    email: z.string().min(1).max(100).email(),
-    emailVerified: z.boolean(),
-    phoneNo: z.string().min(1).max(50).optional(),
-    consentTC: z.boolean(),
-    consentIntake: z.boolean(),
-    passwordRecoveryCode: z.string().min(1).max(50).optional(),
-    passwordRecoveryCodeExpireAt: z.date().optional(),
-    createdAt: z.date(),
-    deleted: z.string().min(1).optional()
+    title: z.string().trim().min(6).max(100),
+    description: z.string().trim().min(6).max(500).optional(),
+    project: z.instanceof(ObjectId),
+    responsible: z.instanceof(ObjectId).array().optional(),
+    status: z.nativeEnum(TaskStatus)
 });

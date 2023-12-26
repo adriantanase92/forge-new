@@ -1,2 +1,3 @@
-export * from './User';
 export * from './Language';
+export * from './Modules';
+export * from './User';

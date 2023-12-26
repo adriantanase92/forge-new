@@ -1,15 +1,11 @@
+import { ObjectId } from 'mongodb';
 import { z } from 'zod';
 
 export const zProject = z.object({
-    firstName: z.string().min(1).max(50),
-    lastName: z.string().min(1).max(50),
-    email: z.string().min(1).max(100).email(),
-    emailVerified: z.boolean(),
-    phoneNo: z.string().min(1).max(50).optional(),
-    consentTC: z.boolean(),
-    consentIntake: z.boolean(),
-    passwordRecoveryCode: z.string().min(1).max(50).optional(),
-    passwordRecoveryCodeExpireAt: z.date().optional(),
-    createdAt: z.date(),
-    deleted: z.string().min(1).optional()
+    name: z.string().trim().min(6).max(100),
+    description: z.string().trim().min(6).max(500).optional(),
+    clients: z.instanceof(ObjectId).array().optional(),
+    workers: z.instanceof(ObjectId).array().optional(),
+    manager: z.instanceof(ObjectId).optional(),
+    tasks: z.instanceof(ObjectId).array().optional()
 });

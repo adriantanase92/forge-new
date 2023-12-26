@@ -1,15 +1,12 @@
 import { z } from 'zod';
-import { Language, UserRole } from '../enums';
+import { Language, Modules, UserRole } from '../enums';
 import { ObjectId } from 'mongodb';
 import { emailRegex } from '../utils';
 import { zAddress } from './zAddress';
 
-export const zUserPermissions = z.object({
-    // Vezi cum faci aici sa le iei dynamic
-    roles: z.object({
-        read: z.boolean(),
-        write: z.boolean()
-    })
+export const zUserPermission = z.object({
+    read: z.boolean(),
+    write: z.boolean()
 });
 
 export const zUser = z.object({
@@ -20,7 +17,7 @@ export const zUser = z.object({
     role: z.nativeEnum(UserRole),
     preferredLanguage: z.nativeEnum(Language),
     projects: z.instanceof(ObjectId).array().optional(),
-    // permissions: z.instanceof(ObjectId).array().optional(),
+    permissions: z.record(z.nativeEnum(Modules), zUserPermission),
     address: zAddress.optional(),
     createdAt: z.date()
 });

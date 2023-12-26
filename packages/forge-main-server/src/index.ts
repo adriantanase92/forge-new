@@ -7,7 +7,7 @@ import rateLimit from '@fastify/rate-limit';
 import { Db } from './models';
 import { createCollections } from './utils';
 import dotenv from 'dotenv';
-import userRoutes from './routes/user-routes';
+import userRoutes from './routes/user';
 
 // --------- dotenv ------------
 dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
