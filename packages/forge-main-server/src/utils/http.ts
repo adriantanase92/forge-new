@@ -142,8 +142,6 @@ export const createOne = async <T extends Document, B>({
     }
 };
 
-// export const createMany = async <T>({request, collection}: HttpParams<T>): Promise<Response<T> => {}
-
 export const updateOne = async <T extends Document>({
     collection,
     id,

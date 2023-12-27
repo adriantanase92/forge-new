@@ -105,7 +105,7 @@ async function permissionRoutes(app: FastifyInstance, db: Db) {
             if ('error' in response) {
                 reply.code(500).send({ error: response.error });
             } else {
-                reply.code(204).send({ data: response.data });
+                reply.code(200).send({ data: response.data });
             }
         } catch (e) {
             reply.code(500).send({
