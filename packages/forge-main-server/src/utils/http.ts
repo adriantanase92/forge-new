@@ -34,7 +34,7 @@ export const getAll = async <T extends Document>({
         const {
             search,
             sortBy,
-            sortOrder = 'asc',
+            sortOrder = 'desc',
             filters,
             page = '1',
             limit = '10',
@@ -71,7 +71,7 @@ export const getAll = async <T extends Document>({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const sort: any = {};
         if (sortBy) {
-            sort[sortBy] = sortOrder === 'asc' ? 1 : -1;
+            sort[sortBy] = sortOrder === 'desc' ? 1 : -1;
         }
 
         // Create a projection object to exclude fields
