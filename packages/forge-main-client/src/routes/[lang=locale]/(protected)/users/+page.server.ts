@@ -1,9 +1,8 @@
-import { generateUsers } from '$lib/shared';
 import type { Actions, PageServerLoad } from './$types.js';
 
 export const load: PageServerLoad = (async () => {
 	return {
-		users: generateUsers(25)
+		users: {}
 	};
 }) satisfies PageServerLoad;
 

@@ -1,9 +1,8 @@
-import { generateProjects } from '$lib/shared';
 import type { Actions, PageServerLoad } from './$types.js';
 
 export const load: PageServerLoad = (async () => {
 	return {
-		projects: generateProjects(25)
+		projects: {}
 	};
 }) satisfies PageServerLoad;
 

@@ -19,6 +19,5 @@ export const zUser = z.object({
     preferredLanguage: z.nativeEnum(Language),
     projects: z.instanceof(ObjectId).array().optional(),
     permissions: z.record(z.nativeEnum(Modules), zUserPermission),
-    address: zAddress.optional(),
-    createdAt: z.date()
+    address: zAddress.optional()
 });

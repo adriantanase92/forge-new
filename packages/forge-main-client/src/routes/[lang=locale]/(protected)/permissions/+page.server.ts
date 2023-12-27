@@ -1,4 +1,3 @@
-import { generatePermissions } from '$lib/shared';
 import { message, superValidate } from 'sveltekit-superforms/client';
 import type { Actions, PageServerLoad } from './$types.js';
 import { permissionSchema } from './schema.js';
@@ -11,7 +10,7 @@ export const load: PageServerLoad = (async ({ locals: { t } }) => {
 
 	return {
 		form,
-		permissions: generatePermissions()
+		permissions: {}
 	};
 }) satisfies PageServerLoad;
 

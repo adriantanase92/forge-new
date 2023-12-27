@@ -6,6 +6,6 @@ export const zProject = z.object({
     description: z.string().trim().min(6).max(500).optional(),
     clients: z.instanceof(ObjectId).array().optional(),
     workers: z.instanceof(ObjectId).array().optional(),
-    manager: z.instanceof(ObjectId).optional(),
+    manager: z.instanceof(ObjectId),
     tasks: z.instanceof(ObjectId).array().optional()
 });
