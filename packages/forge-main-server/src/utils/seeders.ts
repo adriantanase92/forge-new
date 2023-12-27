@@ -5,13 +5,121 @@ import { Language, Modules, UserRole } from '../enums';
 import { formErrorObject } from './error-handling';
 import { createPermissionsObjectFromArray, generateObjectIds } from './helpers';
 import { TaskStatus } from '../enums/Task';
+import dotenv from 'dotenv';
+import path from 'path';
+
+// --------- dotenv ------------
+dotenv.config({ path: path.resolve(__dirname, '../../../../.env') });
+
+const groupTasksByProject = (projects: ObjectId[], tasks: ObjectId[]) => {
+    if (
+        projects.length !== numberOfProjectsToGenerate ||
+        tasks.length !== numberOfTasksToGenerate * numberOfProjectsToGenerate
+    ) {
+        throw new Error(
+            `Invalid input: there must be ${numberOfProjectsToGenerate} projects and ${
+                numberOfTasksToGenerate * numberOfProjectsToGenerate
+            } tasks.`
+        );
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const groupedTasks: any = {};
+
+    projects.forEach((project, index) => {
+        const startIndex = index * numberOfProjectsToGenerate;
+        const endIndex = startIndex + numberOfProjectsToGenerate;
+
+        groupedTasks[project.toString()] = tasks.slice(startIndex, endIndex);
+    });
+
+    return groupedTasks;
+};
 
 const numberOfUsersToGenerate = 15;
-const numberOfTasksToGenerate = 10;
+const numberOfProjectsToGenerate = 5;
+const numberOfTasksToGenerate = 5;
+const projectsIds = generateObjectIds(numberOfProjectsToGenerate);
+const tasksIds = generateObjectIds(numberOfTasksToGenerate * numberOfProjectsToGenerate);
+const tasksIdsPerProjectsIds = groupTasksByProject(projectsIds, tasksIds);
 const roles: UserRole[] = Object.values(UserRole);
 const modules: Modules[] = Object.values(Modules);
 const languages: Language[] = Object.values(Language);
 const taskStatuses: TaskStatus[] = Object.values(TaskStatus);
+const adminObjectId = new ObjectId(process.env.ADMIN_OBJECT_ID);
+const managerObjectId = new ObjectId(process.env.MANAGER_OBJECT_ID);
+const clientObjectId = new ObjectId(process.env.CLIENT_OBJECT_ID);
+const workerObjectId = new ObjectId(process.env.WORKER_OBJECT_ID);
+const adminUserPermissions = createPermissionsObjectFromArray(
+    modules.map((module) => ({
+        name: module,
+        read: true,
+        write: true
+    }))
+);
+const managerUserPermissions = createPermissionsObjectFromArray(
+    modules.map((module) => {
+        if (module === 'roles' || module === 'permissions') {
+            return {
+                name: module,
+                read: false,
+                write: false
+            };
+        } else if (module === 'users') {
+            return {
+                name: module,
+                read: true,
+                write: false
+            };
+        } else {
+            return {
+                name: module,
+                read: true,
+                write: true
+            };
+        }
+    })
+);
+const clientUserPermissions = createPermissionsObjectFromArray(
+    modules.map((module) => {
+        if (module === 'projects' || module === 'tasks') {
+            return {
+                name: module,
+                read: true,
+                write: true
+            };
+        } else {
+            return {
+                name: module,
+                read: false,
+                write: false
+            };
+        }
+    })
+);
+const workerUserPermissions = createPermissionsObjectFromArray(
+    modules.map((module) => {
+        if (module === 'tasks') {
+            return {
+                name: module,
+                read: true,
+                write: true
+            };
+        } else if (module === 'users' || module === 'projects') {
+            return {
+                name: module,
+                read: true,
+                write: false
+            };
+        } else {
+            return {
+                name: module,
+                read: false,
+                write: false
+            };
+        }
+    })
+);
 const defaultUserPermissions = createPermissionsObjectFromArray(
     modules.map((module) => ({
         name: module,
@@ -19,7 +127,6 @@ const defaultUserPermissions = createPermissionsObjectFromArray(
         write: false
     }))
 );
-const projectsIds = generateObjectIds(25);
 
 export const seedRoles = async (collection: Collection<Role>): Promise<void> => {
     try {
@@ -57,6 +164,66 @@ export const seedPermissions = async (collection: Collection<Permission>): Promi
 
 export const seedUsers = async (collection: Collection<User>): Promise<void> => {
     try {
+        const adminUser = {
+            _id: adminObjectId,
+            firstName: `${process.env.ADMIN_FIRST_NAME}`,
+            lastName: `${process.env.ADMIN_LAST_NAME}`,
+            email: `${process.env.ADMIN_EMAIL}`,
+            phone: `${process.env.ADMIN_PHONE}`,
+            role: UserRole.ADMIN,
+            preferredLanguage: Language.EN,
+            projects: projectsIds,
+            permissions: adminUserPermissions,
+            changeLog: {
+                createdAt: new Date()
+            }
+        };
+
+        const managerTestUser = {
+            _id: managerObjectId,
+            firstName: 'Manager',
+            lastName: 'TestUser',
+            email: 'manager.test.user@forge.com',
+            phone: faker.phone.number(),
+            role: UserRole.MANAGER,
+            preferredLanguage: Language.EN,
+            projects: projectsIds,
+            permissions: managerUserPermissions,
+            changeLog: {
+                createdAt: new Date()
+            }
+        };
+
+        const clientTestUser = {
+            _id: clientObjectId,
+            firstName: 'Client',
+            lastName: 'TestUser',
+            email: 'client.test.user@forge.com',
+            phone: faker.phone.number(),
+            role: UserRole.CLIENT,
+            preferredLanguage: Language.EN,
+            projects: projectsIds,
+            permissions: clientUserPermissions,
+            changeLog: {
+                createdAt: new Date()
+            }
+        };
+
+        const workerTestUser = {
+            _id: workerObjectId,
+            firstName: 'Worker',
+            lastName: 'TestUser',
+            email: 'worker.test.user@forge.com',
+            phone: faker.phone.number(),
+            role: UserRole.WORKER,
+            preferredLanguage: Language.EN,
+            projects: projectsIds,
+            permissions: workerUserPermissions,
+            changeLog: {
+                createdAt: new Date()
+            }
+        };
+
         const usersToInsert = Array.from({ length: numberOfUsersToGenerate }, () => {
             const firstName = faker.person.firstName();
             const lastName = faker.person.lastName();
@@ -87,7 +254,13 @@ export const seedUsers = async (collection: Collection<User>): Promise<void> => 
             };
         });
 
-        await collection.insertMany(usersToInsert);
+        await collection.insertMany([
+            adminUser,
+            clientTestUser,
+            workerTestUser,
+            managerTestUser,
+            ...usersToInsert
+        ]);
     } catch (e) {
         console.error({
             error: formErrorObject({ errorKey: 'error_seeding_users', error: e })
@@ -103,18 +276,11 @@ export const seedProjects = async (collection: Collection<Project>): Promise<voi
             _id: new ObjectId(projectId),
             name: faker.commerce.productName(),
             description: faker.lorem.paragraph(),
-            clients: Array.from(
-                { length: faker.number.int({ min: 1, max: 3 }) },
-                () => new ObjectId()
-            ),
-            workers: Array.from(
-                { length: faker.number.int({ min: 1, max: 10 }) },
-                () => new ObjectId()
-            ),
-            manager: new ObjectId(),
-            tasks: Array.from(
-                { length: faker.number.int({ min: 1, max: 10 }) },
-                () => new ObjectId()
+            clients: [clientObjectId],
+            workers: [workerObjectId],
+            manager: managerObjectId,
+            tasks: tasksIdsPerProjectsIds[projectId.toString()].map(
+                (taskId: string) => new ObjectId(taskId)
             ),
             changeLog: {
                 createdAt: new Date()
@@ -133,25 +299,23 @@ export const seedProjects = async (collection: Collection<Project>): Promise<voi
 
 export const seedTasks = async (collection: Collection<Task>): Promise<void> => {
     try {
-        const tasksToInsert = projectsIds
-            .map((projectId) =>
-                Array.from({ length: numberOfTasksToGenerate }, () => ({
-                    title: faker.lorem.text(),
-                    description: faker.lorem.paragraph(),
-                    project: new ObjectId(projectId),
-                    responsible: Array.from(
-                        { length: faker.number.int({ min: 1, max: 3 }) },
-                        () => new ObjectId()
-                    ),
-                    status: faker.helpers.arrayElement(taskStatuses),
-                    changeLog: {
-                        createdAt: new Date()
-                    }
-                }))
-            )
-            .flat();
+        const tasksToInsert = [];
+        for (const [projectId, taskIds] of Object.entries(tasksIdsPerProjectsIds)) {
+            const arrayToInsert = (taskIds as string[]).map((taskId: string) => ({
+                _id: new ObjectId(taskId),
+                title: faker.lorem.text(),
+                description: faker.lorem.paragraph(),
+                project: new ObjectId(projectId),
+                responsible: [workerObjectId],
+                status: faker.helpers.arrayElement(taskStatuses),
+                changeLog: {
+                    createdAt: new Date()
+                }
+            }));
+            tasksToInsert.push(arrayToInsert);
+        }
 
-        await collection.insertMany(tasksToInsert);
+        await collection.insertMany(tasksToInsert.flat());
     } catch (e) {
         console.error({
             error: formErrorObject({ errorKey: 'error_seeding_tasks', error: e })
