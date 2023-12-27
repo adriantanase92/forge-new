@@ -7,7 +7,11 @@ import rateLimit from '@fastify/rate-limit';
 import { Db } from './models';
 import { createCollections } from './utils';
 import dotenv from 'dotenv';
+import permissionRoutes from './routes/permission';
+import roleRoutes from './routes/role';
 import userRoutes from './routes/user';
+import taskRoutes from './routes/task';
+import projectRoutes from './routes/project';
 
 // --------- dotenv ------------
 dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
@@ -35,7 +39,11 @@ const boot = async () => {
     fastify.register(helmet);
 
     const globalRotuesPrefix = '/api';
+    fastify.register(roleRoutes, { prefix: globalRotuesPrefix, ...db });
+    fastify.register(permissionRoutes, { prefix: globalRotuesPrefix, ...db });
     fastify.register(userRoutes, { prefix: globalRotuesPrefix, ...db });
+    fastify.register(projectRoutes, { prefix: globalRotuesPrefix, ...db });
+    fastify.register(taskRoutes, { prefix: globalRotuesPrefix, ...db });
 
     fastify.listen({
         port: parseInt(process.env.PORT_MAIN_SERVER!, 10),
