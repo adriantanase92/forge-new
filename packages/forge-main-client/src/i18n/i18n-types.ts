@@ -72,6 +72,7 @@ export type ErrorsTranslations = {
     emailAddressAlreadyInUse: string;
     noDataFound: string;
     noInformation: string;
+	errorFetchingSomethingFromServer: string;
 };
 
 export type FieldsTranslations = {
@@ -242,6 +243,7 @@ export type TranslationFunctions = {
         emailAddressAlreadyInUse: () => LocalizedString;
         noDataFound: () => LocalizedString;
         noInformation: () => LocalizedString;
+		errorFetchingSomethingFromServer: ({ something }: GenericStringParameter) => LocalizedString;
     };
     fields: {
 		name: {

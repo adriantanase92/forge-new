@@ -42,7 +42,8 @@ export default {
 		emailNotFound: 'This email address was not found.',
 		emailAddressAlreadyInUse: 'This email address already exists.',
 		noDataFound: 'No data found!',
-		noInformation: 'No information'
+		noInformation: 'No information',
+		errorFetchingSomethingFromServer: 'Error fetching { something } from server.'
 	},
 	fields: {
 		name: {

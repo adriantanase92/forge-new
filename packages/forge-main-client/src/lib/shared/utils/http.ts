@@ -1,6 +1,4 @@
 import type { HttpMethod } from '@sveltejs/kit';
-import type { Modules } from '.';
-import { PUBLIC_MAIN_SERVER_URL } from '$env/static/public';
 
 type RawData = Record<string, unknown>;
 type FetchFunctionType = typeof fetch;
@@ -53,15 +51,13 @@ type QueryString = {
 
 type HttpOptionsParams = {
 	fetch: FetchFunctionType;
-	module: Modules;
+	apiUrl: string;
 	errorKey: string;
 };
 
-const mainServerUrl = `${PUBLIC_MAIN_SERVER_URL}/api`;
-
 export const getAll = async ({
 	fetch,
-	module,
+	apiUrl,
 	requestQuery = {},
 	errorKey
 }: HttpOptionsParams & {
@@ -93,7 +89,7 @@ export const getAll = async ({
 
 		const response = await api({
 			fetch,
-			url: `${mainServerUrl}/${module}${queryString}`
+			url: `${apiUrl}${queryString}`
 		});
 
 		return { data: response.data };
@@ -104,7 +100,7 @@ export const getAll = async ({
 
 export const getOne = async ({
 	fetch,
-	module,
+	apiUrl,
 	id,
 	errorKey
 }: HttpOptionsParams & {
@@ -113,7 +109,7 @@ export const getOne = async ({
 	try {
 		const response = await api({
 			fetch,
-			url: `${mainServerUrl}/${module}/${id}`
+			url: `${apiUrl}/${id}`
 		});
 
 		return { data: response.data };
@@ -124,7 +120,7 @@ export const getOne = async ({
 
 export const createOne = async <T>({
 	fetch,
-	module,
+	apiUrl,
 	errorKey,
 	data
 }: HttpOptionsParams & {
@@ -134,7 +130,7 @@ export const createOne = async <T>({
 		const response = await api({
 			fetch,
 			method: 'POST',
-			url: `${mainServerUrl}/${module}`,
+			url: apiUrl,
 			data: data as RawData
 		});
 
@@ -146,7 +142,7 @@ export const createOne = async <T>({
 
 export const updateOne = async <T>({
 	fetch,
-	module,
+	apiUrl,
 	errorKey,
 	data,
 	id
@@ -158,7 +154,7 @@ export const updateOne = async <T>({
 		const response = await api({
 			fetch,
 			method: 'PATCH',
-			url: `${mainServerUrl}/${module}/${id}`,
+			url: `${apiUrl}/${id}`,
 			data
 		});
 
@@ -170,7 +166,7 @@ export const updateOne = async <T>({
 
 export const deleteOne = async ({
 	fetch,
-	module,
+	apiUrl,
 	id,
 	errorKey
 }: HttpOptionsParams & {
@@ -180,7 +176,7 @@ export const deleteOne = async ({
 		const response = await api({
 			fetch: fetch,
 			method: 'DELETE',
-			url: `${mainServerUrl}/${module}/${id}`
+			url: `${apiUrl}/${id}`
 		});
 
 		return { data: response.data };

@@ -42,7 +42,8 @@ export default {
 		emailNotFound: 'Oeps, we kunnen dit e-mailadres niet vinden.',
 		emailAddressAlreadyInUse: 'Dit e-mailadres bestaat al.',
 		noDataFound: 'Geen data gevonden!',
-		noInformation: 'Geen informatie.'
+		noInformation: 'Geen informatie.',
+		errorFetchingSomethingFromServer: 'Fout bij het ophalen van { something } van de server.'
 	},
 	fields: {
 		name: {

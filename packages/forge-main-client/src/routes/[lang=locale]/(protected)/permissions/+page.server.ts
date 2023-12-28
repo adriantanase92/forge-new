@@ -5,17 +5,18 @@ import type { ZodValidation } from 'sveltekit-superforms';
 import type { AnyZodObject } from 'zod';
 import type { Message } from '$lib/shared/components/general/form/types.js';
 import { Modules, getAll } from '$lib/shared/index.js';
+import { PUBLIC_MAIN_SERVER_URL } from '$env/static/public';
 
 export const load: PageServerLoad = (async ({ fetch, locals: { t } }) => {
 	const form = await superValidate(permissionSchema(t));
 
 	const permissions = await getAll({
 		fetch,
-		module: Modules.PERMISSIONS,
-		errorKey: ''
+		apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.PERMISSIONS}`,
+		errorKey: t.errors.errorFetchingSomethingFromServer({
+			something: t.modules.permissions.entity.multiple()
+		})
 	});
-
-	console.log('---------permissions: ', permissions);
 
 	return {
 		form,
@@ -35,6 +36,7 @@ export const actions = {
 			return message(form, t.errors.invalid_form());
 		} else {
 			console.log('----------totul e bine');
+			console.log('----------formData: ', formData);
 		}
 	}
 } satisfies Actions;

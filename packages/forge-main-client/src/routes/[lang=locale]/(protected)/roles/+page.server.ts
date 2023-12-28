@@ -4,32 +4,24 @@ import { roleSchema } from './schema.js';
 import type { ZodValidation } from 'sveltekit-superforms';
 import type { AnyZodObject } from 'zod';
 import type { Message } from '$lib/shared/components/general/form/types.js';
-import { api } from '$lib/shared/utils/http.js';
+import { Modules, getAll } from '$lib/shared/index.js';
 import { PUBLIC_MAIN_SERVER_URL } from '$env/static/public';
 
 export const load: PageServerLoad = (async ({ locals: { t } }) => {
 	const form = await superValidate(roleSchema(t));
 
-	try {
-		const roles = await api({
-			fetch,
-			url: `${PUBLIC_MAIN_SERVER_URL}/api/roles`
-		});
+	const roles = await getAll({
+		fetch,
+		apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.ROLES}`,
+		errorKey: t.errors.errorFetchingSomethingFromServer({
+			something: t.modules.roles.entity.multiple()
+		})
+	});
 
-		if ('error' in roles) {
-			console.error({ error: roles.error });
-		}
-
-		return {
-			form,
-			roles: roles.data ?? { items: [], totalItems: 0 }
-		};
-	} catch (e) {
-		return {
-			form,
-			roles: { items: [], totalItems: 0 }
-		};
-	}
+	return {
+		form,
+		roles: roles.data ?? { items: [], totalItems: 0 }
+	};
 }) satisfies PageServerLoad;
 
 export const actions = {
