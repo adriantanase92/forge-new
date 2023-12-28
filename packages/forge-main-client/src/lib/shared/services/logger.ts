@@ -18,7 +18,7 @@ export interface Logger {
 	 * @returns
 	 * A new child logger instance.
 	 */
-	child(metadata: Record<string, any>): Readonly<Logger>;
+	child(metadata: Record<string, unknown>): Readonly<Logger>;
 
 	/**
 	 * Logs a debug message with optional metadata.
@@ -29,7 +29,7 @@ export interface Logger {
 	 * @param metadata
 	 * Optional metadata to log.
 	 */
-	debug(log: string, metadata?: Record<string, any>): void;
+	debug(log: string, metadata?: Record<string, unknown>): void;
 
 	/**
 	 * Logs an info message with optional metadata.
@@ -40,7 +40,7 @@ export interface Logger {
 	 * @param metadata
 	 * Optional metadata to log.
 	 */
-	info(log: string, metadata?: Record<string, any>): void;
+	info(log: string, metadata?: Record<string, unknown>): void;
 
 	/**
 	 * Logs a warning message with optional metadata.
@@ -51,7 +51,7 @@ export interface Logger {
 	 *  @param metadata
 	 * Optional metadata to log.
 	 */
-	warn(log: string, metadata?: Record<string, any>): void;
+	warn(log: string, metadata?: Record<string, unknown>): void;
 
 	/**
 	 * Logs an error message with optional metadata.
@@ -62,7 +62,7 @@ export interface Logger {
 	 * @param metadata
 	 * Optional metadata to log.
 	 */
-	error(log: string, metadata?: Record<string, any>): void;
+	error(log: string, metadata?: Record<string, unknown>): void;
 }
 
 /** Initializes the logger service. */
@@ -75,19 +75,19 @@ function createLogger(child?: pino.Logger): Readonly<Logger> {
 	const logger = child ?? (browser ? clientLogger() : serverLogger());
 
 	return {
-		child(metadata: Record<string, any>) {
+		child(metadata: Record<string, unknown>) {
 			return createLogger(logger.child(metadata));
 		},
-		debug(log: string, metadata: any) {
+		debug(log: string, metadata: unknown) {
 			logger.debug(metadata, log);
 		},
-		info(log: string, metadata: any) {
+		info(log: string, metadata: unknown) {
 			logger.info(metadata, log);
 		},
-		warn(log: string, ...metadata: any[]) {
+		warn(log: string, ...metadata: unknown[]) {
 			logger.warn(metadata, log);
 		},
-		error(log: string, metadata: any) {
+		error(log: string, metadata: unknown) {
 			logger.error(metadata, log);
 		}
 	};

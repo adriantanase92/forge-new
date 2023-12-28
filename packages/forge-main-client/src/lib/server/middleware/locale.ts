@@ -2,14 +2,14 @@ import { initAcceptLanguageHeaderDetector } from 'typesafe-i18n/detectors';
 import { redirect } from '@sveltejs/kit';
 import type { Locales } from '$i18n/i18n-types';
 import { detectLocale, i18n, isLocale } from '$i18n/i18n-util';
-import { isApiRoute, isAsset } from '$lib/shared';
+import { isAsset } from '$lib/shared';
 import type { MiddlewareBuilder } from './utils';
 
 /** Implements the `locale` middleware interface */
 export default (({ logger, event, resolve }) => {
 	return {
 		canSkip() {
-			return isAsset(event.route.id, event.url) || isApiRoute(event.route.id);
+			return isAsset(event.route.id, event.url);
 		},
 		resolve() {
 			return resolve(event);

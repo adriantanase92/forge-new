@@ -15,7 +15,7 @@
 
 	export let data;
 
-	$: roles = data.roles ?? [];
+	$: roles = data.roles.items ?? [];
 
 	// Setup for Form --------------------------------------------------------------------------
 	const getFormDataFromRoleData = (roleData: Role): { name: string } => {

@@ -69,7 +69,7 @@ async function projectRoutes(app: FastifyInstance, db: Db) {
         }
     });
 
-    app.put<{ Params: RouteParams; Body: Partial<Project> }>(
+    app.patch<{ Params: RouteParams; Body: Partial<Project> }>(
         '/projects/:id',
         async (request, reply) => {
             try {

@@ -23,10 +23,6 @@ export function isAsset(routeId: string | null, url: URL) {
 	);
 }
 
-export function isApiRoute(routeId: string | null) {
-	return routeId !== null && routeId.startsWith('/api/');
-}
-
 export function isOAuthRoute(routeId: string | null) {
 	return routeId !== null && routeId.startsWith('/(oauth)/');
 }

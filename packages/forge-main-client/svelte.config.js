@@ -20,6 +20,9 @@ const config = {
 			'$i18n': './src/i18n',
 			'$i18n/*': './src/i18n/*'
 		},
+		env: {
+			dir: '../../'
+		}
 	}
 };
 

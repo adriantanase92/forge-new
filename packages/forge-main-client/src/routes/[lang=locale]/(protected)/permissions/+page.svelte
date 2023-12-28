@@ -15,7 +15,7 @@
 
 	export let data;
 
-	$: permissions = data.permissions ?? [];
+	$: permissions = data.permissions.items ?? [];
 
 	// Setup for Form --------------------------------------------------------------------------
 	const getFormDataFromPermissionData = (permissionData: Permission): { name: string } => {

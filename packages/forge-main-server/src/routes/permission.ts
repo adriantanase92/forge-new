@@ -69,7 +69,7 @@ async function permissionRoutes(app: FastifyInstance, db: Db) {
         }
     });
 
-    app.put<{ Params: RouteParams; Body: Partial<Permission> }>(
+    app.patch<{ Params: RouteParams; Body: Partial<Permission> }>(
         '/permissions/:id',
         async (request, reply) => {
             try {

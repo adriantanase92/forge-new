@@ -4,13 +4,22 @@ import { permissionSchema } from './schema.js';
 import type { ZodValidation } from 'sveltekit-superforms';
 import type { AnyZodObject } from 'zod';
 import type { Message } from '$lib/shared/components/general/form/types.js';
+import { Modules, getAll } from '$lib/shared/index.js';
 
-export const load: PageServerLoad = (async ({ locals: { t } }) => {
+export const load: PageServerLoad = (async ({ fetch, locals: { t } }) => {
 	const form = await superValidate(permissionSchema(t));
+
+	const permissions = await getAll({
+		fetch,
+		module: Modules.PERMISSIONS,
+		errorKey: ''
+	});
+
+	console.log('---------permissions: ', permissions);
 
 	return {
 		form,
-		permissions: {}
+		permissions: permissions.data ?? { items: [], totalItems: 0 }
 	};
 }) satisfies PageServerLoad;
 

@@ -69,27 +69,30 @@ async function userRoutes(app: FastifyInstance, db: Db) {
         }
     });
 
-    app.put<{ Params: RouteParams; Body: Partial<User> }>('/users/:id', async (request, reply) => {
-        try {
-            const { id } = request.params;
-            const updatedUser = request.body;
-            const response = await updateOne<UserDocument>({
-                collection: db.users,
-                id,
-                dataToUpdate: updatedUser
-            });
+    app.patch<{ Params: RouteParams; Body: Partial<User> }>(
+        '/users/:id',
+        async (request, reply) => {
+            try {
+                const { id } = request.params;
+                const updatedUser = request.body;
+                const response = await updateOne<UserDocument>({
+                    collection: db.users,
+                    id,
+                    dataToUpdate: updatedUser
+                });
 
-            if ('error' in response) {
-                reply.code(500).send({ error: response.error });
-            } else {
-                reply.code(201).send({ data: response.data });
+                if ('error' in response) {
+                    reply.code(500).send({ error: response.error });
+                } else {
+                    reply.code(201).send({ data: response.data });
+                }
+            } catch (e) {
+                reply.code(500).send({
+                    error: formErrorObject({ errorKey: 'internal_server_error', error: e })
+                });
             }
-        } catch (e) {
-            reply.code(500).send({
-                error: formErrorObject({ errorKey: 'internal_server_error', error: e })
-            });
         }
-    });
+    );
 
     app.delete<{ Params: RouteParams }>('/users/:id', async (request, reply) => {
         try {
