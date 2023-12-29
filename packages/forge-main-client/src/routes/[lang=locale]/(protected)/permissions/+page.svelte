@@ -18,9 +18,11 @@
 	$: permissions = data.permissions.items ?? [];
 
 	// Setup for Form --------------------------------------------------------------------------
-	const getFormDataFromPermissionData = (permissionData: Permission): { name: string } => {
-		const { name } = permissionData;
-		return { name };
+	const getFormDataFromPermissionData = (
+		permissionData: Permission
+	): { name: string; id: string } => {
+		const { name, _id: id } = permissionData;
+		return { name, id };
 	};
 	$: superFormData =
 		modalState === 'add'

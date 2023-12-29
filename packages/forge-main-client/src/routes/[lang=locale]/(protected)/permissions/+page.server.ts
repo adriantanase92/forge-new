@@ -35,6 +35,7 @@ export const actions = {
 		if (!form.valid) {
 			return message(form, t.errors.invalid_form());
 		} else {
+			// console.log('----------form.id: ', formData.id);
 			console.log('----------totul e bine');
 			console.log('----------formData: ', formData);
 		}

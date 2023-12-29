@@ -4,6 +4,7 @@ import { z } from 'zod';
 export const permissionSchema = (t: TranslationFunctions) =>
 	z
 		.object({
+			id: z.string().optional(),
 			name: z
 				.string({
 					required_error: t.errors.required({
