@@ -20,7 +20,7 @@ export enum PreferredLanguage {
 }
 
 export type Role = {
-	id: string;
+	id?: string;
 	name: UserRole;
 };
 

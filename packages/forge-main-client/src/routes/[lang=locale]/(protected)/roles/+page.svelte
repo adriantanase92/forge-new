@@ -2,30 +2,28 @@
 	import Box from '$lib/shared/components/panel/Box.svelte';
 	import PageTitle from '$lib/shared/components/panel/PageTitle.svelte';
 	import DynamicDataRenderer from '$lib/shared/components/general/dynamic-data-renderer/DynamicDataRenderer.svelte';
-	import { capitalize, colors } from '$lib/shared/index.js';
+	import { Modules, UserRole, capitalize, colors, deleteOne } from '$lib/shared/index.js';
 	import LL from '$i18n/i18n-svelte';
 	import Button from '$lib/shared/components/general/button/Button.svelte';
 	import Role from '$lib/shared/components/modules/roles/Role.svelte';
 	import AddEditRoleModal from '$lib/shared/components/modules/roles/AddEditRoleModal.svelte';
 	import type { ModalState } from '$lib/shared/components/general/modal/types.js';
-	import { superValidateSync } from 'sveltekit-superforms/client';
 	import { roleSchema } from './schema.js';
 	import { formatEntityForModal } from '$lib/shared/components/general/modal/utils.js';
 	import DeleteModal from '$lib/shared/components/general/modal/DeleteModal.svelte';
+	import { PUBLIC_MAIN_SERVER_URL } from '$env/static/public';
+	import { invalidateAll } from '$app/navigation';
 
 	export let data;
 
 	$: roles = data.roles.items ?? [];
 
 	// Setup for Form --------------------------------------------------------------------------
-	const getFormDataFromRoleData = (roleData: Role): { name: string } => {
-		const { name } = roleData;
-		return { name };
+	const getFormDataFromRoleData = (roleData: Role): { name: UserRole; id: string } => {
+		const { name, _id: id } = roleData;
+		return { name, id };
 	};
-	$: superFormData =
-		modalState === 'add'
-			? data.form
-			: superValidateSync(getFormDataFromRoleData(roleData as Role), roleSchema($LL));
+	let dataForEditForm: { name: UserRole; id: string };
 
 	// Setup for Modals ------------------------------------------------------------------------
 	let openDeleteModal: boolean = false;
@@ -39,6 +37,7 @@
 
 		if (action === 'edit') {
 			modalState = 'edit';
+			dataForEditForm = getFormDataFromRoleData(roleData as Role);
 			openAddEditModal = true;
 		} else {
 			openDeleteModal = true;
@@ -46,11 +45,21 @@
 	};
 
 	// Setup for Delete Action -----------------------------------------------------------------
-	const deleteItem = (event: CustomEvent<{ confirm: boolean }>) => {
+	const deleteItem = async (event: CustomEvent<{ confirm: boolean }>) => {
 		const { confirm } = event.detail;
 
 		if (confirm) {
-			console.log('role to be deleted: ', roleData);
+			const { _id: id } = roleData as Role;
+			const response = await deleteOne({
+				apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.ROLES}`,
+				errorKey: $LL.errors.errorFetchingSomethingFromServer({
+					something: $LL.modules.roles.entity.single()
+				}),
+				id
+			});
+			// TODO: don't forget about notification here
+			console.log('delete response: ', response);
+			invalidateAll();
 			openDeleteModal = false;
 		}
 	};
@@ -91,7 +100,8 @@
 	<AddEditRoleModal
 		bind:open={openAddEditModal}
 		{modalState}
-		{superFormData}
+		{dataForEditForm}
+		schema={roleSchema($LL)}
 		entity={modalState === 'add'
 			? $LL.modules.roles.entity.single()
 			: formatEntityForModal({
@@ -107,7 +117,7 @@
 		bind:open={openDeleteModal}
 		entity={formatEntityForModal({
 			modalType: 'delete',
-			entity: $LL.modules.permissions.entity.single(),
+			entity: $LL.modules.roles.entity.single(),
 			itemName: roleData?.name
 		})}
 		on:clickConfirmBtnTriggered={deleteItem}

@@ -18,8 +18,6 @@
 
 	$: permissions = data.permissions.items ?? [];
 
-	$: console.log('permissions: ', permissions);
-
 	// Setup for Form --------------------------------------------------------------------------
 	const getFormDataFromPermissionData = (
 		permissionData: Permission
