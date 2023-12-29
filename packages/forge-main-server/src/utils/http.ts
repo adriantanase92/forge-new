@@ -158,11 +158,11 @@ export const updateOne = async <T extends Document>({
             { returnDocument: 'after' }
         );
 
-        if (result && !('value' in result)) {
+        if (result === null) {
             return { error: formErrorObject({ errorKey: 'item_not_found' }) };
         }
 
-        return { data: result?.value };
+        return { data: result };
     } catch (e) {
         return { error: formErrorObject({ errorKey: 'server_http_error_occured', error: e }) };
     }

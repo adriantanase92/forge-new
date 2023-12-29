@@ -25,7 +25,7 @@ export type Role = {
 };
 
 export type Permission = {
-	id: string;
+	id?: string;
 	name: Modules;
 };
 

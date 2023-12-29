@@ -2,35 +2,32 @@
 	import Box from '$lib/shared/components/panel/Box.svelte';
 	import PageTitle from '$lib/shared/components/panel/PageTitle.svelte';
 	import DynamicDataRenderer from '$lib/shared/components/general/dynamic-data-renderer/DynamicDataRenderer.svelte';
-	import { capitalize, colors } from '$lib/shared/index.js';
+	import { Modules, capitalize, colors, deleteOne } from '$lib/shared/index.js';
 	import LL from '$i18n/i18n-svelte';
 	import Button from '$lib/shared/components/general/button/Button.svelte';
 	import Permission from '$lib/shared/components/modules/permissions/Permission.svelte';
 	import type { ModalState } from '$lib/shared/components/general/modal/types.js';
 	import DeleteModal from '$lib/shared/components/general/modal/DeleteModal.svelte';
 	import { formatEntityForModal } from '$lib/shared/components/general/modal/utils.js';
-	import { superValidateSync } from 'sveltekit-superforms/client';
-	import { permissionSchema } from './schema.js';
 	import AddEditPermissionModal from '$lib/shared/components/modules/permissions/AddEditPermissionModal.svelte';
+	import { permissionSchema } from './schema.js';
+	import { PUBLIC_MAIN_SERVER_URL } from '$env/static/public';
+	import { invalidateAll } from '$app/navigation';
 
 	export let data;
 
 	$: permissions = data.permissions.items ?? [];
 
+	$: console.log('permissions: ', permissions);
+
 	// Setup for Form --------------------------------------------------------------------------
 	const getFormDataFromPermissionData = (
 		permissionData: Permission
-	): { name: string; id: string } => {
+	): { name: Modules; id: string } => {
 		const { name, _id: id } = permissionData;
 		return { name, id };
 	};
-	$: superFormData =
-		modalState === 'add'
-			? data.form
-			: superValidateSync(
-					getFormDataFromPermissionData(permissionData as Permission),
-					permissionSchema($LL)
-			  );
+	let dataForEditForm: { name: Modules; id: string };
 
 	// Setup for Modals ------------------------------------------------------------------------
 	let openDeleteModal: boolean = false;
@@ -46,6 +43,7 @@
 
 		if (action === 'edit') {
 			modalState = 'edit';
+			dataForEditForm = getFormDataFromPermissionData(permissionData as Permission);
 			openAddEditModal = true;
 		} else {
 			openDeleteModal = true;
@@ -53,11 +51,21 @@
 	};
 
 	// Setup for Delete Action -----------------------------------------------------------------
-	const deleteItem = (event: CustomEvent<{ confirm: boolean }>) => {
+	const deleteItem = async (event: CustomEvent<{ confirm: boolean }>) => {
 		const { confirm } = event.detail;
 
 		if (confirm) {
-			console.log('permission to be deleted: ', permissionData);
+			const { _id: id } = permissionData as Permission;
+			const response = await deleteOne({
+				apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.PERMISSIONS}`,
+				errorKey: $LL.errors.errorFetchingSomethingFromServer({
+					something: $LL.modules.permissions.entity.single()
+				}),
+				id
+			});
+			// TODO: don't forget about notification here
+			console.log('delete response: ', response);
+			invalidateAll();
 			openDeleteModal = false;
 		}
 	};
@@ -106,7 +114,8 @@
 	<AddEditPermissionModal
 		bind:open={openAddEditModal}
 		{modalState}
-		{superFormData}
+		{dataForEditForm}
+		schema={permissionSchema($LL)}
 		entity={modalState === 'add'
 			? $LL.modules.permissions.entity.single()
 			: formatEntityForModal({

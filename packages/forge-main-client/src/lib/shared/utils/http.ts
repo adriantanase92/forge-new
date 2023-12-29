@@ -50,7 +50,7 @@ type QueryString = {
 };
 
 type HttpOptionsParams = {
-	fetch: FetchFunctionType;
+	fetch?: FetchFunctionType;
 	apiUrl: string;
 	errorKey: string;
 };
