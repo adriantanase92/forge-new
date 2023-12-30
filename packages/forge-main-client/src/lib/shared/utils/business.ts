@@ -34,26 +34,30 @@ export type PermissionOptions = {
 	write: boolean;
 };
 
-export type UserPermission = Permission & PermissionOptions;
+export type UserPermissionArrayItem = Permission & PermissionOptions;
+
+export type UserPermissions = Record<Modules, PermissionOptions>;
+
+export type Address = {
+	country?: string;
+	county?: string;
+	city?: string;
+	street?: string;
+	locationNumber?: string;
+	zipCode?: string;
+};
 
 export type User = {
 	id: string;
 	firstName: string;
 	lastName: string;
 	email: string;
-	phone: string;
+	phone?: string;
 	role: UserRole;
-	permissions: UserPermission[];
+	permissions: UserPermissions;
 	preferredLanguage: PreferredLanguage;
 	projects: string[];
-	address: {
-		country: string;
-		county: string;
-		city: string;
-		street: string;
-		locationNumber: string;
-		zipCode: string;
-	};
+	address?: Address;
 	createdAt: string;
 };
 

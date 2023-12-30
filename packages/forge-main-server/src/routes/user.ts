@@ -32,7 +32,7 @@ async function userRoutes(app: FastifyInstance, db: Db) {
         }
     });
 
-    app.get<{ Params: RouteParams }>('/user/:id', async (request, reply) => {
+    app.get<{ Params: RouteParams }>('/users/:id', async (request, reply) => {
         try {
             const { id } = request.params;
             const response = await getOne<UserDocument>({ collection: db.users, id });

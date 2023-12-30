@@ -72,6 +72,9 @@ export default {
 		},
 		phone: {
 			text: 'telefoon'
+		},
+		role: {
+			text: 'rol'
 		}
 	},
 	buttonsOrLinks: {

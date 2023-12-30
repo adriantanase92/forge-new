@@ -32,7 +32,7 @@ async function permissionRoutes(app: FastifyInstance, db: Db) {
         }
     });
 
-    app.get<{ Params: RouteParams }>('/permission/:id', async (request, reply) => {
+    app.get<{ Params: RouteParams }>('/permissions/:id', async (request, reply) => {
         try {
             const { id } = request.params;
             const response = await getOne<PermissionDocument>({ collection: db.permissions, id });

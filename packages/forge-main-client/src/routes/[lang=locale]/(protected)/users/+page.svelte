@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Button from '$lib/shared/components/general/button/Button.svelte';
 	import Table from '$lib/shared/components/general/table/Table.svelte';
 	import type {
 		TableAction,
@@ -9,7 +8,19 @@
 	import LL from '$i18n/i18n-svelte';
 	import PageTitle from '$lib/shared/components/panel/PageTitle.svelte';
 	import Box from '$lib/shared/components/panel/Box.svelte';
-	import { capitalize, UserRole } from '$lib/shared/index.js';
+	import {
+		capitalize,
+		colors,
+		deleteOne,
+		Modules,
+		UserRole,
+		type User,
+		formatObjectFromTable
+	} from '$lib/shared/index.js';
+	import { PUBLIC_MAIN_SERVER_URL } from '$env/static/public';
+	import { goto, invalidateAll } from '$app/navigation';
+	import DeleteModal from '$lib/shared/components/general/modal/DeleteModal.svelte';
+	import { formatEntityForModal } from '$lib/shared/components/general/modal/utils.js';
 
 	export let data;
 
@@ -19,11 +30,11 @@
 	});
 
 	const headers = [
-		{ key: 'firstName', text: 'sdfsfs' },
-		{ key: 'lastName', text: 'sdfsfs' },
-		{ key: 'role', text: 'fsdfs' },
-		{ key: 'email', text: 'fsdfs' },
-		{ key: 'phone', text: 'sdfsf' }
+		{ key: 'firstName', text: capitalize($LL.fields.firstName.text()) },
+		{ key: 'lastName', text: capitalize($LL.fields.lastName.text()) },
+		{ key: 'role', text: capitalize($LL.fields.role.text()) },
+		{ key: 'email', text: capitalize($LL.fields.email.text()) },
+		{ key: 'phone', text: capitalize($LL.fields.phone.text()) }
 	];
 
 	const actions: TableAction[] = [
@@ -37,15 +48,20 @@
 			},
 			buttonColor: 'gallery',
 			class: 'rounded-lg p-1'
+		},
+		{
+			type: 'button',
+			btnActionName: 'delete',
+			icon: {
+				name: 'bin',
+				width: '18',
+				height: '18',
+				color: colors.white
+			},
+			buttonColor: 'error',
+			class: 'rounded-lg py-1 px-2'
 		}
 	];
-
-	const handleAction = (event: CustomEvent<TableOnClickDispatcherEvent>) => {
-		const { data, actionName } = event.detail;
-
-		// if (actionName === 'edit') {
-		// }
-	};
 
 	const getColorForUserRole = (role: UserRole) => {
 		let color: string = 'text-rhino';
@@ -65,7 +81,7 @@
 		return unformattedTableItems.map((item) => {
 			return {
 				id: {
-					value: item.id
+					value: item._id
 				},
 				email: {
 					value: item.email
@@ -87,8 +103,47 @@
 		});
 	};
 
-	$: items = data.users && data.users.length > 0 ? formatItemsForTable(data.users) : [];
-	$: console.log('items: ', items);
+	$: items =
+		data.users.items && data.users.items.length > 0
+			? formatItemsForTable(data.users.items)
+			: [];
+
+	// Setup for Modals ------------------------------------------------------------------------
+	let openDeleteModal: boolean = false;
+	let userData: User | null = null;
+
+	const handleAction = (event: CustomEvent<TableOnClickDispatcherEvent>) => {
+		const { data, actionName } = event.detail;
+		userData = formatObjectFromTable(structuredClone(data)) as User;
+
+		if (actionName === 'edit') {
+			goto(`/${Modules.USERS}/${userData.id}`);
+		}
+
+		if (actionName === 'delete') {
+			openDeleteModal = true;
+		}
+	};
+
+	// Setup for Delete Action -----------------------------------------------------------------
+	const deleteItem = async (event: CustomEvent<{ confirm: boolean }>) => {
+		const { confirm } = event.detail;
+
+		if (confirm) {
+			const { id } = userData as User;
+			const response = await deleteOne({
+				apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.USERS}`,
+				errorKey: $LL.errors.errorFetchingSomethingFromServer({
+					something: $LL.modules.users.entity.single()
+				}),
+				id
+			});
+			// TODO: don't forget about notification here
+			console.log('delete response: ', response);
+			invalidateAll();
+			openDeleteModal = false;
+		}
+	};
 </script>
 
 <Box>
@@ -106,3 +161,15 @@
 		<div slot="actions"></div>
 	</Table>
 </Box>
+
+{#if openDeleteModal}
+	<DeleteModal
+		bind:open={openDeleteModal}
+		entity={formatEntityForModal({
+			modalType: 'delete',
+			entity: $LL.modules.users.entity.single(),
+			itemName: `${userData?.firstName} ${userData?.lastName}`
+		})}
+		on:clickConfirmBtnTriggered={deleteItem}
+	/>
+{/if}

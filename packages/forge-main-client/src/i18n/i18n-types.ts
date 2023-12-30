@@ -103,6 +103,9 @@ export type FieldsTranslations = {
 	phone: {
 		text: string;
 	};
+	role: {
+		text: string;
+	}
 };
 
 export type ButtonsOrLinksTranslations = {
@@ -271,6 +274,9 @@ export type TranslationFunctions = {
 			text: () => LocalizedString;
 		};
 		phone: {
+			text: () => LocalizedString;
+		};
+		role: {
 			text: () => LocalizedString;
 		};
     };

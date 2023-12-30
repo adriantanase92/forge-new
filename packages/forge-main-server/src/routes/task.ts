@@ -32,7 +32,7 @@ async function taskRoutes(app: FastifyInstance, db: Db) {
         }
     });
 
-    app.get<{ Params: RouteParams }>('/task/:id', async (request, reply) => {
+    app.get<{ Params: RouteParams }>('/tasks/:id', async (request, reply) => {
         try {
             const { id } = request.params;
             const response = await getOne<TaskDocument>({ collection: db.tasks, id });

@@ -12,7 +12,9 @@
 		"moduleResolution": "bundler",
 		"paths": {
 			"$unit": ["./unit"],
-			"$unit/*": ["./unit/*"],
+			"$unit/*": ["./unit"],
+			"$assets": ["./src/assets"],
+			"$assets/*": ["./src/assets/*"],
 			"$lib": ["./src/lib"],
 			"$lib/*": ["./src/lib/*"],
 			"$routes": ["./src/routes"],

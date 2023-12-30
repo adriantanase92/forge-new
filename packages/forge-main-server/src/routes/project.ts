@@ -32,7 +32,7 @@ async function projectRoutes(app: FastifyInstance, db: Db) {
         }
     });
 
-    app.get<{ Params: RouteParams }>('/project/:id', async (request, reply) => {
+    app.get<{ Params: RouteParams }>('/projects/:id', async (request, reply) => {
         try {
             const { id } = request.params;
             const response = await getOne<ProjectDocument>({ collection: db.projects, id });

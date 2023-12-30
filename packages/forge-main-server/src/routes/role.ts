@@ -32,7 +32,7 @@ async function roleRoutes(app: FastifyInstance, db: Db) {
         }
     });
 
-    app.get<{ Params: RouteParams }>('/role/:id', async (request, reply) => {
+    app.get<{ Params: RouteParams }>('/roles/:id', async (request, reply) => {
         try {
             const { id } = request.params;
             const response = await getOne<RoleDocument>({ collection: db.roles, id });

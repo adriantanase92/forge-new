@@ -15,6 +15,8 @@ const config = {
 		alias: {
 			'$unit': './unit',
 			'$unit/*': './unit/*',
+			'$assets': './src/assets',
+			'$assets/*': './src/assets/*',
 			'$routes': './src/routes',
 			'$routes/*': './src/routes/*',
 			'$i18n': './src/i18n',
