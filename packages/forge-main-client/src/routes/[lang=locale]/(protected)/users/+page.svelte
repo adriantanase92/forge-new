@@ -97,7 +97,7 @@
 					value: item.lastName
 				},
 				phone: {
-					value: item.phone
+					value: item.phone ?? '/'
 				}
 			};
 		});

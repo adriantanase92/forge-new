@@ -1,5 +1,6 @@
 import { Collection, ObjectId, Document, WithId, Filter, OptionalUnlessRequiredId } from 'mongodb';
 import { formErrorObject, type Error } from './error-handling';
+import { ChangeLog } from '../models';
 
 export type ResponseData<T> = {
     data:
@@ -23,6 +24,10 @@ export type QueryString = {
     excludeFields?: string[];
 };
 
+type WithChangeLog = {
+    changeLog: ChangeLog;
+};
+
 export const getAll = async <T extends Document>({
     collection,
     requestQuery
@@ -33,7 +38,7 @@ export const getAll = async <T extends Document>({
     try {
         const {
             search,
-            sortBy,
+            sortBy = 'changeLog.createdAt',
             sortOrder = 'desc',
             filters,
             page = '1',
@@ -69,9 +74,9 @@ export const getAll = async <T extends Document>({
 
         // Determine the sorting order
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const sort: any = {};
+        const sort: Record<string, any> = {};
         if (sortBy) {
-            sort[sortBy] = sortOrder === 'desc' ? 1 : -1;
+            sort[sortBy] = sortOrder === 'desc' ? -1 : 1;
         }
 
         // Create a projection object to exclude fields
@@ -114,7 +119,7 @@ export const getOne = async <T extends Document>({
     }
 };
 
-export const createOne = async <T extends Document, B>({
+export const createOne = async <T extends Document, B extends WithChangeLog>({
     collection,
     newItemData
 }: {
@@ -122,7 +127,18 @@ export const createOne = async <T extends Document, B>({
     newItemData: B;
 }): Promise<Response<T>> => {
     try {
-        const result = await collection.insertOne(newItemData as OptionalUnlessRequiredId<T>);
+        // Check if 'changeLog' exists and has a 'createdAt' property
+        if (!newItemData.changeLog) {
+            // If 'changeLog' doesn't exist, create it with the current date
+            newItemData.changeLog = { createdAt: new Date() };
+        } else if (!newItemData.changeLog.createdAt) {
+            // If 'changeLog' exists but doesn't have 'createdAt', add it
+            newItemData.changeLog.createdAt = new Date();
+        }
+
+        const result = await collection.insertOne(
+            newItemData as unknown as OptionalUnlessRequiredId<T>
+        );
 
         if (!result.acknowledged) {
             return { error: formErrorObject({ errorKey: 'insert_operation_failed' }) };
@@ -138,6 +154,7 @@ export const createOne = async <T extends Document, B>({
 
         return { data: insertedItem };
     } catch (e) {
+        console.log('------e: ', e);
         return { error: formErrorObject({ errorKey: 'server_http_error_occured', error: e }) };
     }
 };
