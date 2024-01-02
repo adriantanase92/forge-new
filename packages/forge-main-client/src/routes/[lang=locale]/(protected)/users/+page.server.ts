@@ -12,7 +12,7 @@ export const load: PageServerLoad = (async ({ fetch, locals: { t } }) => {
 	});
 
 	return {
-		users: users.data ?? { items: [], totalItems: 0 }
+		users: users.data ?? { items: [], pagination: { totalItems: 0, page: 1 } }
 	};
 }) satisfies PageServerLoad;
 

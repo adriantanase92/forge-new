@@ -28,34 +28,17 @@
 	export let hoverableClass: string = 'hover:bg-none sm:hover:bg-gray-300';
 	export let noDataFoundMessage: string = $LL.errors.noDataFound();
 
-	let search = '';
-	let currentPage = 1;
-	const itemsPerPage = 10;
+	export let totalItems: number = 10;
+	export let currentPage: number = 10;
 
-	$: filteredItems = items.filter((item) =>
-		Object.values(item).some(
-			(field: TableItemValue) =>
-				(typeof field.value === 'string' || typeof field.value === 'number') &&
-				field.value.toString().toLowerCase().includes(search.toString().toLowerCase())
-		)
-	);
-	$: pageItems = filteredItems.slice(
-		(currentPage - 1) * itemsPerPage,
-		currentPage * itemsPerPage
-	);
 	$: itemsCheck = items.length > 0;
-	$: filteredItemsCheck = filteredItems.length > 0;
-	$: pageCount = Math.ceil(filteredItems.length / itemsPerPage);
 	$: hasActions = actions.length > 0;
-	$: if (search.length > 0) {
-		currentPage = 1;
-	}
 
 	const dispatch = createEventDispatcher();
 
 	const onClickAction = ({ data, actionName }: TableOnClickDispatcherEvent) => {
 		if (data) {
-			dispatch('clickActionTriggered', {
+			dispatch('clickAction', {
 				data,
 				actionName
 			});
@@ -76,7 +59,7 @@
 		<div class="flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row">
 			{#if itemsCheck}
 				{#if withSearch}
-					<Search wrapperClasses="relative w-full sm:w-auto mr-[1px]" bind:search />
+					<Search wrapperClasses="relative w-full sm:w-auto mr-[1px]" on:searchBy />
 				{/if}
 			{/if}
 			{#if $$slots.actions}
@@ -85,12 +68,12 @@
 		</div>
 	</div>
 
-	{#if filteredItemsCheck}
+	{#if itemsCheck}
 		<div class="max-w-full overflow-x-auto">
 			<table class={stylingClasses[responsiveMode].tableEl}>
 				<thead class={stylingClasses[responsiveMode].tableHead.el}>
 					{#if responsiveMode === 'advanced'}
-						{#each pageItems as item, index}
+						{#each items as item, index}
 							<tr
 								class="{stylingClasses[responsiveMode].tableHead.trEl} {index !== 0
 									? 'sm:hidden'
@@ -136,7 +119,7 @@
 					{/if}
 				</thead>
 				<tbody class={stylingClasses[responsiveMode].tableBody.el}>
-					{#each pageItems as item}
+					{#each items as item}
 						<tr
 							class="{stylingClasses[responsiveMode].tableBody.trEl} {striped
 								? stripedClass
@@ -216,7 +199,7 @@
 		</div>
 
 		{#if withPagination}
-			<Pagination bind:currentPage {pageCount} />
+			<Pagination {totalItems} {currentPage} on:changePage />
 		{/if}
 	{:else}
 		<div>{noDataFoundMessage}</div>

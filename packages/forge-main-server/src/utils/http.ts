@@ -7,7 +7,13 @@ export type ResponseData<T> = {
         | WithId<T>
         | WithId<T>[]
         | { messageKey: string }
-        | { items: WithId<T>[]; totalItems: number };
+        | {
+              items: WithId<T>[];
+              pagination: {
+                  totalItems: number;
+                  page: number;
+              };
+          };
 };
 export type ResponseError = { error: Error };
 export type Response<T> = ResponseData<T> | ResponseError;
@@ -93,7 +99,15 @@ export const getAll = async <T extends Document>({
             .limit(limitItems)
             .toArray();
 
-        return { data: { items, totalItems } };
+        return {
+            data: {
+                items,
+                pagination: {
+                    totalItems,
+                    page: currentPage
+                }
+            }
+        };
     } catch (e) {
         return { error: formErrorObject({ errorKey: 'server_http_error_occured', error: e }) };
     }
@@ -154,7 +168,6 @@ export const createOne = async <T extends Document, B extends WithChangeLog>({
 
         return { data: insertedItem };
     } catch (e) {
-        console.log('------e: ', e);
         return { error: formErrorObject({ errorKey: 'server_http_error_occured', error: e }) };
     }
 };

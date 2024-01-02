@@ -2,9 +2,10 @@
 	import SvgIcon from '../svg/SvgIcon.svelte';
 	import LL from '$i18n/i18n-svelte';
 	import { capitalize } from '$lib/shared/utils';
+	import { createEventDispatcher } from 'svelte';
 
-	// Specify default value for the search input
-	export let search = '';
+	// Specify debounce time in milliseconds
+	const debounceTime = 800; // Adjust as needed
 	// Specify the css classes for the wrapper div around the search input and icon
 	export let wrapperClasses: string = 'relative w-full sm:w-auto';
 	// Specify the css classes for the search input
@@ -13,10 +14,21 @@
 	// Specify the css classes for the icon element
 	export let searchClasses: string = 'absolute left-2 top-2';
 
-	function handleInput(event: Event) {
-		const target = event.target as HTMLInputElement;
-		search = target.value;
-	}
+	// Initialize the search query variable and timeout
+	let search = '';
+	let timeout: number | NodeJS.Timeout;
+
+	const dispatch = createEventDispatcher();
+
+	const handleInput = () => {
+		// Clear the existing timeout
+		if (timeout) clearTimeout(timeout);
+
+		// Set a new timeout
+		timeout = setTimeout(() => {
+			dispatch('searchBy', { search });
+		}, debounceTime);
+	};
 </script>
 
 <div class={wrapperClasses}>

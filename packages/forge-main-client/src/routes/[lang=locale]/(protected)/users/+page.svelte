@@ -15,7 +15,8 @@
 		Modules,
 		UserRole,
 		type User,
-		formatObjectFromTable
+		formatObjectFromTable,
+		getAll
 	} from '$lib/shared/index.js';
 	import { PUBLIC_MAIN_SERVER_URL } from '$env/static/public';
 	import { goto, invalidateAll } from '$app/navigation';
@@ -107,6 +108,45 @@
 		data.users.items && data.users.items.length > 0
 			? formatItemsForTable(data.users.items)
 			: [];
+	$: totalItems = data.users.pagination.totalItems ?? 10;
+	$: currentPage = data.users.pagination.page ?? 1;
+
+	let pagination: { page: number; limit?: number };
+	$: pagination = { page: currentPage };
+
+	let searchValue: string = '';
+
+	const handleTableData = async (
+		event: CustomEvent<{ search: string; pagination: { page: number; limit?: number } }>
+	) => {
+		if (event.detail.search) {
+			searchValue = event.detail.search;
+		}
+
+		if (event.detail.pagination) {
+			pagination = structuredClone(event.detail.pagination);
+		}
+
+		const response = await getAll({
+			fetch,
+			apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.USERS}`,
+			requestQuery: {
+				search: searchValue,
+				page: pagination.page.toString(),
+				...(pagination.limit ? { limit: pagination.limit.toString() } : {})
+			},
+			errorKey: $LL.errors.errorFetchingSomethingFromServer({
+				something: $LL.modules.users.entity.multiple()
+			})
+		});
+
+		items =
+			response.data.items && response.data.items.length > 0
+				? formatItemsForTable(data.users.items)
+				: [];
+		totalItems = response.data.pagination.totalItems ?? 10;
+		currentPage = response.data.pagination.page ?? 1;
+	};
 
 	// Setup for Modals ------------------------------------------------------------------------
 	let openDeleteModal: boolean = false;
@@ -155,7 +195,11 @@
 		striped
 		withPagination
 		withSearch
-		on:clickActionTriggered={handleAction}
+		{totalItems}
+		{currentPage}
+		on:clickAction={handleAction}
+		on:searchBy={handleTableData}
+		on:changePage={handleTableData}
 	>
 		<PageTitle slot="title" text={capitalize($LL.modules.users.entity.multiple())} />
 		<div slot="actions"></div>

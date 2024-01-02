@@ -2,13 +2,16 @@
 	import Button from '../button/Button.svelte';
 	import { colors } from '$lib/shared/utils';
 	import SvgIcon from '../svg/SvgIcon.svelte';
+	import { createEventDispatcher } from 'svelte';
 
 	// Set to `true` if you want to display the current page number
 	export let displayCurrentPage: boolean = false;
 	// Specify the current active page
 	export let currentPage: number = 1;
-	// Specify the total number of pages
-	export let pageCount: number = 1;
+	// Specify the total number of items
+	export let totalItems: number;
+	// Specify the number of items to skip;
+	export let limit: number = 10;
 	// Specify the css classes for the wrapper element
 	export let wrapperClasses: string = 'flex items-center justify-between';
 	// Specify the css classes for the previous button element
@@ -23,20 +26,35 @@
 	export let ellipsisClasses: string =
 		'inline-block w-[40px] h-[40px] leading-[40px] text-center rounded-lg font-secondary bg-gallery text-rhino';
 
+	const pageCount: number = Math.ceil(totalItems / limit);
+
 	const goToPage = (page: number) => {
 		currentPage = page;
+		handleChangePage();
 	};
 
 	const prevPage = () => {
 		if (currentPage > 1) currentPage--;
+		handleChangePage();
 	};
 
 	const nextPage = () => {
 		if (currentPage < pageCount) currentPage++;
+		handleChangePage();
 	};
 
 	const activePage = (page: number, currentPage: number) =>
 		currentPage === page ? 'bg-rhino text-white' : 'bg-gallery !text-rhino';
+
+	const dispatch = createEventDispatcher();
+	const handleChangePage = () => {
+		dispatch('changePage', {
+			pagination: {
+				page: currentPage,
+				...(limit !== 10 ? { limit } : {})
+			}
+		});
+	};
 </script>
 
 {#if pageCount > 1}
