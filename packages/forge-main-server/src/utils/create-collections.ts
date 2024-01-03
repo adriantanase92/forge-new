@@ -13,6 +13,9 @@ export const createCollections = async (dbClient: MongoClient, db: Db) => {
             { name: 1, deleted: 1 },
             { unique: true, collation: { locale: 'en', strength: 2 } }
         );
+        await db.roles.createIndex({
+            name: 'text'
+        });
         await seedRoles(db.roles);
     }
 
@@ -23,6 +26,9 @@ export const createCollections = async (dbClient: MongoClient, db: Db) => {
             { name: 1, deleted: 1 },
             { unique: true, collation: { locale: 'en', strength: 2 } }
         );
+        await db.permissions.createIndex({
+            name: 'text'
+        });
         await seedPermissions(db.permissions);
     }
 
@@ -62,7 +68,7 @@ export const createCollections = async (dbClient: MongoClient, db: Db) => {
             { title: 1, deleted: 1 },
             { unique: true, collation: { locale: 'en', strength: 2 } }
         );
-        await db.tasks.createIndex({ name: 'text', description: 'text' });
+        await db.tasks.createIndex({ title: 'text', description: 'text' });
         await seedTasks(db.tasks);
     }
 };

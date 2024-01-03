@@ -2,7 +2,7 @@
 	import Box from '$lib/shared/components/panel/Box.svelte';
 	import PageTitle from '$lib/shared/components/panel/PageTitle.svelte';
 	import DynamicDataRenderer from '$lib/shared/components/general/dynamic-data-renderer/DynamicDataRenderer.svelte';
-	import { Modules, capitalize, colors, deleteOne } from '$lib/shared/index.js';
+	import { Modules, capitalize, colors, deleteOne, getAll } from '$lib/shared/index.js';
 	import LL from '$i18n/i18n-svelte';
 	import Button from '$lib/shared/components/general/button/Button.svelte';
 	import Permission from '$lib/shared/components/modules/permissions/Permission.svelte';
@@ -13,10 +13,48 @@
 	import { permissionSchema } from './schema.js';
 	import { PUBLIC_MAIN_SERVER_URL } from '$env/static/public';
 	import { invalidateAll } from '$app/navigation';
+	import Pagination from '$lib/shared/components/general/pagination/Pagination.svelte';
+	import Search from '$lib/shared/components/general/search/Search.svelte';
 
 	export let data;
 
 	$: permissions = data.permissions.items ?? [];
+	$: totalItems = data.permissions.pagination.totalItems ?? 10;
+	$: currentPage = data.permissions.pagination.page ?? 1;
+	let pagination: { page: number; limit?: number };
+	$: pagination = { page: currentPage };
+	let searchValue: string = '';
+
+	// Setup display ---------------------------------------------------------------------------
+	const handleData = async (
+		event: CustomEvent<{ search: string; pagination: { page: number; limit?: number } }>
+	) => {
+		if (event.detail.search !== undefined) {
+			searchValue = event.detail.search;
+		}
+
+		if (event.detail.pagination) {
+			pagination = structuredClone(event.detail.pagination);
+		}
+
+		const response = await getAll({
+			fetch,
+			apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.PERMISSIONS}`,
+			requestQuery: {
+				search: searchValue,
+				page: pagination.page.toString(),
+				...(pagination.limit ? { limit: pagination.limit.toString() } : {})
+			},
+			errorKey: $LL.errors.errorFetchingSomethingFromServer({
+				something: $LL.modules.permissions.entity.multiple()
+			})
+		});
+
+		permissions =
+			response.data.items && response.data.items.length > 0 ? response.data.items : [];
+		totalItems = response.data.pagination.totalItems ?? 10;
+		currentPage = response.data.pagination.page ?? 1;
+	};
 
 	// Setup for Form --------------------------------------------------------------------------
 	const getFormDataFromPermissionData = (
@@ -70,8 +108,13 @@
 </script>
 
 <Box>
-	<div class="flex justify-between items-center mb-8">
-		<PageTitle text={capitalize($LL.modules.permissions.entity.multiple())} />
+	<PageTitle text={capitalize($LL.modules.permissions.entity.multiple())} />
+
+	<hr class="my-8" />
+
+	<div class="flex justify-between items-center mb-6 gap-2">
+		<Search on:searchBy={handleData} />
+
 		<Button
 			class="py-2 px-4"
 			kind="fill"
@@ -91,21 +134,27 @@
 		</Button>
 	</div>
 
-	<DynamicDataRenderer
-		layout="grid"
-		gap="gap-6"
-		gridClasses="grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-	>
-		{#each permissions as permission}
-			<Permission {permission} on:clickActionTriggered={handleAction} />
-		{:else}
-			<p>
-				{$LL.errors.noSomethingFound({
-					something: $LL.modules.permissions.entity.multiple()
-				})}
-			</p>
-		{/each}
-	</DynamicDataRenderer>
+	<div class="flex flex-col gap-6">
+		<DynamicDataRenderer
+			layout="grid"
+			gap="gap-6"
+			gridClasses="grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+		>
+			{#each permissions as permission}
+				<Permission {permission} on:clickActionTriggered={handleAction} />
+			{:else}
+				<p>
+					{$LL.errors.noSomethingFound({
+						something: $LL.modules.permissions.entity.multiple()
+					})}
+				</p>
+			{/each}
+		</DynamicDataRenderer>
+
+		{#if permissions.length > 0}
+			<Pagination {totalItems} {currentPage} on:changePage={handleData} />
+		{/if}
+	</div>
 </Box>
 
 {#if openAddEditModal}

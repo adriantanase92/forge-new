@@ -119,7 +119,6 @@
 	const handleTableData = async (
 		event: CustomEvent<{ search: string; pagination: { page: number; limit?: number } }>
 	) => {
-		console.log('event.detail.search: ', event.detail.search);
 		if (event.detail.search !== undefined) {
 			searchValue = event.detail.search;
 		}

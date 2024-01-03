@@ -58,7 +58,7 @@
 
 		<div class="flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row">
 			{#if withSearch}
-				<Search wrapperClasses="relative w-full sm:w-auto mr-[1px]" on:searchBy />
+				<Search wrapperClasses="w-full sm:w-auto mr-[1px]" on:searchBy />
 			{/if}
 
 			{#if $$slots.actions}

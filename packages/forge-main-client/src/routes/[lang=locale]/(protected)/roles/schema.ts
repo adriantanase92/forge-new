@@ -1,4 +1,5 @@
 import type { TranslationFunctions } from '$i18n/i18n-types';
+import { escapeString } from '$lib/shared';
 import { z } from 'zod';
 
 export const roleSchema = (t: TranslationFunctions) =>
@@ -14,6 +15,7 @@ export const roleSchema = (t: TranslationFunctions) =>
 				.trim()
 				.min(2, t.errors.minCharacters({ number: 2 }))
 				.max(60, t.errors.maxCharacters({ number: 60 }))
+				.transform(escapeString)
 		})
 		.strict();
 

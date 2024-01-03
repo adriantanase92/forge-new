@@ -10,7 +10,7 @@
 	// Specify debounce time in milliseconds
 	const debounceTime = 800;
 	// Specify the css classes for the wrapper div around the search input and icon
-	export let wrapperClasses: string = 'relative w-full sm:w-auto';
+	export let wrapperClasses: string = 'w-full sm:w-auto';
 	// Specify the css classes for the search input
 	export let inputClasses: string =
 		'max-w-full sm:max-w-[240px] w-full sm:w-auto rounded-lg border border-solid border-rhino-alt py-2 pl-10 pr-3 text-rhino';
@@ -35,7 +35,7 @@
 	};
 </script>
 
-<div class={wrapperClasses}>
+<div class="relative {wrapperClasses}">
 	<SvgIcon class={searchClasses} name="search" width="24" height="24" />
 	<input
 		type="text"
