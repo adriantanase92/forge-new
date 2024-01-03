@@ -38,7 +38,8 @@ export const createCollections = async (dbClient: MongoClient, db: Db) => {
             firstName: 'text',
             lastName: 'text',
             email: 'text',
-            phone: 'text'
+            phone: 'text',
+            role: 'text'
         });
         await seedUsers(db.users);
     }

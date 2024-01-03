@@ -33,3 +33,19 @@ export const formatObjectFromTable = (obj: Record<string, { value: unknown }>) =
 
 	return simplified;
 };
+
+export const escapeString = (str: string): string => {
+	return (
+		str
+			.replace(/[&]/g, '&amp;')
+			.replace(/[<]/g, '&lt;')
+			.replace(/[>]/g, '&gt;')
+			.replace(/["]/g, '&quot;')
+			.replace(/[']/g, '&#039;')
+			.replace(/[/]/g, '&#x2F;')
+			.replace(/[\\]/g, '&#x5C;')
+			.replace(/[-]/g, '&#x2D;')
+			// eslint-disable-next-line no-useless-escape
+			.replace(/[\`]/g, '&#96;')
+	);
+};

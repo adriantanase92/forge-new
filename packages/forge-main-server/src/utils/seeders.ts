@@ -236,7 +236,7 @@ export const seedUsers = async (collection: Collection<User>): Promise<void> => 
                     lastName
                 }),
                 phone: faker.phone.number(),
-                role: faker.helpers.arrayElement(roles),
+                role: faker.helpers.arrayElement(roles.filter((role) => role !== 'admin')),
                 preferredLanguage: faker.helpers.arrayElement(languages),
                 projects: [],
                 permissions: defaultUserPermissions,

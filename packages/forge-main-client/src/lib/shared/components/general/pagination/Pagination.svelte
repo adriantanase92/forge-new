@@ -26,7 +26,7 @@
 	export let ellipsisClasses: string =
 		'inline-block w-[40px] h-[40px] leading-[40px] text-center rounded-lg font-secondary bg-gallery text-rhino';
 
-	const pageCount: number = Math.ceil(totalItems / limit);
+	$: pageCount = Math.ceil(totalItems / limit);
 
 	const goToPage = (page: number) => {
 		currentPage = page;
@@ -47,6 +47,7 @@
 		currentPage === page ? 'bg-rhino text-white' : 'bg-gallery !text-rhino';
 
 	const dispatch = createEventDispatcher();
+
 	const handleChangePage = () => {
 		dispatch('changePage', {
 			pagination: {

@@ -1,6 +1,8 @@
 import { Collection, ObjectId, Document, WithId, Filter, OptionalUnlessRequiredId } from 'mongodb';
 import { formErrorObject, type Error } from './error-handling';
 import { ChangeLog } from '../models';
+import { z } from 'zod';
+import { escapeString } from './helpers';
 
 export type ResponseData<T> = {
     data:
@@ -30,6 +32,23 @@ export type QueryString = {
     excludeFields?: string[];
 };
 
+const QueryStringSchema = z.object({
+    search: z.string().trim().transform(escapeString).optional(),
+    sortBy: z.string().default('changeLog.createdAt'),
+    sortOrder: z.enum(['asc', 'desc']).default('desc'),
+    filters: z
+        .array(
+            z.object({
+                field: z.string(),
+                value: z.any()
+            })
+        )
+        .optional(),
+    page: z.string().default('1'),
+    limit: z.string().default('10'),
+    excludeFields: z.array(z.string()).default([])
+});
+
 type WithChangeLog = {
     changeLog: ChangeLog;
 };
@@ -50,7 +69,7 @@ export const getAll = async <T extends Document>({
             page = '1',
             limit = '10',
             excludeFields = []
-        } = requestQuery;
+        } = QueryStringSchema.parse(requestQuery);
 
         // Convert page and limit to numbers
         const currentPage: number = parseInt(page) || 1;
@@ -69,6 +88,7 @@ export const getAll = async <T extends Document>({
         }
 
         // Handling multiple filters
+        const hasFilters = filters && Array.isArray(filters) && filters.length > 0;
         if (filters && Array.isArray(filters)) {
             // Assume filters are passed as an array of objects
             filters.forEach((filter) => {
@@ -89,11 +109,14 @@ export const getAll = async <T extends Document>({
         const projection = excludeFields.reduce((acc, field) => ({ ...acc, [field]: 0 }), {});
 
         // Count total matching documents
-        const totalItems = await collection.countDocuments(query);
+        const shouldCount = search || hasFilters;
+        const totalItems = shouldCount
+            ? await collection.countDocuments(query)
+            : await collection.estimatedDocumentCount();
 
         // Fetch the users from the database with pagination
         const items: WithId<T>[] = await collection
-            .find(query, { projection })
+            .find(query, { projection, collation: { locale: 'en', strength: 2 } })
             .sort(sort)
             .skip(skipItems)
             .limit(limitItems)

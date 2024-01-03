@@ -119,7 +119,8 @@
 	const handleTableData = async (
 		event: CustomEvent<{ search: string; pagination: { page: number; limit?: number } }>
 	) => {
-		if (event.detail.search) {
+		console.log('event.detail.search: ', event.detail.search);
+		if (event.detail.search !== undefined) {
 			searchValue = event.detail.search;
 		}
 
@@ -142,7 +143,7 @@
 
 		items =
 			response.data.items && response.data.items.length > 0
-				? formatItemsForTable(data.users.items)
+				? formatItemsForTable(response.data.items)
 				: [];
 		totalItems = response.data.pagination.totalItems ?? 10;
 		currentPage = response.data.pagination.page ?? 1;
