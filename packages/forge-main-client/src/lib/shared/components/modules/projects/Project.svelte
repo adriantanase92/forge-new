@@ -1,15 +1,16 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import Button from '../../general/button/Button.svelte';
-	import { colors, Modules, type Project } from '$lib/shared';
+	import { colors, Modules, type ProjectType } from '$lib/shared';
 	import { goto } from '$app/navigation';
 
-	export let project: Project;
+	export let project: ProjectType;
 
 	const dispatch = createEventDispatcher();
-	const onClickAction = ({ project }: { project: Project }) =>
+	const onClickAction = ({ project }: { project: ProjectType }) =>
 		dispatch('clickActionTriggered', { project });
-	const viewProject = (project: Project) => goto(`/${Modules.PROJECTS}/${project._id as string}`);
+	const viewProject = (project: ProjectType) =>
+		goto(`/${Modules.PROJECTS}/${project._id as string}`);
 
 	$: console.log('project: ', project);
 </script>

@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { colors, type Permission } from '$lib/shared';
+	import { colors, type PermissionType } from '$lib/shared';
 	import Button from '../../general/button/Button.svelte';
 
-	export let permission: Permission;
+	export let permission: PermissionType;
 
 	const dispatch = createEventDispatcher();
 	const onClickAction = ({
@@ -11,7 +11,7 @@
 		permission
 	}: {
 		action: 'edit' | 'delete';
-		permission: Permission;
+		permission: PermissionType;
 	}) => dispatch('clickActionTriggered', { action, permission });
 </script>
 

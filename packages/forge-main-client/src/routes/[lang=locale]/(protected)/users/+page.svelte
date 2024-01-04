@@ -14,7 +14,7 @@
 		deleteOne,
 		Modules,
 		UserRole,
-		type User,
+		type UserType,
 		formatObjectFromTable,
 		getAll,
 		type HadleDataParams,
@@ -83,7 +83,7 @@
 	const formatItemsForTable = (unformattedTableItems: any[]): TableItem[] => {
 		return unformattedTableItems.map((item) => {
 			return {
-				id: {
+				_id: {
 					value: item._id
 				},
 				email: {
@@ -150,14 +150,14 @@
 
 	// Setup for Modals ------------------------------------------------------------------------
 	let openDeleteModal: boolean = false;
-	let userData: User | null = null;
+	let userData: UserType | null = null;
 
 	const handleAction = (event: CustomEvent<TableOnClickDispatcherEvent>) => {
 		const { data, actionName } = event.detail;
-		userData = formatObjectFromTable(structuredClone(data)) as User;
+		userData = formatObjectFromTable(structuredClone(data)) as UserType;
 
 		if (actionName === 'edit') {
-			goto(`/${Modules.USERS}/${userData.id}`);
+			goto(`/${Modules.USERS}/${userData._id}`);
 		}
 
 		if (actionName === 'delete') {
@@ -170,7 +170,7 @@
 		const { confirm } = event.detail;
 
 		if (confirm) {
-			const { id } = userData as User;
+			const { _id: id } = userData as UserType;
 			const response = await deleteOne({
 				apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.USERS}`,
 				errorKey: $LL.errors.errorFetchingSomethingFromServer({

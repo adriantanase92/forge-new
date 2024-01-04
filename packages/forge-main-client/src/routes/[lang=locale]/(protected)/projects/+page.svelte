@@ -7,7 +7,8 @@
 		type HadleDataParams,
 		deleteOne,
 		capitalize,
-		colors
+		colors,
+		type ProjectType
 	} from '$lib/shared/index.js';
 	import LL from '$i18n/i18n-svelte';
 	import { invalidateAll } from '$app/navigation';
@@ -65,9 +66,9 @@
 	let openDeleteModal: boolean = false;
 	let openAddModal: boolean = false;
 	let modalState: ModalState = 'add';
-	let projectData: Project | null = null;
+	let projectData: ProjectType | null = null;
 
-	const handleAction = (event: CustomEvent<{ project: Project }>) => {
+	const handleAction = (event: CustomEvent<{ project: ProjectType }>) => {
 		const { project } = event.detail;
 		projectData = structuredClone(project);
 		openDeleteModal = true;
@@ -78,7 +79,7 @@
 		const { confirm } = event.detail;
 
 		if (confirm) {
-			const { _id: id } = projectData as Project;
+			const { _id: id } = projectData as ProjectType;
 			const response = await deleteOne({
 				apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.PROJECTS}`,
 				errorKey: $LL.errors.errorFetchingSomethingFromServer({
@@ -159,7 +160,7 @@
 		entity={formatEntityForModal({
 			modalType: 'delete',
 			entity: $LL.modules.projects.entity.single(),
-			itemName: projectData?.name
+			itemName: `${projectData?.name}`
 		})}
 		on:clickConfirmBtnTriggered={deleteItem}
 	/>

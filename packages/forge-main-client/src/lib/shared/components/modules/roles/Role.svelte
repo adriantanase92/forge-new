@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { colors, type Role } from '$lib/shared';
+	import { colors, type RoleType } from '$lib/shared';
 	import { createEventDispatcher } from 'svelte';
 	import Button from '../../general/button/Button.svelte';
 
-	export let role: Role;
+	export let role: RoleType;
 
 	const dispatch = createEventDispatcher();
-	const onClickAction = ({ action, role }: { action: 'edit' | 'delete'; role: Role }) =>
+	const onClickAction = ({ action, role }: { action: 'edit' | 'delete'; role: RoleType }) =>
 		dispatch('clickActionTriggered', { action, role });
 </script>
 

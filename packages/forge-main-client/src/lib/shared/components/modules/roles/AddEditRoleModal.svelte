@@ -7,10 +7,12 @@
 	import {
 		textValidator,
 		capitalize,
-		type Role,
+		type RoleType,
 		createOne,
 		Modules,
-		updateOne
+		updateOne,
+		type EditRoleType,
+		type NewRoleType
 	} from '$lib/shared';
 	import { superForm, superValidateSync } from 'sveltekit-superforms/client';
 	import LL from '$i18n/i18n-svelte';
@@ -21,7 +23,7 @@
 	export let open = false;
 	export let modalState: ModalState = 'add';
 	export let entity: string = 'item';
-	export let dataForEditForm: Role;
+	export let dataForEditForm: EditRoleType;
 	export let schema;
 
 	const roleData = open && modalState === 'edit' ? dataForEditForm : null;
@@ -32,7 +34,7 @@
 		onUpdate: async ({ form }) => {
 			if (form.valid) {
 				if (!form.data.id) {
-					const response = await createOne<Role>({
+					const response = await createOne<NewRoleType>({
 						apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.ROLES}`,
 						errorKey: $LL.errors.errorFetchingSomethingFromServer({
 							something: $LL.modules.roles.entity.single()
@@ -42,7 +44,7 @@
 					// TODO: don't forget about notification here
 					console.log('add response: ', response);
 				} else {
-					const response = await updateOne<Role>({
+					const response = await updateOne<RoleType>({
 						apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.ROLES}`,
 						errorKey: $LL.errors.errorFetchingSomethingFromServer({
 							something: $LL.modules.roles.entity.single()

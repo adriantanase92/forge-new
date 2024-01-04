@@ -9,7 +9,9 @@
 		deleteOne,
 		getAll,
 		type HadleDataParams,
-		type HadleDataPagination
+		type HadleDataPagination,
+		type PermissionType,
+		type EditPermissionType
 	} from '$lib/shared/index.js';
 	import LL from '$i18n/i18n-svelte';
 	import Button from '$lib/shared/components/general/button/Button.svelte';
@@ -63,29 +65,27 @@
 	};
 
 	// Setup for Form --------------------------------------------------------------------------
-	const getFormDataFromPermissionData = (
-		permissionData: Permission
-	): { name: Modules; id: string } => {
+	const getFormDataFromPermissionData = (permissionData: PermissionType): EditPermissionType => {
 		const { name, _id: id } = permissionData;
 		return { name, id };
 	};
-	let dataForEditForm: { name: Modules; id: string };
+	let dataForEditForm: EditPermissionType;
 
 	// Setup for Modals ------------------------------------------------------------------------
 	let openDeleteModal: boolean = false;
 	let openAddEditModal: boolean = false;
 	let modalState: ModalState = 'add';
-	let permissionData: Permission | null = null;
+	let permissionData: PermissionType | null = null;
 
 	const handleAction = (
-		event: CustomEvent<{ action: 'edit' | 'delete'; permission: Permission }>
+		event: CustomEvent<{ action: 'edit' | 'delete'; permission: PermissionType }>
 	) => {
 		const { action, permission } = event.detail;
 		permissionData = structuredClone(permission);
 
 		if (action === 'edit') {
 			modalState = 'edit';
-			dataForEditForm = getFormDataFromPermissionData(permissionData as Permission);
+			dataForEditForm = getFormDataFromPermissionData(permissionData as PermissionType);
 			openAddEditModal = true;
 		} else {
 			openDeleteModal = true;
@@ -97,7 +97,7 @@
 		const { confirm } = event.detail;
 
 		if (confirm) {
-			const { _id: id } = permissionData as Permission;
+			const { _id: id } = permissionData as PermissionType;
 			const response = await deleteOne({
 				apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.PERMISSIONS}`,
 				errorKey: $LL.errors.errorFetchingSomethingFromServer({
@@ -174,7 +174,7 @@
 			: formatEntityForModal({
 					modalType: 'edit',
 					entity: $LL.modules.permissions.entity.single(),
-					itemName: permissionData?.name
+					itemName: `${permissionData?.name}`
 			  })}
 	/>
 {/if}
@@ -185,7 +185,7 @@
 		entity={formatEntityForModal({
 			modalType: 'delete',
 			entity: $LL.modules.permissions.entity.single(),
-			itemName: permissionData?.name
+			itemName: `${permissionData?.name}`
 		})}
 		on:clickConfirmBtnTriggered={deleteItem}
 	/>

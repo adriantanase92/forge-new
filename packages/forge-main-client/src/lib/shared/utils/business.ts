@@ -19,33 +19,42 @@ export enum PreferredLanguage {
 	NL = 'nl'
 }
 
+export type EntityDocumentType = {
+	_id: string;
+	changeLog: ChangeLog;
+};
+
 export type ChangeLog = {
 	createdAt: Date;
 	updatedAt?: Date;
 };
 
-export type Role = {
-	_id?: string;
-	id?: string;
+export type NewRoleType = {
 	name: UserRole;
-	changeLog?: ChangeLog;
 };
 
-export type Permission = {
-	_id?: string;
-	id?: string;
+export type EditRoleType = {
+	id: string;
+} & NewRoleType;
+
+export type RoleType = EntityDocumentType & NewRoleType;
+
+export type NewPermissionType = {
 	name: Modules;
-	changeLog?: ChangeLog;
 };
 
-export type PermissionOptions = {
+export type EditPermissionType = {
+	id: string;
+} & NewPermissionType;
+
+export type PermissionType = EntityDocumentType & NewPermissionType;
+
+export type UserPermissionOptions = {
 	read: boolean;
 	write: boolean;
 };
 
-export type UserPermissionArrayItem = Permission & PermissionOptions;
-
-export type UserPermissions = Record<Modules, PermissionOptions>;
+export type UserPermissions = Record<Modules, UserPermissionOptions>;
 
 export type Address = {
 	country?: string;
@@ -56,9 +65,7 @@ export type Address = {
 	zipCode?: string;
 };
 
-export type User = {
-	_id?: string;
-	id: string;
+export type NewUserType = {
 	firstName: string;
 	lastName: string;
 	email: string;
@@ -68,20 +75,31 @@ export type User = {
 	preferredLanguage: PreferredLanguage;
 	projects: string[];
 	address?: Address;
-	changeLog?: ChangeLog;
 };
 
-export type Project = {
-	_id?: string;
-	id?: string;
-	name: string;
-	clients: string[];
-	workers: string[];
-	manager: string;
-	tasks: string[];
-	description: string;
+export type EditUserType = {
+	id: string;
+} & NewUserType;
+
+export type UserType = {
+	_id: string;
 	changeLog?: ChangeLog;
+} & NewUserType;
+
+export type NewProjectType = {
+	name: string;
+	clients?: string[];
+	workers?: string[];
+	manager: string;
+	tasks?: string[];
+	description?: string;
 };
+
+export type EditProjectType = {
+	id: string;
+} & NewProjectType;
+
+export type ProjectType = EntityDocumentType & NewProjectType;
 
 export enum TaskStatus {
 	TO_DO = 'to-do',
@@ -89,13 +107,16 @@ export enum TaskStatus {
 	DONE = 'done'
 }
 
-export type Task = {
-	_id?: string;
-	id?: string;
+export type NewTaskType = {
 	title: string;
-	description: string;
+	description?: string;
 	project: string;
-	responsible: string[];
+	responsible?: string[];
 	status: TaskStatus;
-	changeLog?: ChangeLog;
 };
+
+export type EditTaskType = {
+	id: string;
+} & NewTaskType;
+
+export type Task = EntityDocumentType & NewTaskType;

@@ -10,7 +10,9 @@
 		deleteOne,
 		getAll,
 		type HadleDataParams,
-		type HadleDataPagination
+		type HadleDataPagination,
+		type EditRoleType,
+		type RoleType
 	} from '$lib/shared/index.js';
 	import LL from '$i18n/i18n-svelte';
 	import Button from '$lib/shared/components/general/button/Button.svelte';
@@ -63,25 +65,25 @@
 	};
 
 	// Setup for Form --------------------------------------------------------------------------
-	const getFormDataFromRoleData = (roleData: Role): { name: UserRole; id: string } => {
+	const getFormDataFromRoleData = (roleData: RoleType): EditRoleType => {
 		const { name, _id: id } = roleData;
 		return { name, id };
 	};
-	let dataForEditForm: { name: UserRole; id: string };
+	let dataForEditForm: EditRoleType;
 
 	// Setup for Modals ------------------------------------------------------------------------
 	let openDeleteModal: boolean = false;
 	let openAddEditModal: boolean = false;
 	let modalState: ModalState = 'add';
-	let roleData: Role | null = null;
+	let roleData: RoleType | null = null;
 
-	const handleAction = (event: CustomEvent<{ action: 'edit' | 'delete'; role: Role }>) => {
+	const handleAction = (event: CustomEvent<{ action: 'edit' | 'delete'; role: RoleType }>) => {
 		const { action, role } = event.detail;
 		roleData = structuredClone(role);
 
 		if (action === 'edit') {
 			modalState = 'edit';
-			dataForEditForm = getFormDataFromRoleData(roleData as Role);
+			dataForEditForm = getFormDataFromRoleData(roleData as RoleType);
 			openAddEditModal = true;
 		} else {
 			openDeleteModal = true;
@@ -93,7 +95,7 @@
 		const { confirm } = event.detail;
 
 		if (confirm) {
-			const { _id: id } = roleData as Role;
+			const { _id: id } = roleData as RoleType;
 			const response = await deleteOne({
 				apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.ROLES}`,
 				errorKey: $LL.errors.errorFetchingSomethingFromServer({
@@ -165,7 +167,7 @@
 			: formatEntityForModal({
 					modalType: 'edit',
 					entity: $LL.modules.roles.entity.single(),
-					itemName: roleData?.name
+					itemName: `${roleData?.name}`
 			  })}
 	/>
 {/if}
@@ -176,7 +178,7 @@
 		entity={formatEntityForModal({
 			modalType: 'delete',
 			entity: $LL.modules.roles.entity.single(),
-			itemName: roleData?.name
+			itemName: `${roleData?.name}`
 		})}
 		on:clickConfirmBtnTriggered={deleteItem}
 	/>

@@ -4,7 +4,13 @@
 	import Input from '$lib/shared/components/general/form/Input.svelte';
 	import AddEditModal from '../../general/modal/AddEditModal.svelte';
 	import type { ModalState } from '../../general/modal/types';
-	import { textValidator, capitalize, Modules, createOne, type Project } from '$lib/shared';
+	import {
+		textValidator,
+		capitalize,
+		Modules,
+		createOne,
+		type NewProjectType
+	} from '$lib/shared';
 	import { superForm, superValidateSync } from 'sveltekit-superforms/client';
 	import LL from '$i18n/i18n-svelte';
 	import Button from '../../general/button/Button.svelte';
@@ -21,7 +27,7 @@
 		dataType: 'json',
 		onUpdate: async ({ form }) => {
 			if (form.valid) {
-				const response = await createOne<Project>({
+				const response = await createOne<NewProjectType>({
 					apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.PROJECTS}`,
 					errorKey: $LL.errors.errorFetchingSomethingFromServer({
 						something: $LL.modules.projects.entity.single()

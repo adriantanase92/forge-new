@@ -7,10 +7,12 @@
 	import {
 		textValidator,
 		capitalize,
-		type Permission,
+		type PermissionType,
 		Modules,
 		createOne,
-		updateOne
+		updateOne,
+		type NewPermissionType,
+		type EditPermissionType
 	} from '$lib/shared';
 	import { superForm, superValidateSync } from 'sveltekit-superforms/client';
 	import LL from '$i18n/i18n-svelte';
@@ -21,7 +23,7 @@
 	export let open = false;
 	export let modalState: ModalState = 'add';
 	export let entity: string = 'item';
-	export let dataForEditForm: Permission;
+	export let dataForEditForm: EditPermissionType;
 	export let schema;
 
 	const permissionData = open && modalState === 'edit' ? dataForEditForm : null;
@@ -32,7 +34,7 @@
 		onUpdate: async ({ form }) => {
 			if (form.valid) {
 				if (!form.data.id) {
-					const response = await createOne<Permission>({
+					const response = await createOne<NewPermissionType>({
 						apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.PERMISSIONS}`,
 						errorKey: $LL.errors.errorFetchingSomethingFromServer({
 							something: $LL.modules.permissions.entity.single()
@@ -42,7 +44,7 @@
 					// TODO: don't forget about notification here
 					console.log('add response: ', response);
 				} else {
-					const response = await updateOne<Permission>({
+					const response = await updateOne<PermissionType>({
 						apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.PERMISSIONS}`,
 						errorKey: $LL.errors.errorFetchingSomethingFromServer({
 							something: $LL.modules.permissions.entity.single()
