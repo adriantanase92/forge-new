@@ -35,7 +35,7 @@ export type QueryString = {
     filters?: { field: string; value: string }[];
     page?: string;
     limit?: string;
-    excludeFields?: string[];
+    excludeFields?: string;
     populate?: PopulateInfo[];
 };
 
@@ -53,7 +53,7 @@ const QueryStringSchema = z.object({
         .optional(),
     page: z.string().default('1'),
     limit: z.string().default('10'),
-    excludeFields: z.array(z.string()).default([]),
+    excludeFields: z.string(),
     populate: z
         .array(
             z.object({
@@ -84,7 +84,7 @@ export const getAll = async <T extends Document>({
             sortOrder = 'desc',
             page = '1',
             limit = '10',
-            excludeFields = []
+            excludeFields = ''
         } = QueryStringSchema.parse(requestQuery);
 
         // Convert page and limit to numbers
@@ -126,9 +126,14 @@ export const getAll = async <T extends Document>({
         }
 
         // Create a projection object to exclude fields
-        const projection = Array.isArray(excludeFields)
-            ? excludeFields.reduce((acc, field) => ({ ...acc, [field]: 0 }), {})
-            : {};
+        const excludeFieldsArray =
+            typeof excludeFields === 'string' && excludeFields.length > 0
+                ? excludeFields.split(',')
+                : [];
+        const projection = excludeFieldsArray.reduce((acc, field) => {
+            const trimmedField = field.trim(); // Remove any extra white space
+            return trimmedField ? { ...acc, [trimmedField]: 0 } : acc;
+        }, {});
 
         // Count total matching documents
         const totalItems = shouldCount

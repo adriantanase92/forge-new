@@ -8,7 +8,10 @@ export const load: PageServerLoad = (async ({ fetch, locals: { t } }) => {
 		apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.USERS}`,
 		errorKey: t.errors.errorFetchingSomethingFromServer({
 			something: t.modules.users.entity.multiple()
-		})
+		}),
+		requestQuery: {
+			excludeFields: ['permissions', 'preferredLanguage', 'projects']
+		}
 	});
 
 	return {
