@@ -53,7 +53,7 @@ const QueryStringSchema = z.object({
         .optional(),
     page: z.string().default('1'),
     limit: z.string().default('10'),
-    excludeFields: z.string(),
+    excludeFields: z.string().optional(),
     populate: z
         .array(
             z.object({
