@@ -12,6 +12,6 @@ export const load: PageServerLoad = (async ({ fetch, locals: { t } }) => {
 	});
 
 	return {
-		permissions: permissions.data ?? { items: [], totalItems: 0 }
+		permissions: permissions.data ?? { items: [], pagination: { totalItems: 0, page: 1 } }
 	};
 }) satisfies PageServerLoad;

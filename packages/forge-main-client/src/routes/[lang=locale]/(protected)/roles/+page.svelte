@@ -2,7 +2,16 @@
 	import Box from '$lib/shared/components/panel/Box.svelte';
 	import PageTitle from '$lib/shared/components/panel/PageTitle.svelte';
 	import DynamicDataRenderer from '$lib/shared/components/general/dynamic-data-renderer/DynamicDataRenderer.svelte';
-	import { Modules, UserRole, capitalize, colors, deleteOne, getAll } from '$lib/shared/index.js';
+	import {
+		Modules,
+		UserRole,
+		capitalize,
+		colors,
+		deleteOne,
+		getAll,
+		type HadleDataParams,
+		type HadleDataPagination
+	} from '$lib/shared/index.js';
 	import LL from '$i18n/i18n-svelte';
 	import Button from '$lib/shared/components/general/button/Button.svelte';
 	import Role from '$lib/shared/components/modules/roles/Role.svelte';
@@ -21,14 +30,12 @@
 	$: roles = data.roles.items ?? [];
 	$: totalItems = data.roles.pagination.totalItems ?? 10;
 	$: currentPage = data.roles.pagination.page ?? 1;
-	let pagination: { page: number; limit?: number };
+	let pagination: HadleDataPagination;
 	$: pagination = { page: currentPage };
 	let searchValue: string = '';
 
 	// Setup display ---------------------------------------------------------------------------
-	const handleData = async (
-		event: CustomEvent<{ search: string; pagination: { page: number; limit?: number } }>
-	) => {
+	const handleData = async (event: CustomEvent<HadleDataParams>) => {
 		if (event.detail.search !== undefined) {
 			searchValue = event.detail.search;
 		}
@@ -105,7 +112,7 @@
 <Box>
 	<PageTitle text={capitalize($LL.modules.roles.entity.multiple())} />
 
-	<hr class="my-8" />
+	<hr class="mt-4 mb-8" />
 
 	<div class="flex justify-between items-center mb-6 gap-2">
 		<Search on:searchBy={handleData} />

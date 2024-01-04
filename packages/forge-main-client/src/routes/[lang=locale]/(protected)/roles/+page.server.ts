@@ -12,6 +12,6 @@ export const load: PageServerLoad = (async ({ fetch, locals: { t } }) => {
 	});
 
 	return {
-		roles: roles.data ?? { items: [], totalItems: 0 }
+		roles: roles.data ?? { items: [], pagination: { totalItems: 0, page: 1 } }
 	};
 }) satisfies PageServerLoad;

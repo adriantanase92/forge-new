@@ -75,6 +75,9 @@ export default {
 		},
 		role: {
 			text: 'role'
+		},
+		title: {
+			text: 'title'
 		}
 	},
 	buttonsOrLinks: {

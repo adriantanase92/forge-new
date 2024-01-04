@@ -16,7 +16,9 @@
 		UserRole,
 		type User,
 		formatObjectFromTable,
-		getAll
+		getAll,
+		type HadleDataParams,
+		type HadleDataPagination
 	} from '$lib/shared/index.js';
 	import { PUBLIC_MAIN_SERVER_URL } from '$env/static/public';
 	import { goto, invalidateAll } from '$app/navigation';
@@ -111,14 +113,12 @@
 	$: totalItems = data.users.pagination.totalItems ?? 10;
 	$: currentPage = data.users.pagination.page ?? 1;
 
-	let pagination: { page: number; limit?: number };
+	let pagination: HadleDataPagination;
 	$: pagination = { page: currentPage };
 
 	let searchValue: string = '';
 
-	const handleTableData = async (
-		event: CustomEvent<{ search: string; pagination: { page: number; limit?: number } }>
-	) => {
+	const handleTableData = async (event: CustomEvent<HadleDataParams>) => {
 		if (event.detail.search !== undefined) {
 			searchValue = event.detail.search;
 		}

@@ -19,14 +19,23 @@ export enum PreferredLanguage {
 	NL = 'nl'
 }
 
+export type ChangeLog = {
+	createdAt: Date;
+	updatedAt?: Date;
+};
+
 export type Role = {
+	_id?: string;
 	id?: string;
 	name: UserRole;
+	changeLog?: ChangeLog;
 };
 
 export type Permission = {
+	_id?: string;
 	id?: string;
 	name: Modules;
+	changeLog?: ChangeLog;
 };
 
 export type PermissionOptions = {
@@ -48,6 +57,7 @@ export type Address = {
 };
 
 export type User = {
+	_id?: string;
 	id: string;
 	firstName: string;
 	lastName: string;
@@ -58,17 +68,19 @@ export type User = {
 	preferredLanguage: PreferredLanguage;
 	projects: string[];
 	address?: Address;
-	createdAt: string;
+	changeLog?: ChangeLog;
 };
 
 export type Project = {
+	_id?: string;
+	id?: string;
 	name: string;
 	clients: string[];
 	workers: string[];
 	manager: string;
 	tasks: string[];
 	description: string;
-	createdAt: string;
+	changeLog?: ChangeLog;
 };
 
 export enum TaskStatus {
@@ -78,9 +90,12 @@ export enum TaskStatus {
 }
 
 export type Task = {
+	_id?: string;
+	id?: string;
 	title: string;
 	description: string;
 	project: string;
 	responsible: string[];
 	status: TaskStatus;
+	changeLog?: ChangeLog;
 };

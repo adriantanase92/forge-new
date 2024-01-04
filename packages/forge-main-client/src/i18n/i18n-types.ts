@@ -105,6 +105,9 @@ export type FieldsTranslations = {
 	};
 	role: {
 		text: string;
+	};
+	title: {
+		text: string;
 	}
 };
 
@@ -277,6 +280,9 @@ export type TranslationFunctions = {
 			text: () => LocalizedString;
 		};
 		role: {
+			text: () => LocalizedString;
+		};
+		title: {
 			text: () => LocalizedString;
 		};
     };

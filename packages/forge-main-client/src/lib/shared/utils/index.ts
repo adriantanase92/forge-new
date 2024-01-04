@@ -5,4 +5,5 @@ export * from './http';
 export * from './menus';
 export * from './regex';
 export * from './theme';
+export * from './types';
 export * from './validators';

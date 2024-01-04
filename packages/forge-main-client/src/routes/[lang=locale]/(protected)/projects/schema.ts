@@ -1,15 +1,15 @@
 import type { TranslationFunctions } from '$i18n/i18n-types';
-import { TaskStatus, escapeString } from '$lib/shared';
+import { escapeString } from '$lib/shared';
 import { z } from 'zod';
 
-export const taskSchema = (t: TranslationFunctions) =>
+export const projectSchema = (t: TranslationFunctions) =>
 	z
 		.object({
 			id: z.string().optional(),
-			title: z
+			name: z
 				.string({
 					required_error: t.errors.required({
-						field: `${t.modules.tasks.entity.single()} ${t.fields.title.text()}`
+						field: `${t.modules.projects.entity.single()} ${t.fields.name.text()}`
 					})
 				})
 				.trim()
@@ -17,10 +17,11 @@ export const taskSchema = (t: TranslationFunctions) =>
 				.max(60, t.errors.maxCharacters({ number: 100 }))
 				.transform(escapeString),
 			description: z.string().trim().min(6).max(500).transform(escapeString).optional(),
-			project: z.string(),
-			responsible: z.string().array().optional(),
-			status: z.nativeEnum(TaskStatus)
+			clients: z.string().array().optional(),
+			workers: z.string().array().optional(),
+			manager: z.string(),
+			tasks: z.string().array().optional()
 		})
 		.strict();
 
-export type TasksSchema = typeof taskSchema;
+export type ProjectsSchema = typeof projectSchema;

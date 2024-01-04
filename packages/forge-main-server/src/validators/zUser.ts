@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { Language, Modules, UserRole } from '../enums';
 import { ObjectId } from 'mongodb';
-import { emailRegex } from '../utils';
+import { emailRegex, escapeString } from '../utils';
 import { zAddress } from './zAddress';
 
 export const zUserPermission = z.object({
@@ -11,10 +11,10 @@ export const zUserPermission = z.object({
 
 export const zUser = z.object({
     _id: z.instanceof(ObjectId).optional(),
-    firstName: z.string().trim().min(2).max(100),
-    lastName: z.string().trim().min(2).max(100),
+    firstName: z.string().trim().min(2).max(100).transform(escapeString),
+    lastName: z.string().trim().min(2).max(100).transform(escapeString),
     email: z.string().trim().toLowerCase().regex(emailRegex),
-    phone: z.string().min(1).max(50).optional(),
+    phone: z.string().min(1).max(50).transform(escapeString).optional(),
     role: z.nativeEnum(UserRole),
     preferredLanguage: z.nativeEnum(Language),
     projects: z.instanceof(ObjectId).array().optional(),
