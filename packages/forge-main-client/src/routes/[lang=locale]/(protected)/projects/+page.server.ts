@@ -10,7 +10,11 @@ export const load: PageServerLoad = (async ({ fetch, locals: { t } }) => {
 			something: t.modules.projects.entity.multiple()
 		}),
 		requestQuery: {
-			populate: [{ field: 'tasks', collectionName: Modules.TASKS }]
+			populate: [
+				{ field: 'clients', collectionName: Modules.USERS },
+				{ field: 'workers', collectionName: Modules.USERS },
+				{ field: 'manager', collectionName: Modules.USERS }
+			]
 		}
 	});
 

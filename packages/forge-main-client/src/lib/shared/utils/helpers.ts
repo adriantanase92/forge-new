@@ -72,3 +72,18 @@ export const formatDateTime = (dateString: Date): { date: string; time: string }
 		time: formattedTime
 	};
 };
+
+export const getNameInitials = ({
+	firstName,
+	lastName
+}: {
+	firstName: string;
+	lastName: string;
+}): string => {
+	// Get the first letter of the first name and last name, and make them uppercase.
+	const firstInitial = firstName.charAt(0).toUpperCase();
+	const lastInitial = lastName.charAt(0).toUpperCase();
+
+	// Combine the initials and return them.
+	return `${firstInitial}${lastInitial}`;
+};

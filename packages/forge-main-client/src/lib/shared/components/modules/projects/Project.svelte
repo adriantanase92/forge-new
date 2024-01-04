@@ -1,7 +1,13 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import Button from '../../general/button/Button.svelte';
-	import { colors, formatDateTime, Modules, type ProjectType } from '$lib/shared';
+	import {
+		colors,
+		formatDateTime,
+		getNameInitials,
+		Modules,
+		type ProjectType
+	} from '$lib/shared';
 	import { goto } from '$app/navigation';
 
 	export let project: ProjectType;
@@ -52,6 +58,35 @@
 
 		{#if project.description}<div class="line-clamp-2">{project.description}</div>{/if}
 
-		<div class="flex justify-between items-center"></div>
+		<div class="flex justify-between items-center">
+			<div>
+				Manager: {getNameInitials({
+					firstName: project.manager.firstName,
+					lastName: project.manager.lastName
+				})}
+			</div>
+			{#if project.clients && project.clients.length > 0}
+				<div>
+					Clients:
+					{#each project.clients as client}
+						{getNameInitials({
+							firstName: client.firstName,
+							lastName: client.lastName
+						})}
+					{/each}
+				</div>
+			{/if}
+			{#if project.workers && project.workers.length > 0}
+				<div>
+					Workers:
+					{#each project.workers as worker}
+						{getNameInitials({
+							firstName: worker.firstName,
+							lastName: worker.lastName
+						})}
+					{/each}
+				</div>
+			{/if}
+		</div>
 	</div>
 {/if}

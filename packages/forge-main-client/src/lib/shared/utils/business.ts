@@ -99,7 +99,14 @@ export type EditProjectType = {
 	id: string;
 } & NewProjectType;
 
-export type ProjectType = EntityDocumentType & NewProjectType;
+export type ProjectType = EntityDocumentType & {
+	name: string;
+	clients?: UserType[];
+	workers?: UserType[];
+	manager: UserType;
+	tasks?: string[];
+	description?: string;
+};
 
 export enum TaskStatus {
 	TO_DO = 'to-do',
