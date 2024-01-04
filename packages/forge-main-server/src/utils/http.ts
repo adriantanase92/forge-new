@@ -150,17 +150,24 @@ export const getAll = async <T extends Document>({
 
                 items = await Promise.all(
                     items.map(async (item) => {
-                        if (item[field] && Array.isArray(item[field])) {
+                        // If the field is a single ObjectId
+                        if (item[field] && ObjectId.isValid(item[field])) {
+                            const relatedDoc = await populateCollection.findOne({
+                                _id: item[field] as ObjectId
+                            });
+                            return { ...item, [field]: relatedDoc || null }; // Replace the ID with the actual document
+                        }
+                        // If the field is an array of ObjectId
+                        else if (item[field] && Array.isArray(item[field])) {
                             // Fetch each related document from the dynamic collection
                             const relatedDocs = await Promise.all(
-                                item[field].map(async (id: ObjectId) =>
+                                (item[field] as ObjectId[]).map(async (id: ObjectId) =>
                                     populateCollection.findOne({ _id: id })
                                 )
                             );
-
-                            return { ...item, [field]: relatedDocs.filter((doc) => doc !== null) };
+                            return { ...item, [field]: relatedDocs.filter((doc) => doc !== null) }; // Replace ID array with actual documents
                         }
-                        return item;
+                        return item; // Return the item unmodified if the field doesn't meet the criteria
                     })
                 );
             }
@@ -181,17 +188,61 @@ export const getAll = async <T extends Document>({
 };
 
 export const getOne = async <T extends Document>({
+    db,
     collection,
-    id
+    id,
+    requestQuery
 }: {
+    db: Db;
     collection: Collection<T>;
     id: string;
+    requestQuery: QueryString;
 }): Promise<Response<T>> => {
     try {
         const item = await collection.findOne({ _id: new ObjectId(id) } as Filter<T>);
 
         if (!item) {
             return { error: formErrorObject({ errorKey: 'item_not_found' }) };
+        }
+
+        const populateInstructions: PopulateInfo[] = [];
+
+        // Iterate over the requestQuery to separate filters and populate instructions
+        for (const [key, value] of Object.entries(requestQuery)) {
+            if (key.startsWith('populate_')) {
+                const field = key.replace('populate_', '');
+                populateInstructions.push({ field, collectionName: value as Modules });
+            }
+        }
+
+        // If populate parameter is provided and not empty, perform population
+        if (populateInstructions.length > 0) {
+            // Iterate through each populate instruction
+            for (const { field, collectionName } of populateInstructions) {
+                // Dynamically get the collection to populate from
+                const populateCollection = db[collectionName];
+
+                // If the field exists and is an ObjectId or an array of ObjectId
+                if (item[field]) {
+                    // Handle the case where the field is a single ObjectId
+                    if (ObjectId.isValid(item[field])) {
+                        const relatedDoc = await populateCollection.findOne({
+                            _id: item[field] as ObjectId
+                        });
+                        item[field] = relatedDoc; // Replace single ID with the actual document
+                    }
+                    // Handle the case where the field is an array of ObjectId
+                    else if (Array.isArray(item[field])) {
+                        const relatedDocs = await Promise.all(
+                            (item[field] as ObjectId[]).map(async (id: ObjectId) =>
+                                populateCollection.findOne({ _id: id })
+                            )
+                        );
+                        // Replace ID array with actual documents, filtering out any null results
+                        item[field] = relatedDocs.filter((doc) => doc !== null);
+                    }
+                }
+            }
         }
 
         return { data: item };

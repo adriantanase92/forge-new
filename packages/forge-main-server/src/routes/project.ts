@@ -33,22 +33,31 @@ async function projectRoutes(app: FastifyInstance, db: Db) {
         }
     });
 
-    app.get<{ Params: RouteParams }>('/projects/:id', async (request, reply) => {
-        try {
-            const { id } = request.params;
-            const response = await getOne<ProjectDocument>({ collection: db.projects, id });
+    app.get<{ Querystring: QueryString; Params: RouteParams }>(
+        '/projects/:id',
+        async (request, reply) => {
+            try {
+                const query = request.query;
+                const { id } = request.params;
+                const response = await getOne<ProjectDocument>({
+                    db,
+                    collection: db.projects,
+                    id,
+                    requestQuery: query
+                });
 
-            if ('error' in response) {
-                reply.code(500).send({ error: response.error });
-            } else {
-                reply.code(200).send({ data: response.data });
+                if ('error' in response) {
+                    reply.code(500).send({ error: response.error });
+                } else {
+                    reply.code(200).send({ data: response.data });
+                }
+            } catch (e) {
+                reply.code(500).send({
+                    error: formErrorObject({ errorKey: 'internal_server_error', error: e })
+                });
             }
-        } catch (e) {
-            reply.code(500).send({
-                error: formErrorObject({ errorKey: 'internal_server_error', error: e })
-            });
         }
-    });
+    );
 
     app.post<{ Body: Project }>('/projects', async (request, reply) => {
         try {

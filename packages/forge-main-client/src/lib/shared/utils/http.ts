@@ -125,14 +125,26 @@ export const getOne = async ({
 	fetch,
 	apiUrl,
 	id,
+	populate = [],
 	errorKey
 }: HttpOptionsParams & {
 	id: string;
+	populate?: PopulateInfo[];
 }) => {
 	try {
+		let url = `${apiUrl}/${id}`;
+
+		// If populate instructions are provided, add them as query parameters
+		if (populate.length > 0) {
+			const populateQueries = populate
+				.map((p) => `populate_${p.field}=${encodeURIComponent(p.collectionName)}`)
+				.join('&');
+			url += `?${populateQueries}`;
+		}
+
 		const response = await api({
 			fetch,
-			url: `${apiUrl}/${id}`
+			url
 		});
 
 		return { data: response.data };

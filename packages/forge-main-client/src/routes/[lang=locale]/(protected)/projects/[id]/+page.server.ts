@@ -9,7 +9,13 @@ export const load: PageServerLoad = (async ({ fetch, locals: { t }, params: { id
 		id,
 		errorKey: t.errors.errorFetchingSomethingFromServer({
 			something: t.modules.projects.entity.multiple()
-		})
+		}),
+		populate: [
+			{ field: 'clients', collectionName: Modules.USERS },
+			{ field: 'workers', collectionName: Modules.USERS },
+			{ field: 'manager', collectionName: Modules.USERS },
+			{ field: 'tasks', collectionName: Modules.TASKS }
+		]
 	});
 
 	return {

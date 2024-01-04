@@ -33,22 +33,31 @@ async function roleRoutes(app: FastifyInstance, db: Db) {
         }
     });
 
-    app.get<{ Params: RouteParams }>('/roles/:id', async (request, reply) => {
-        try {
-            const { id } = request.params;
-            const response = await getOne<RoleDocument>({ collection: db.roles, id });
+    app.get<{ Params: RouteParams; Querystring: QueryString }>(
+        '/roles/:id',
+        async (request, reply) => {
+            try {
+                const query = request.query;
+                const { id } = request.params;
+                const response = await getOne<RoleDocument>({
+                    db,
+                    collection: db.roles,
+                    id,
+                    requestQuery: query
+                });
 
-            if ('error' in response) {
-                reply.code(500).send({ error: response.error });
-            } else {
-                reply.code(200).send({ data: response.data });
+                if ('error' in response) {
+                    reply.code(500).send({ error: response.error });
+                } else {
+                    reply.code(200).send({ data: response.data });
+                }
+            } catch (e) {
+                reply.code(500).send({
+                    error: formErrorObject({ errorKey: 'internal_server_error', error: e })
+                });
             }
-        } catch (e) {
-            reply.code(500).send({
-                error: formErrorObject({ errorKey: 'internal_server_error', error: e })
-            });
         }
-    });
+    );
 
     app.post<{ Body: Role }>('/roles', async (request, reply) => {
         try {
