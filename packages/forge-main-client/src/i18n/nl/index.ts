@@ -127,6 +127,24 @@ export default {
 			entity: {
 				single: 'gebruiker',
 				multiple: 'gebruikers'
+			},
+			types: {
+				admin: {
+					single: 'beheerder',
+					multiple: 'beheerders'
+				},
+				manager: {
+					single: 'manager',
+					multiple: 'managers'
+				},
+				client: {
+					single: 'cliënt',
+					multiple: 'klanten'
+				},
+				worker: {
+					single: 'arbeider',
+					multiple: 'werknemers'
+				}
 			}
 		},
 		projects: {

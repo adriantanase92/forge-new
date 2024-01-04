@@ -161,7 +161,25 @@ export type ModulesTranslations = {
 			entity: {
 				single: string;
 				multiple: string;
-			}
+			};
+			types: {
+				admin: {
+					single: string;
+					multiple: string;
+				},
+				manager: {
+					single: string;
+					multiple: string;
+				},
+				client: {
+					single: string;
+					multiple: string;
+				},
+				worker: {
+					single: string;
+					multiple: string;
+				}
+			};
 		};
 		projects: {
 			entity: {
@@ -333,7 +351,25 @@ export type TranslationFunctions = {
 			entity: {
 				single: () => LocalizedString;
 				multiple: () => LocalizedString;
-			}
+			};
+			types: {
+				admin: {
+					single: () => LocalizedString;
+					multiple: () => LocalizedString;
+				},
+				manager: {
+					single: () => LocalizedString;
+					multiple: () => LocalizedString;
+				},
+				client: {
+					single: () => LocalizedString;
+					multiple: () => LocalizedString;
+				},
+				worker: {
+					single: () => LocalizedString;
+					multiple: () => LocalizedString;
+				}
+			};
 		};
 		projects: {
 			entity: {

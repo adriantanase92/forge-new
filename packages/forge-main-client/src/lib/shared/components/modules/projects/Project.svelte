@@ -1,22 +1,16 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import Button from '../../general/button/Button.svelte';
-	import {
-		colors,
-		formatDateTime,
-		getNameInitials,
-		Modules,
-		type ProjectType
-	} from '$lib/shared';
+	import { colors, formatDateTime, Modules, type ProjectType } from '$lib/shared';
 	import { goto } from '$app/navigation';
+	import LL from '$i18n/i18n-svelte';
+	import ProfileImage from '../../general/profile-image/ProfileImage.svelte';
 
 	export let project: ProjectType;
 
 	const dispatch = createEventDispatcher();
 	const onClickAction = ({ project }: { project: ProjectType }) =>
 		dispatch('clickActionTriggered', { project });
-
-	$: console.log('project: ', project);
 </script>
 
 {#if project}
@@ -58,32 +52,31 @@
 
 		{#if project.description}<div class="line-clamp-2">{project.description}</div>{/if}
 
-		<div class="flex justify-between items-center">
+		<div class="flex flex-col md:flex-row justify-between md:items-center">
 			<div>
-				Manager: {getNameInitials({
-					firstName: project.manager.firstName,
-					lastName: project.manager.lastName
-				})}
+				<span class="text-sm capitalize">{$LL.modules.users.types.manager.single()}:</span>
+				<ProfileImage
+					firstName={project.manager.firstName}
+					lastName={project.manager.lastName}
+				/>
 			</div>
 			{#if project.clients && project.clients.length > 0}
 				<div>
-					Clients:
+					<span class="text-sm capitalize"
+						>{$LL.modules.users.types.client.multiple()}:</span
+					>
 					{#each project.clients as client}
-						{getNameInitials({
-							firstName: client.firstName,
-							lastName: client.lastName
-						})}
+						<ProfileImage firstName={client.firstName} lastName={client.lastName} />
 					{/each}
 				</div>
 			{/if}
 			{#if project.workers && project.workers.length > 0}
 				<div>
-					Workers:
+					<span class="text-sm capitalize"
+						>{$LL.modules.users.types.worker.multiple()}:</span
+					>
 					{#each project.workers as worker}
-						{getNameInitials({
-							firstName: worker.firstName,
-							lastName: worker.lastName
-						})}
+						<ProfileImage firstName={worker.firstName} lastName={worker.lastName} />
 					{/each}
 				</div>
 			{/if}
