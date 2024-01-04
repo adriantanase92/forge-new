@@ -11,6 +11,16 @@ import path from 'path';
 // --------- dotenv ------------
 dotenv.config({ path: path.resolve(__dirname, '../../../../.env') });
 
+const getRandomPastDate = (daysBack = 365) => {
+    const today = new Date();
+    const pastDate = new Date(today.getTime() - Math.random() * daysBack * 24 * 60 * 60 * 1000);
+    return pastDate;
+};
+
+const getRandomNumber = (min: number, max: number): number => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
 const groupTasksByProject = (projects: ObjectId[], tasks: ObjectId[]) => {
     if (
         projects.length !== numberOfProjectsToGenerate ||
@@ -133,7 +143,7 @@ export const seedRoles = async (collection: Collection<Role>): Promise<void> => 
         const rolesToInsert = roles.map((role) => ({
             name: role,
             changeLog: {
-                createdAt: new Date()
+                createdAt: getRandomPastDate(getRandomNumber(1, 365))
             }
         }));
         await collection.insertMany(rolesToInsert);
@@ -149,7 +159,7 @@ export const seedPermissions = async (collection: Collection<Permission>): Promi
         const permissionsToInsert = modules.map((module) => ({
             name: module,
             changeLog: {
-                createdAt: new Date()
+                createdAt: getRandomPastDate(getRandomNumber(1, 365))
             }
         }));
         await collection.insertMany(permissionsToInsert);
@@ -175,7 +185,7 @@ export const seedUsers = async (collection: Collection<User>): Promise<void> => 
             projects: projectsIds,
             permissions: adminUserPermissions,
             changeLog: {
-                createdAt: new Date()
+                createdAt: getRandomPastDate(getRandomNumber(1, 365))
             }
         };
 
@@ -190,7 +200,7 @@ export const seedUsers = async (collection: Collection<User>): Promise<void> => 
             projects: projectsIds,
             permissions: managerUserPermissions,
             changeLog: {
-                createdAt: new Date()
+                createdAt: getRandomPastDate(getRandomNumber(1, 365))
             }
         };
 
@@ -205,7 +215,7 @@ export const seedUsers = async (collection: Collection<User>): Promise<void> => 
             projects: projectsIds,
             permissions: clientUserPermissions,
             changeLog: {
-                createdAt: new Date()
+                createdAt: getRandomPastDate(getRandomNumber(1, 365))
             }
         };
 
@@ -220,7 +230,7 @@ export const seedUsers = async (collection: Collection<User>): Promise<void> => 
             projects: projectsIds,
             permissions: workerUserPermissions,
             changeLog: {
-                createdAt: new Date()
+                createdAt: getRandomPastDate(getRandomNumber(1, 365))
             }
         };
 
@@ -249,7 +259,7 @@ export const seedUsers = async (collection: Collection<User>): Promise<void> => 
                     zipCode: faker.location.zipCode()
                 },
                 changeLog: {
-                    createdAt: new Date()
+                    createdAt: getRandomPastDate(getRandomNumber(1, 365))
                 }
             };
         });
@@ -283,7 +293,7 @@ export const seedProjects = async (collection: Collection<Project>): Promise<voi
                 (taskId: string) => new ObjectId(taskId)
             ),
             changeLog: {
-                createdAt: new Date()
+                createdAt: getRandomPastDate(getRandomNumber(1, 365))
             }
         }));
 
@@ -309,7 +319,7 @@ export const seedTasks = async (collection: Collection<Task>): Promise<void> => 
                 responsible: [workerObjectId],
                 status: faker.helpers.arrayElement(taskStatuses),
                 changeLog: {
-                    createdAt: new Date()
+                    createdAt: getRandomPastDate(getRandomNumber(1, 365))
                 }
             }));
             tasksToInsert.push(arrayToInsert);
