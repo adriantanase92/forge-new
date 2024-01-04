@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import Button from '../../general/button/Button.svelte';
-	import { colors, Modules, type ProjectType } from '$lib/shared';
+	import { colors, formatDateTime, Modules, type ProjectType } from '$lib/shared';
 	import { goto } from '$app/navigation';
 
 	export let project: ProjectType;
@@ -9,8 +9,6 @@
 	const dispatch = createEventDispatcher();
 	const onClickAction = ({ project }: { project: ProjectType }) =>
 		dispatch('clickActionTriggered', { project });
-	const viewProject = (project: ProjectType) =>
-		goto(`/${Modules.PROJECTS}/${project._id as string}`);
 
 	$: console.log('project: ', project);
 </script>
@@ -24,7 +22,9 @@
 				<h3 class="capitalize text-xl font-semibold group-hover:text-cobalt">
 					{project.name}
 				</h3>
-				<span>{project.changeLog.createdAt}</span>
+				<span class="text-sm text-slate-400"
+					>{formatDateTime(project.changeLog.createdAt).date}</span
+				>
 			</div>
 			<div class="flex gap-2">
 				<Button
@@ -35,7 +35,7 @@
 					iconHeight="18"
 					iconWidth="18"
 					iconColor={colors.white}
-					on:click={() => viewProject(project)}
+					on:click={() => goto(`/${Modules.PROJECTS}/${project._id}`)}
 				/>
 				<Button
 					class="p-2"

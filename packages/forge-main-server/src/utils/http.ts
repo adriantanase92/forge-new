@@ -1,8 +1,9 @@
 import { Collection, ObjectId, Document, WithId, Filter, OptionalUnlessRequiredId } from 'mongodb';
 import { formErrorObject, type Error } from './error-handling';
-import { ChangeLog } from '../models';
+import { ChangeLog, Db } from '../models';
 import { z } from 'zod';
 import { escapeString } from './helpers';
+import { Modules } from '../enums';
 
 export type ResponseData<T> = {
     data:
@@ -22,6 +23,11 @@ export type Response<T> = ResponseData<T> | ResponseError;
 
 export type RouteParams = { id: string };
 
+export type PopulateInfo = {
+    field: string;
+    collectionName: Modules;
+};
+
 export type QueryString = {
     search?: string;
     sortBy?: string;
@@ -30,6 +36,7 @@ export type QueryString = {
     page?: string;
     limit?: string;
     excludeFields?: string[];
+    populate?: PopulateInfo[];
 };
 
 const QueryStringSchema = z.object({
@@ -46,7 +53,15 @@ const QueryStringSchema = z.object({
         .optional(),
     page: z.string().default('1'),
     limit: z.string().default('10'),
-    excludeFields: z.array(z.string()).default([])
+    excludeFields: z.array(z.string()).default([]),
+    populate: z
+        .array(
+            z.object({
+                field: z.string().trim(),
+                collectionName: z.nativeEnum(Modules)
+            })
+        )
+        .optional()
 });
 
 type WithChangeLog = {
@@ -54,9 +69,11 @@ type WithChangeLog = {
 };
 
 export const getAll = async <T extends Document>({
+    db,
     collection,
     requestQuery
 }: {
+    db: Db;
     collection: Collection<T>;
     requestQuery: QueryString;
 }): Promise<Response<T>> => {
@@ -65,7 +82,6 @@ export const getAll = async <T extends Document>({
             search,
             sortBy = 'changeLog.createdAt',
             sortOrder = 'desc',
-            filters,
             page = '1',
             limit = '10',
             excludeFields = []
@@ -81,21 +97,25 @@ export const getAll = async <T extends Document>({
         // Initialize query for MongoDB
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const query: any = {};
+        const populateInstructions: PopulateInfo[] = [];
+        let shouldCount = false;
+
+        // Iterate over the requestQuery to separate filters and populate instructions
+        for (const [key, value] of Object.entries(requestQuery)) {
+            if (key.startsWith('filter_')) {
+                shouldCount = true;
+                const field = key.replace('filter_', '');
+                query[field] = value;
+            } else if (key.startsWith('populate_')) {
+                const field = key.replace('populate_', '');
+                populateInstructions.push({ field, collectionName: value as Modules });
+            }
+        }
 
         // Handling text search
         if (search) {
+            shouldCount = true;
             query.$text = { $search: search };
-        }
-
-        // Handling multiple filters
-        const hasFilters = filters && Array.isArray(filters) && filters.length > 0;
-        if (filters && Array.isArray(filters)) {
-            // Assume filters are passed as an array of objects
-            filters.forEach((filter) => {
-                if (filter && filter.field && filter.value) {
-                    query[filter.field] = filter.value;
-                }
-            });
         }
 
         // Determine the sorting order
@@ -106,21 +126,45 @@ export const getAll = async <T extends Document>({
         }
 
         // Create a projection object to exclude fields
-        const projection = excludeFields.reduce((acc, field) => ({ ...acc, [field]: 0 }), {});
+        const projection = Array.isArray(excludeFields)
+            ? excludeFields.reduce((acc, field) => ({ ...acc, [field]: 0 }), {})
+            : {};
 
         // Count total matching documents
-        const shouldCount = search || hasFilters;
         const totalItems = shouldCount
             ? await collection.countDocuments(query)
             : await collection.estimatedDocumentCount();
 
         // Fetch the users from the database with pagination
-        const items: WithId<T>[] = await collection
+        let items: WithId<T>[] = await collection
             .find(query, { projection, collation: { locale: 'en', strength: 2 } })
             .sort(sort)
             .skip(skipItems)
             .limit(limitItems)
             .toArray();
+
+        // Populate fields
+        if (populateInstructions.length > 0) {
+            for (const { field, collectionName } of populateInstructions) {
+                const populateCollection = db[collectionName];
+
+                items = await Promise.all(
+                    items.map(async (item) => {
+                        if (item[field] && Array.isArray(item[field])) {
+                            // Fetch each related document from the dynamic collection
+                            const relatedDocs = await Promise.all(
+                                item[field].map(async (id: ObjectId) =>
+                                    populateCollection.findOne({ _id: id })
+                                )
+                            );
+
+                            return { ...item, [field]: relatedDocs.filter((doc) => doc !== null) };
+                        }
+                        return item;
+                    })
+                );
+            }
+        }
 
         return {
             data: {

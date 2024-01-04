@@ -1,4 +1,5 @@
 import type { HttpMethod } from '@sveltejs/kit';
+import type { Modules } from '.';
 
 type RawData = Record<string, unknown>;
 type FetchFunctionType = typeof fetch;
@@ -39,6 +40,11 @@ export const api = async (options: ApiOptionsParams) => {
 	}
 };
 
+type PopulateInfo = {
+	field: string;
+	collectionName: Modules;
+};
+
 type QueryString = {
 	search?: string;
 	sortBy?: string;
@@ -47,6 +53,7 @@ type QueryString = {
 	page?: string;
 	limit?: string;
 	excludeFields?: string[];
+	populate?: PopulateInfo[];
 };
 
 type HttpOptionsParams = {
@@ -64,7 +71,8 @@ export const getAll = async ({
 	requestQuery?: QueryString;
 }) => {
 	try {
-		const { search, sortBy, sortOrder, filters, page, limit, excludeFields } = requestQuery;
+		const { search, sortBy, sortOrder, filters, page, limit, excludeFields, populate } =
+			requestQuery;
 
 		// Initialize an array to hold query parameters
 		const queryParams: string[] = [];
@@ -77,12 +85,27 @@ export const getAll = async ({
 		if (limit) queryParams.push(`limit=${limit}`);
 		if (excludeFields) queryParams.push(`excludeFields=${excludeFields.join(',')}`);
 
-		// Handle filters (assuming filters is an array of { field, value } objects)
-		filters?.forEach((filter) => {
-			if (filter?.field && filter?.value) {
-				queryParams.push(`${filter.field}=${encodeURIComponent(filter.value)}`);
-			}
-		});
+		if (filters && filters.length > 0) {
+			// Prefix each filter with 'filter_'
+			filters.forEach((filter) => {
+				if (filter?.field && filter?.value) {
+					queryParams.push(`filter_${filter.field}=${encodeURIComponent(filter.value)}`);
+				}
+			});
+		}
+
+		if (populate && populate.length > 0) {
+			// Prefix each populate with 'populate_'
+			populate.forEach((populateInfo) => {
+				if (populateInfo?.field && populateInfo?.collectionName) {
+					queryParams.push(
+						`populate_${populateInfo.field}=${encodeURIComponent(
+							populateInfo.collectionName
+						)}`
+					);
+				}
+			});
+		}
 
 		// Construct the full URL with query parameters
 		const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';

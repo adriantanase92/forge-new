@@ -16,6 +16,7 @@ async function roleRoutes(app: FastifyInstance, db: Db) {
         try {
             const query = request.query;
             const response = await getAll<RoleDocument>({
+                db,
                 collection: db.roles,
                 requestQuery: query
             });

@@ -16,6 +16,7 @@ async function permissionRoutes(app: FastifyInstance, db: Db) {
         try {
             const query = request.query;
             const response = await getAll<PermissionDocument>({
+                db,
                 collection: db.permissions,
                 requestQuery: query
             });

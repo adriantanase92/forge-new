@@ -16,6 +16,7 @@ async function userRoutes(app: FastifyInstance, db: Db) {
         try {
             const query = request.query;
             const response = await getAll<UserDocument>({
+                db,
                 collection: db.users,
                 requestQuery: query
             });

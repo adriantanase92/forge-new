@@ -16,6 +16,7 @@ async function taskRoutes(app: FastifyInstance, db: Db) {
         try {
             const query = request.query;
             const response = await getAll<TaskDocument>({
+                db,
                 collection: db.tasks,
                 requestQuery: query
             });

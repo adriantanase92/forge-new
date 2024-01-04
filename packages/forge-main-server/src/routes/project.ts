@@ -16,6 +16,7 @@ async function projectRoutes(app: FastifyInstance, db: Db) {
         try {
             const query = request.query;
             const response = await getAll<ProjectDocument>({
+                db,
                 collection: db.projects,
                 requestQuery: query
             });
