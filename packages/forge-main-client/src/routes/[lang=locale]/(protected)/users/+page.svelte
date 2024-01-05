@@ -24,6 +24,7 @@
 	import { goto, invalidateAll } from '$app/navigation';
 	import DeleteModal from '$lib/shared/components/general/modal/DeleteModal.svelte';
 	import { formatEntityForModal } from '$lib/shared/components/general/modal/utils.js';
+	import { notifications } from '$stores/notifications.js';
 
 	export let data;
 
@@ -180,6 +181,7 @@
 			});
 			// TODO: don't forget about notification here
 			console.log('delete response: ', response);
+			notifications.success('Deleted item successfully!');
 			invalidateAll();
 			openDeleteModal = false;
 		}

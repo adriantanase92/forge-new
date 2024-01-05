@@ -1,5 +1,6 @@
 <script lang="ts">
 	import MainFooter from '$lib/shared/components/footers/MainFooter.svelte';
+	import Notifications from '$lib/shared/components/general/notification/Notifications.svelte';
 	import MainHeader from '$lib/shared/components/headers/MainHeader.svelte';
 	import MainSidebar from '$lib/shared/components/sidebars/MainSidebar.svelte';
 </script>
@@ -12,3 +13,4 @@
 		<MainFooter />
 	</div>
 </main>
+<Notifications />

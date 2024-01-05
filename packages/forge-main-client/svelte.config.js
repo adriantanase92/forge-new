@@ -20,7 +20,9 @@ const config = {
 			'$routes': './src/routes',
 			'$routes/*': './src/routes/*',
 			'$i18n': './src/i18n',
-			'$i18n/*': './src/i18n/*'
+			'$i18n/*': './src/i18n/*',
+			'$stores': './src/stores',
+			'$stores/*': './src/stores/*'
 		},
 		env: {
 			dir: '../..'

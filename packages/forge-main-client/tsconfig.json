@@ -21,6 +21,8 @@
 			"$routes/*": ["./src/routes/*"],
 			"$i18n": ["./src/i18n"],
 			"$i18n/*": ["./src/i18n/*"],
+			"$stores": ["./src/stores"],
+			"$stores/*": ["./src/stores/*"],
 		},
 	}
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
