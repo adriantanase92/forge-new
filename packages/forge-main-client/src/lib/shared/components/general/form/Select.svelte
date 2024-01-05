@@ -1,4 +1,6 @@
 <script lang="ts">
+	import type { SelectOptionType } from './types';
+
 	import type { FormPathLeaves, ZodValidation } from 'sveltekit-superforms';
 	import { formFieldProxy, type SuperForm } from 'sveltekit-superforms/client';
 	import type { z, AnyZodObject } from 'zod';
@@ -19,7 +21,7 @@
 	export let withEmptyOption: boolean = false;
 	export let emptyOptionText: string = $LL.components.form.placeholders.selectEmptyOptionText();
 
-	export let options: { text: string; value: string }[] = [];
+	export let options: SelectOptionType[] = [];
 
 	// Set to `true` to show required icon
 	export let isRequired = false;

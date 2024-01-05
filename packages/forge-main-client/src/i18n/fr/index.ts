@@ -79,6 +79,9 @@ export default {
 		},
 		title: {
 			text: 'titre'
+		},
+		description: {
+			text: 'description'
 		}
 	},
 	buttonsOrLinks: {

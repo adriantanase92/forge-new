@@ -78,6 +78,9 @@ export default {
 		},
 		title: {
 			text: 'titel'
+		},
+		description: {
+			text: 'beschrijving'
 		}
 	},
 	buttonsOrLinks: {

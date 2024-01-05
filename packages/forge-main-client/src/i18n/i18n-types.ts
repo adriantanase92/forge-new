@@ -108,6 +108,9 @@ export type FieldsTranslations = {
 	};
 	title: {
 		text: string;
+	};
+	description: {
+		text: string;
 	}
 };
 
@@ -303,6 +306,9 @@ export type TranslationFunctions = {
 		title: {
 			text: () => LocalizedString;
 		};
+		description: {
+			text: () => LocalizedString;
+		}
     };
     buttonsOrLinks: {
 		cancel: () => LocalizedString;
