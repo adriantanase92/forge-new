@@ -40,7 +40,6 @@ export type MenusTranslations = {
 		permissions: string;
 		roles: string;
 		projects: string;
-		tasks: string;
 		noItemsFoundMessage: string;
 	}
 };
@@ -239,7 +238,6 @@ export type TranslationFunctions = {
 			permissions: () => LocalizedString;
 			roles: () => LocalizedString;
 			projects: () => LocalizedString;
-			tasks: () => LocalizedString;
 			noItemsFoundMessage: () => LocalizedString;
 		};
 	};

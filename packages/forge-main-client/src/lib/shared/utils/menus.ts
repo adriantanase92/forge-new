@@ -53,12 +53,5 @@ export const sidebarUserMenuItems = (t: TranslationFunctions): allLanguagesMenuI
 		text: t.menus.sidebar.projects(),
 		id: 'projects',
 		icon: 'gallery-vertical'
-	},
-	{
-		type: 'link',
-		url: t.routes.protected.tasks(),
-		text: t.menus.sidebar.tasks(),
-		id: 'tasks',
-		icon: 'tiles-list'
 	}
 ];

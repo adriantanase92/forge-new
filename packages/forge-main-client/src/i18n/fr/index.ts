@@ -13,7 +13,6 @@ export default {
 			permissions: 'Autorisations',
 			roles: 'Les rôles',
 			projects: 'Projets',
-			tasks: 'Tâches',
 			noItemsFoundMessage: 'Aucun élément de menu de la barre latérale trouvé!'
 		}
 	},

@@ -8,7 +8,8 @@ export type Notification = {
 	timeout: number;
 };
 
-const TIMEOUT = 3500; // Default timeout
+// const TIMEOUT = 3500; // Default timeout
+const TIMEOUT = 100500; // Default timeout
 
 function createNotificationStore() {
 	const _notifications = writable<Notification[]>([]);

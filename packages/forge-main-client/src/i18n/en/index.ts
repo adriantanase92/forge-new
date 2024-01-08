@@ -13,7 +13,6 @@ export default {
 			permissions: 'Permissions',
 			roles: 'Roles',
 			projects: 'Projects',
-			tasks: 'Tasks',
 			noItemsFoundMessage: 'No sidebar menu items found!'
 		}
 	},

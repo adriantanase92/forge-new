@@ -9,9 +9,9 @@ const transformColorsObjectToArray = (colorsObject: Record<string, string>) => {
 export const primaryColors = {
 	gallery: '#f0f3ff',
 	cobalt: '#0e62be',
-	cobaltAlt: '#62b3f4',
+	'cobalt-alt': '#62b3f4',
 	rhino: '#2e3767',
-	rhinoAlt: '#7984a9'
+	'rhino-alt': '#7984a9'
 };
 export const primaryColorsArray = transformColorsObjectToArray(primaryColors);
 
@@ -26,11 +26,11 @@ export const secondaryColorsArray = transformColorsObjectToArray(secondaryColors
 
 export const informColors = {
 	success: '#58c322',
-	successAlt: '#ecf8e6',
+	'success-alt': '#ecf8e6',
 	warning: '#fa9600',
-	warningAlt: '#fef3e0',
+	'warning-alt': '#fef3e0',
 	error: '#d41111',
-	errorAlt: '#ffebed'
+	'error-alt': '#ffebed'
 };
 export const informColorsArray = transformColorsObjectToArray(informColors);
 

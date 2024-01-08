@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { notifications } from '$stores/notifications';
+	import Button from '../button/Button.svelte';
 	import { SvgIcon } from '../svg';
 	import type { notificationKind, notificationType } from './type';
 	import { getIconBasedOnType, getCssClasses, getIconColor } from './utils';
@@ -18,7 +20,7 @@
 	$: notificationProps = {
 		id,
 		class: [
-			'flex items-center p-2',
+			`relative flex items-center ${message.length > 0 ? 'pr-8 py-4 px-2' : 'p-2'}`,
 			kind && type && getCssClasses(kind, type),
 			$$restProps.class
 		]
@@ -28,7 +30,7 @@
 </script>
 
 <div {...notificationProps}>
-	<div class="mr-2 p-2">
+	<div class="mr-2">
 		{#key type}
 			<SvgIcon
 				name={getIconBasedOnType(type)}
@@ -39,11 +41,20 @@
 		{/key}
 	</div>
 
-	{#if $$slots.default}
-		<slot />
-	{/if}
-
 	{#if message.length > 0}
 		{message}
+
+		<div class="absolute top-1 right-1">
+			<Button
+				kind="icon"
+				color="transparent"
+				icon="x-circle"
+				iconWidth="20"
+				iconHeight="20"
+				on:click={() => notifications.remove(id)}
+			/>
+		</div>
+	{:else if $$slots.default}
+		<slot />
 	{/if}
 </div>
