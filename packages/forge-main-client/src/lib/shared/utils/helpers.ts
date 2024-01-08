@@ -1,3 +1,5 @@
+import type { SelectOptionType } from '../components/general/form/types';
+
 export const capitalize = (text: string = ''): string =>
 	text.length > 0 ? text.charAt(0).toUpperCase() + text.slice(1) : '';
 
@@ -87,3 +89,17 @@ export const getNameInitials = ({
 	// Combine the initials and return them.
 	return `${firstInitial}${lastInitial}`;
 };
+
+export const formatArrayToOptionsArray = <T>({
+	array,
+	textProp,
+	valueProp
+}: {
+	array: T[];
+	textProp: keyof T;
+	valueProp: keyof T;
+}): SelectOptionType[] =>
+	array.map((item) => ({
+		text: String(item[textProp]),
+		value: String(item[valueProp])
+	}));

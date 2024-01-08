@@ -8,7 +8,8 @@
 		deleteOne,
 		capitalize,
 		colors,
-		type ProjectType
+		type ProjectType,
+		type UserType
 	} from '$lib/shared/index.js';
 	import LL from '$i18n/i18n-svelte';
 	import { invalidateAll } from '$app/navigation';
@@ -28,6 +29,14 @@
 
 	export let data;
 
+	$: console.log('users: ', data.users.items);
+
+	$: users =
+		data.users.items.map((user: UserType) => ({
+			role: user.role,
+			id: user._id,
+			name: `${user.firstName} ${user.lastName}`
+		})) ?? [];
 	$: projects = data.projects.items ?? [];
 	$: totalItems = data.projects.pagination.totalItems ?? 10;
 	$: currentPage = data.projects.pagination.page ?? 1;
@@ -155,6 +164,7 @@
 	<AddProjectModal
 		bind:open={openAddModal}
 		modalState="add"
+		{users}
 		schema={projectSchema($LL)}
 		entity={$LL.modules.projects.entity.single()}
 	/>

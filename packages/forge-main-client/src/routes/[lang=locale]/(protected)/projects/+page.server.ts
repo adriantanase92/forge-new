@@ -18,7 +18,26 @@ export const load: PageServerLoad = (async ({ fetch, locals: { t } }) => {
 		}
 	});
 
+	const users = await getAll({
+		fetch,
+		apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.USERS}`,
+		errorKey: t.errors.errorFetchingSomethingFromServer({
+			something: t.modules.users.entity.multiple()
+		}),
+		requestQuery: {
+			excludeFields: [
+				'email',
+				'phone',
+				'preferredLanguage',
+				'projects',
+				'permissions',
+				'changeLog'
+			]
+		}
+	});
+
 	return {
-		projects: projects.data ?? { items: [], pagination: { totalItems: 0, page: 1 } }
+		projects: projects.data ?? { items: [], pagination: { totalItems: 0, page: 1 } },
+		users: users.data ?? { items: [], pagination: { totalItems: 0, page: 1 } }
 	};
 }) satisfies PageServerLoad;

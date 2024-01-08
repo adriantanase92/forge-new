@@ -26,7 +26,7 @@
 	export let modalHeaderClasses: string =
 		'flex justify-between items-center py-4 shrink-0 max-h-[64px]';
 	// Set the css classes for teh modal body
-	export let modalBodyClasses: string = 'grow py-4 max-h-[200px] overflow-y-auto';
+	export let modalBodyClasses: string = 'grow py-4 overflow-y-auto';
 	// Set the css classes for teh modal footer
 	export let modalFooterClasses: string =
 		'flex justify-between items-center py-4 shrink-0 max-h-[76px]';

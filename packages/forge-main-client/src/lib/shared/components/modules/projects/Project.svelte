@@ -53,13 +53,18 @@
 		{#if project.description}<div class="line-clamp-2">{project.description}</div>{/if}
 
 		<div class="flex flex-col md:flex-row justify-between md:items-center">
-			<div>
-				<span class="text-sm capitalize">{$LL.modules.users.types.manager.single()}:</span>
-				<ProfileImage
-					firstName={project.manager.firstName}
-					lastName={project.manager.lastName}
-				/>
-			</div>
+			{#if project.manager}
+				<div>
+					<span class="text-sm capitalize"
+						>{$LL.modules.users.types.manager.single()}:</span
+					>
+
+					<ProfileImage
+						firstName={project.manager.firstName}
+						lastName={project.manager.lastName}
+					/>
+				</div>
+			{/if}
 			{#if project.clients && project.clients.length > 0}
 				<div>
 					<span class="text-sm capitalize"

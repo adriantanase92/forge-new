@@ -9,7 +9,10 @@
 		capitalize,
 		Modules,
 		createOne,
-		type NewProjectType
+		type NewProjectType,
+		type UserType,
+		UserRole,
+		formatArrayToOptionsArray
 	} from '$lib/shared';
 	import { superForm, superValidateSync } from 'sveltekit-superforms/client';
 	import LL from '$i18n/i18n-svelte';
@@ -20,11 +23,31 @@
 	import Select from '../../general/form/Select.svelte';
 	import type { SelectOptionType } from '../../general/form/types';
 	import { notifications } from '$stores/notifications';
+	import MultiSelect from '../../general/form/MultiSelect.svelte';
+
+	type UsersProp = { id: string; role: UserRole; name: string };
 
 	export let open = false;
 	export let modalState: ModalState = 'add';
 	export let entity: string = 'item';
 	export let schema;
+	export let users: UsersProp[] = [];
+
+	const clients: SelectOptionType[] = formatArrayToOptionsArray({
+		array: users.filter((user: UsersProp) => user.role === UserRole.CLIENT),
+		textProp: 'name',
+		valueProp: 'id'
+	});
+	const workers: SelectOptionType[] = formatArrayToOptionsArray({
+		array: users.filter((user: UsersProp) => user.role === UserRole.WORKER),
+		textProp: 'name',
+		valueProp: 'id'
+	});
+	const managers: SelectOptionType[] = formatArrayToOptionsArray({
+		array: users.filter((user: UsersProp) => user.role === UserRole.MANAGER),
+		textProp: 'name',
+		valueProp: 'id'
+	});
 
 	const form = superForm(superValidateSync(null, schema), {
 		SPA: true,
@@ -75,10 +98,6 @@
 		resetForm: true
 	});
 	const { form: formData, errors, enhance, delayed, message } = form;
-
-	const managers: SelectOptionType[] = [];
-	const clients: SelectOptionType[] = [];
-	const workers: SelectOptionType[] = [];
 </script>
 
 {#if open}
@@ -119,6 +138,7 @@
 						label={capitalize($LL.modules.users.types.manager.single())}
 						aria-invalid={$errors.name ? 'true' : undefined}
 						options={managers}
+						withEmptyOption
 						{form}
 						field="manager"
 						id="manager"
@@ -128,28 +148,25 @@
 				</div>
 
 				<div>
-					<Select
+					<MultiSelect
 						label={capitalize($LL.modules.users.types.client.multiple())}
 						aria-invalid={$errors.name ? 'true' : undefined}
 						options={clients}
 						{form}
 						field="clients"
 						id="clients"
-						class=""
 					/>
 					<FieldError errors={$errors.clients} />
 				</div>
 
 				<div>
-					<Select
+					<MultiSelect
 						label={capitalize($LL.modules.users.types.worker.multiple())}
 						aria-invalid={$errors.name ? 'true' : undefined}
 						options={workers}
 						{form}
 						field="workers"
-						type="text"
 						id="workers"
-						class=""
 					/>
 					<FieldError errors={$errors.workers} />
 				</div>
