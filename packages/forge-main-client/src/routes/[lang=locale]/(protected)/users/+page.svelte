@@ -171,7 +171,7 @@
 		const { confirm } = event.detail;
 
 		if (confirm) {
-			const { _id: id } = userData as UserType;
+			const { _id: id, firstName, lastName } = userData as UserType;
 			const response = await deleteOne({
 				apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.USERS}`,
 				errorKey: $LL.errors.errorFetchingSomethingFromServer({
@@ -179,11 +179,15 @@
 				}),
 				id
 			});
-			// TODO: don't forget about notification here
-			console.log('delete response: ', response);
-			notifications.success('Deleted item successfully!');
-			invalidateAll();
-			openDeleteModal = false;
+			if (response.data.messageKey === 'item_deleted_successfully') {
+				notifications.success(
+					$LL.notifications.somethingDeletedSuccessfully({
+						something: `<span class="capitalize mr-2">${$LL.modules.users.entity.single()}</span> <span class="font-medium text-error mr-2">${firstName} ${lastName}</span>`
+					})
+				);
+				invalidateAll();
+				openDeleteModal = false;
+			}
 		}
 	};
 </script>

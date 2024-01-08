@@ -21,7 +21,11 @@ export default {
 			title: 'Mijn Dashboard'
 		}
 	},
-	warnings: {},
+	notifications: {
+		somethingDeletedSuccessfully: '{ something } is succesvol verwijderd!',
+		somethingAddedSuccessfully: '{ something } succesvol toegevoegd!',
+		somethingEditedSuccessfully: '{ something } succesvol bewerkt!'
+	},
 	errors: {
 		required: 'Je bent vergeten om { field } in te vullen.',
 		requiredSelect: 'Je bent vergeten een optie te selecteren.',

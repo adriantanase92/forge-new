@@ -19,6 +19,7 @@
 	import Textarea from '../../general/form/Textarea.svelte';
 	import Select from '../../general/form/Select.svelte';
 	import type { SelectOptionType } from '../../general/form/types';
+	import { notifications } from '$stores/notifications';
 
 	export let open = false;
 	export let modalState: ModalState = 'add';
@@ -47,8 +48,13 @@
 							: {})
 					}
 				});
-				// TODO: don't forget about notification here
-				console.log('add response: ', response);
+				if (!response.error) {
+					notifications.success(
+						$LL.notifications.somethingAddedSuccessfully({
+							something: `<span class="capitalize mr-2">${$LL.modules.projects.entity.single()}</span>`
+						})
+					);
+				}
 				open = false;
 			}
 		},

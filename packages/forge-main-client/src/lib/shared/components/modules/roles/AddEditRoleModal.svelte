@@ -17,8 +17,8 @@
 	import { superForm, superValidateSync } from 'sveltekit-superforms/client';
 	import LL from '$i18n/i18n-svelte';
 	import Button from '../../general/button/Button.svelte';
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 	import { PUBLIC_MAIN_SERVER_URL } from '$env/static/public';
+	import { notifications } from '$stores/notifications';
 
 	export let open = false;
 	export let modalState: ModalState = 'add';
@@ -41,8 +41,13 @@
 						}),
 						data: { name: form.data.name }
 					});
-					// TODO: don't forget about notification here
-					console.log('add response: ', response);
+					if (!response.error) {
+						notifications.success(
+							$LL.notifications.somethingAddedSuccessfully({
+								something: `<span class="capitalize mr-2">${$LL.modules.roles.entity.single()}</span>`
+							})
+						);
+					}
 				} else {
 					const response = await updateOne<RoleType>({
 						apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.ROLES}`,
@@ -52,8 +57,13 @@
 						id: form.data.id,
 						data: { name: form.data.name }
 					});
-					// TODO: don't forget about notification here
-					console.log('edit response: ', response);
+					if (!response.error) {
+						notifications.success(
+							$LL.notifications.somethingEditedSuccessfully({
+								something: `<span class="capitalize mr-2">${$LL.modules.roles.entity.single()}</span>`
+							})
+						);
+					}
 				}
 				open = false;
 			}
@@ -85,8 +95,6 @@
 			{/if}
 
 			<div class="flex flex-col gap-6">
-				<SuperDebug data={$formData} />
-
 				<div>
 					<Input
 						aria-invalid={$errors.name ? 'true' : undefined}

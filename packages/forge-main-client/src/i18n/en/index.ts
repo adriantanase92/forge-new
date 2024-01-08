@@ -21,7 +21,11 @@ export default {
 			title: 'My Dashboard'
 		}
 	},
-	warnings: {},
+	notifications: {
+		somethingDeletedSuccessfully: '{ something } was deleted successfully!',
+		somethingAddedSuccessfully: '{ something } added successfully!',
+		somethingEditedSuccessfully: '{ something } edited successfully!'
+	},
 	errors: {
 		required: 'You forgot to fill in { field }.',
 		requiredSelect: 'You forgot to select an option.',

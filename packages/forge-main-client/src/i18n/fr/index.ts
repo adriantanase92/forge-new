@@ -21,7 +21,11 @@ export default {
 			title: 'Mon tableau de bord'
 		}
 	},
-	warnings: {},
+	notifications: {
+		somethingDeletedSuccessfully: '{ something } a été supprimé avec succès!',
+		somethingAddedSuccessfully: '{ something } ajouté avec succès!',
+		somethingEditedSuccessfully: '{ something } modifié avec succès!'
+	},
 	errors: {
 		required: 'Vous avez oublié de renseigner votre { field }.',
 		requiredSelect: 'Vous avez oublié de sélectionner une option.',

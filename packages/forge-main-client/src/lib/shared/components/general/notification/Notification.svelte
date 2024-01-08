@@ -42,7 +42,7 @@
 	</div>
 
 	{#if message.length > 0}
-		{message}
+		{@html message}
 
 		<div class="absolute top-1 right-1">
 			<Button

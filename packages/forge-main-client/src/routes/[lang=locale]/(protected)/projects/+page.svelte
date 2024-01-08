@@ -24,6 +24,7 @@
 	import { projectSchema } from './schema.js';
 	import Project from '$lib/shared/components/modules/projects/Project.svelte';
 	import AddProjectModal from '$lib/shared/components/modules/projects/AddProjectModal.svelte';
+	import { notifications } from '$stores/notifications.js';
 
 	export let data;
 
@@ -79,7 +80,7 @@
 		const { confirm } = event.detail;
 
 		if (confirm) {
-			const { _id: id } = projectData as ProjectType;
+			const { _id: id, name } = projectData as ProjectType;
 			const response = await deleteOne({
 				apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.PROJECTS}`,
 				errorKey: $LL.errors.errorFetchingSomethingFromServer({
@@ -87,10 +88,15 @@
 				}),
 				id
 			});
-			// TODO: don't forget about notification here
-			console.log('delete response: ', response);
-			invalidateAll();
-			openDeleteModal = false;
+			if (response.data.messageKey === 'item_deleted_successfully') {
+				notifications.success(
+					$LL.notifications.somethingDeletedSuccessfully({
+						something: `<span class="capitalize mr-2">${$LL.modules.projects.entity.single()}</span> <span class="font-medium text-error mr-2">${name}</span>`
+					})
+				);
+				invalidateAll();
+				openDeleteModal = false;
+			}
 		}
 	};
 </script>

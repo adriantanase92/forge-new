@@ -50,7 +50,11 @@ export type PagesTranslations = {
 	}
 };
 
-export type WarningsTranslations = {};
+export type NotificationsTranslations = {
+	somethingDeletedSuccessfully: string;
+	somethingAddedSuccessfully: string;
+	somethingEditedSuccessfully: string;
+};
 
 export type ErrorsTranslations = {
     required: string;
@@ -203,7 +207,7 @@ type RootTranslation = {
 	app: AppTranslations;
     menus: MenusTranslations;
     pages: PagesTranslations;
-    warnings: WarningsTranslations;
+    notifications: NotificationsTranslations;
     errors: ErrorsTranslations;
     fields: FieldsTranslations;
     buttonsOrLinks: ButtonsOrLinksTranslations;
@@ -246,7 +250,11 @@ export type TranslationFunctions = {
 			title: () => LocalizedString;
 		};
 	};
-	warnings: {};
+	notifications: {
+		somethingDeletedSuccessfully: ({ something }: GenericStringParameter) => LocalizedString;
+		somethingAddedSuccessfully: ({ something }: GenericStringParameter) => LocalizedString;
+		somethingEditedSuccessfully: ({ something }: GenericStringParameter) => LocalizedString;
+	};
 	errors: {
 		required: ({ field }: GenericStringParameter) => LocalizedString;
         requiredSelect: () => LocalizedString;

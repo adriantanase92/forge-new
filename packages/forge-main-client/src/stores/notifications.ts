@@ -8,39 +8,52 @@ export type Notification = {
 	timeout: number;
 };
 
-// const TIMEOUT = 3500; // Default timeout
-const TIMEOUT = 100500; // Default timeout
+const TIMEOUT = 3500; // Default timeout
 
 function createNotificationStore() {
-	const _notifications = writable<Notification[]>([]);
+	const MAX_ACTIVE_NOTIFICATIONS = 6;
+	const _activeNotifications = writable<Notification[]>([]);
+	const _queuedNotifications = writable<Notification[]>([]);
 
 	const send = (message: string, type: notificationType = 'info', timeout: number = TIMEOUT) => {
-		_notifications.update((state: Notification[]) => {
-			return [...state, { id: id(), type, message, timeout }];
-		});
+		const newNotification = { id: id(), type, message, timeout };
+		_queuedNotifications.update((queue) => [...queue, newNotification]);
+		processQueue();
 	};
 
 	const remove = (id: string) => {
-		_notifications.update((notifications) =>
+		_activeNotifications.update((notifications) =>
 			notifications.filter((notification) => notification.id !== id)
 		);
+		processQueue(); // Try to add a new notification from the queue
 	};
 
+	const processQueue = () => {
+		_queuedNotifications.update((queue) => {
+			_activeNotifications.update((active) => {
+				while (active.length < MAX_ACTIVE_NOTIFICATIONS && queue.length > 0) {
+					const [next, ...rest] = queue;
+					queue = rest;
+					active.push(next);
+					scheduleRemoval(next); // Auto remove after timeout
+				}
+				return active;
+			});
+			return queue;
+		});
+	};
+
+	const scheduleRemoval = (notification: Notification) => {
+		setTimeout(() => {
+			remove(notification.id);
+		}, notification.timeout);
+	};
+
+	// Combine active and queued notifications for subscription
 	const notifications = derived(
-		_notifications,
-		($_notifications: Notification[], set: (value: Notification[]) => void) => {
-			set($_notifications);
-			if ($_notifications.length > 0) {
-				const timer = setTimeout(() => {
-					_notifications.update((state: Notification[]) => {
-						state.shift();
-						return state;
-					});
-				}, $_notifications[0].timeout);
-				return () => {
-					clearTimeout(timer);
-				};
-			}
+		[_activeNotifications, _queuedNotifications],
+		([$_activeNotifications]) => {
+			return $_activeNotifications;
 		}
 	);
 

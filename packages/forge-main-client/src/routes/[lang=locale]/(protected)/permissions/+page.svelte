@@ -25,6 +25,7 @@
 	import { invalidateAll } from '$app/navigation';
 	import Pagination from '$lib/shared/components/general/pagination/Pagination.svelte';
 	import Search from '$lib/shared/components/general/search/Search.svelte';
+	import { notifications } from '$stores/notifications.js';
 
 	export let data;
 
@@ -97,7 +98,7 @@
 		const { confirm } = event.detail;
 
 		if (confirm) {
-			const { _id: id } = permissionData as PermissionType;
+			const { _id: id, name } = permissionData as PermissionType;
 			const response = await deleteOne({
 				apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.PERMISSIONS}`,
 				errorKey: $LL.errors.errorFetchingSomethingFromServer({
@@ -105,10 +106,15 @@
 				}),
 				id
 			});
-			// TODO: don't forget about notification here
-			console.log('delete response: ', response);
-			invalidateAll();
-			openDeleteModal = false;
+			if (response.data.messageKey === 'item_deleted_successfully') {
+				notifications.success(
+					$LL.notifications.somethingDeletedSuccessfully({
+						something: `<span class="capitalize mr-2">${$LL.modules.permissions.entity.single()}</span> <span class="font-medium text-error mr-2">${name}</span>`
+					})
+				);
+				invalidateAll();
+				openDeleteModal = false;
+			}
 		}
 	};
 </script>
