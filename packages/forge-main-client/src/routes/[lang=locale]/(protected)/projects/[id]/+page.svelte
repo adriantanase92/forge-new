@@ -6,16 +6,33 @@
 		TaskStatus,
 		capitalize,
 		colorOptionsPerColor,
-		colors
+		colors,
+		type ProjectType,
+		deleteOne,
+		type TaskType,
+		type UserType
 	} from '$lib/shared/index.js';
 	import ProfileImage from '$lib/shared/components/general/profile-image/ProfileImage.svelte';
 	import Button from '$lib/shared/components/general/button/Button.svelte';
+	import type { ModalState } from '$lib/shared/components/general/modal/types.js';
+	import { PUBLIC_MAIN_SERVER_URL } from '$env/static/public';
+	import { notifications } from '$stores/notifications.js';
+	import { goto, invalidateAll } from '$app/navigation';
+	import DeleteModal from '$lib/shared/components/general/modal/DeleteModal.svelte';
+	import { formatEntityForModal } from '$lib/shared/components/general/modal/utils.js';
+	import { projectSchema } from '../schema.js';
+	import AddEditProjectModal from '$lib/shared/components/modules/projects/AddEditProjectModal.svelte';
 
 	export let data;
 
+	$: users =
+		data.users.items.map((user: UserType) => ({
+			role: user.role,
+			id: user._id,
+			name: `${user.firstName} ${user.lastName}`
+		})) ?? [];
 	$: project = data.project;
 	$: checkProjectTasks = project.tasks && project.tasks.length > 0;
-	$: console.log('project: ', project);
 
 	const taskColorByStatys = (status: TaskStatus): string => {
 		let colorClasses = '';
@@ -29,6 +46,69 @@
 
 		return colorClasses;
 	};
+
+	// Setup for Modals ------------------------------------------------------------------------
+	let openDeleteTaskModal: boolean = false;
+	let openDeleteProjectModal: boolean = false;
+	let openEditProjectModal: boolean = false;
+	let taskData: TaskType | null = null;
+
+	const getFormDataFromProjectData = (projectData: ProjectType) => {
+		const clients = (projectData.clients as UserType[]).map((client) => client._id);
+		const workers = (projectData.workers as UserType[]).map((worker) => worker._id);
+		const manager = projectData.manager._id;
+		const { _id: id, name, description } = projectData;
+		return { id, name, description, clients, workers, manager };
+	};
+
+	// Setup for Delete Actions -----------------------------------------------------------------
+	const deleteProjectItem = async (event: CustomEvent<{ confirm: boolean }>) => {
+		const { confirm } = event.detail;
+
+		if (confirm) {
+			const response = await deleteOne({
+				apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.PROJECTS}`,
+				errorKey: $LL.errors.errorFetchingSomethingFromServer({
+					something: $LL.modules.projects.entity.single()
+				}),
+				id: project._id
+			});
+			if (response.data.messageKey === 'item_deleted_successfully') {
+				notifications.success(
+					$LL.notifications.somethingDeletedSuccessfully({
+						something: `<span class="capitalize mr-2">${$LL.modules.projects.entity.single()}</span>`
+					})
+				);
+				invalidateAll();
+				openDeleteProjectModal = false;
+				goto(`/${Modules.PROJECTS}`);
+			}
+		}
+	};
+
+	const deleteTaskItem = async (event: CustomEvent<{ confirm: boolean }>) => {
+		const { confirm } = event.detail;
+
+		if (confirm) {
+			const { _id: id } = taskData as TaskType;
+			const response = await deleteOne({
+				apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.TASKS}`,
+				errorKey: $LL.errors.errorFetchingSomethingFromServer({
+					something: $LL.modules.tasks.entity.single()
+				}),
+				id
+			});
+			if (response.data.messageKey === 'item_deleted_successfully') {
+				notifications.success(
+					$LL.notifications.somethingDeletedSuccessfully({
+						something: `<span class="capitalize mr-2">${$LL.modules.tasks.entity.single()}</span>`
+					})
+				);
+				invalidateAll();
+				openDeleteTaskModal = false;
+			}
+		}
+	};
 </script>
 
 {#if project}
@@ -40,20 +120,28 @@
 						{capitalize($LL.modules.projects.entity.single())}: {project.name}
 					</h2>
 
-					<Button
-						class="py-2 px-4"
-						kind="fill"
-						color="cobalt"
-						icon="pencil"
-						iconHeight="24"
-						iconWidth="24"
-						iconColor={colors.white}
-						on:click={() => {}}
-					>
-						{$LL.buttonsOrLinks.editSomething({
-							something: $LL.modules.projects.entity.single()
-						})}
-					</Button>
+					<div>
+						<Button
+							class="p-2"
+							kind="icon"
+							color="cobalt"
+							icon="pencil"
+							iconHeight="18"
+							iconWidth="18"
+							iconColor={colors.white}
+							on:click={() => (openEditProjectModal = !openEditProjectModal)}
+						/>
+						<Button
+							class="p-2"
+							kind="icon"
+							color="error"
+							icon="bin"
+							iconHeight="18"
+							iconWidth="18"
+							iconColor={colors.white}
+							on:click={(e) => (openDeleteProjectModal = !openDeleteProjectModal)}
+						/>
+					</div>
 				</div>
 
 				{#if project.description}
@@ -216,4 +304,43 @@
 			</div>
 		</div>
 	</Box>
+{/if}
+
+{#if openEditProjectModal}
+	<AddEditProjectModal
+		bind:open={openEditProjectModal}
+		modalState="edit"
+		{users}
+		dataForEditForm={getFormDataFromProjectData(project)}
+		schema={projectSchema($LL)}
+		entity={formatEntityForModal({
+			modalType: 'edit',
+			entity: $LL.modules.projects.entity.single(),
+			itemName: `${project.name}`
+		})}
+	/>
+{/if}
+
+{#if openDeleteProjectModal}
+	<DeleteModal
+		bind:open={openDeleteProjectModal}
+		entity={formatEntityForModal({
+			modalType: 'delete',
+			entity: $LL.modules.projects.entity.single(),
+			itemName: `${project.name}`
+		})}
+		on:clickConfirmBtnTriggered={deleteProjectItem}
+	/>
+{/if}
+
+{#if openDeleteTaskModal}
+	<DeleteModal
+		bind:open={openDeleteTaskModal}
+		entity={formatEntityForModal({
+			modalType: 'delete',
+			entity: $LL.modules.tasks.entity.single(),
+			itemName: ''
+		})}
+		on:clickConfirmBtnTriggered={deleteTaskItem}
+	/>
 {/if}

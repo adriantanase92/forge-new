@@ -126,4 +126,4 @@ export type EditTaskType = {
 	id: string;
 } & NewTaskType;
 
-export type Task = EntityDocumentType & NewTaskType;
+export type TaskType = EntityDocumentType & NewTaskType;
