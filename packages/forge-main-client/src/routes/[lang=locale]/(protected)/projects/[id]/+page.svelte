@@ -35,7 +35,7 @@
 	<Box>
 		<div class="flex flex-col sm:flex-row gap-6">
 			<div class="w-full sm:w-1/3">
-				<div class="mb-6 flex justify-between items-center">
+				<div class="mb-6 flex justify-between items-center gap-2">
 					<h2 class="text-2xl font-secondary font-medium">
 						{capitalize($LL.modules.projects.entity.single())}: {project.name}
 					</h2>
@@ -140,7 +140,7 @@
 
 			<div class="w-full sm:w-2/3">
 				<div class="border border-solid border-slate-400 rounded-lg p-4">
-					<div class="mb-6 flex justify-between items-center">
+					<div class="mb-6 flex justify-between items-center gap-2">
 						<h3 class="text-xl font-secondary font-medium">
 							{capitalize($LL.modules.tasks.entity.multiple())}
 						</h3>
