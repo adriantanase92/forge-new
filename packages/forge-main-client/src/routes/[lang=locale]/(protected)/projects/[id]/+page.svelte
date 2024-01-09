@@ -20,11 +20,11 @@
 	const taskColorByStatys = (status: TaskStatus): string => {
 		let colorClasses = '';
 		if (status === TaskStatus.DONE) {
-			colorClasses = `${colorOptionsPerColor.eucalyptus.backGround}`;
+			colorClasses = `${colorOptionsPerColor.successAlt.backGround}`;
 		} else if (status === TaskStatus.IN_PROGRESS) {
-			colorClasses = `${colorOptionsPerColor.curious.backGround}`;
+			colorClasses = `${colorOptionsPerColor.warningAlt.backGround}`;
 		} else {
-			colorClasses = `${colorOptionsPerColor.warning.backGround}`;
+			colorClasses = `${colorOptionsPerColor.errorAlt.backGround}`;
 		}
 
 		return colorClasses;
@@ -67,8 +67,11 @@
 
 				<div class="flex flex-col gap-4">
 					{#if project.clients && project.clients.length > 0}
-						<div class="flex items-center gap-4 py-2 px-4 rounded-xl bg-error-alt">
-							<h3 class="capitalize font-secondary font-medium">
+						<div
+							class="flex items-center gap-4 py-2 px-4 rounded-xl {colorOptionsPerColor
+								.curious.backGround}"
+						>
+							<h3 class="capitalize font-secondary font-medium text-white">
 								{$LL.modules.users.types.client.multiple()}:
 							</h3>
 							<div class="flex items-center gap-2">
@@ -78,7 +81,7 @@
 											firstName={worker.firstName}
 											lastName={worker.lastName}
 										/>
-										<span>
+										<span class="text-white">
 											{worker.firstName}
 											{worker.lastName}
 										</span>
@@ -89,8 +92,11 @@
 					{/if}
 
 					{#if project.manager}
-						<div class="flex items-center gap-4 py-2 px-4 rounded-xl bg-success-alt">
-							<h3 class="capitalize font-secondary font-medium">
+						<div
+							class="flex items-center gap-4 py-2 px-4 rounded-xl {colorOptionsPerColor
+								.eucalyptus.backGround}"
+						>
+							<h3 class="capitalize font-secondary font-medium text-white">
 								{$LL.modules.users.types.manager.single()}:
 							</h3>
 							<div class="flex items-center gap-2">
@@ -98,14 +104,19 @@
 									firstName={project.manager.firstName}
 									lastName={project.manager.lastName}
 								/>
-								<span>{project.manager.firstName} {project.manager.lastName}</span>
+								<span class="text-white"
+									>{project.manager.firstName} {project.manager.lastName}</span
+								>
 							</div>
 						</div>
 					{/if}
 
 					{#if project.workers && project.workers.length > 0}
-						<div class="flex items-center gap-4 py-2 px-4 rounded-xl bg-warning-alt">
-							<h3 class="capitalize font-secondary font-medium">
+						<div
+							class="flex items-center gap-4 py-2 px-4 rounded-xl {colorOptionsPerColor
+								.warning.backGround}"
+						>
+							<h3 class="capitalize font-secondary font-medium text-white">
 								{$LL.modules.users.types.worker.multiple()}:
 							</h3>
 							<div class="flex items-center gap-4">
@@ -115,7 +126,7 @@
 											firstName={client.firstName}
 											lastName={client.lastName}
 										/>
-										<span>
+										<span class="text-white">
 											{client.firstName}
 											{client.lastName}
 										</span>
@@ -153,7 +164,7 @@
 						<div class="flex flex-col gap-2">
 							{#each project.tasks as task}
 								<div
-									class="py-2 px-4 rounded-xl flex justify-between items-center gap-8 text-white {taskColorByStatys(
+									class="py-2 px-4 rounded-xl flex justify-between items-center gap-8 {taskColorByStatys(
 										task.status
 									)}"
 								>
