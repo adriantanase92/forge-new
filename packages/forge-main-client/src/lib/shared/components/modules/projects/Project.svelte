@@ -9,8 +9,13 @@
 	export let project: ProjectType;
 
 	const dispatch = createEventDispatcher();
-	const onClickAction = ({ project }: { project: ProjectType }) =>
-		dispatch('clickActionTriggered', { project });
+	const onClickAction = ({
+		action,
+		project
+	}: {
+		action: 'edit' | 'delete';
+		project: ProjectType;
+	}) => dispatch('clickActionTriggered', { action, project });
 </script>
 
 {#if project}
@@ -45,7 +50,7 @@
 					iconHeight="18"
 					iconWidth="18"
 					iconColor={colors.white}
-					on:click={(e) => onClickAction({ project })}
+					on:click={(e) => onClickAction({ action: 'delete', project })}
 				/>
 			</div>
 		</div>

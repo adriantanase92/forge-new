@@ -10,9 +10,11 @@
 		Modules,
 		createOne,
 		type NewProjectType,
-		type UserType,
 		UserRole,
-		formatArrayToOptionsArray
+		formatArrayToOptionsArray,
+		type EditProjectType,
+		updateOne,
+		type ProjectType
 	} from '$lib/shared';
 	import { superForm, superValidateSync } from 'sveltekit-superforms/client';
 	import LL from '$i18n/i18n-svelte';
@@ -31,6 +33,7 @@
 	export let modalState: ModalState = 'add';
 	export let entity: string = 'item';
 	export let schema;
+	export let dataForEditForm: EditProjectType | null = null;
 	export let users: UsersProp[] = [];
 
 	const clients: SelectOptionType[] = formatArrayToOptionsArray({
@@ -49,34 +52,68 @@
 		valueProp: 'id'
 	});
 
-	const form = superForm(superValidateSync(null, schema), {
+	const projectData = open && modalState === 'edit' ? dataForEditForm : null;
+
+	const form = superForm(superValidateSync(projectData, schema), {
 		SPA: true,
 		dataType: 'json',
 		onUpdate: async ({ form }) => {
 			if (form.valid) {
-				const response = await createOne<NewProjectType>({
-					apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.PROJECTS}`,
-					errorKey: $LL.errors.errorFetchingSomethingFromServer({
-						something: $LL.modules.projects.entity.single()
-					}),
-					data: {
-						name: form.data.name,
-						...(form.data.description ? { description: form.data.description } : {}),
-						manager: form.data.manager,
-						...(form.data.clients && form.data.clients.length > 0
-							? { clients: form.data.clients }
-							: {}),
-						...(form.data.workers && form.data.workers.length > 0
-							? { workers: form.data.workers }
-							: {})
+				if (!form.data.id) {
+					const response = await createOne<NewProjectType>({
+						apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.PROJECTS}`,
+						errorKey: $LL.errors.errorFetchingSomethingFromServer({
+							something: $LL.modules.projects.entity.single()
+						}),
+						data: {
+							name: form.data.name,
+							...(form.data.description
+								? { description: form.data.description }
+								: {}),
+							manager: form.data.manager,
+							...(form.data.clients && form.data.clients.length > 0
+								? { clients: form.data.clients }
+								: {}),
+							...(form.data.workers && form.data.workers.length > 0
+								? { workers: form.data.workers }
+								: {})
+						}
+					});
+					if (!response.error) {
+						notifications.success(
+							$LL.notifications.somethingAddedSuccessfully({
+								something: `<span class="capitalize mr-2">${$LL.modules.projects.entity.single()}</span>`
+							})
+						);
 					}
-				});
-				if (!response.error) {
-					notifications.success(
-						$LL.notifications.somethingAddedSuccessfully({
-							something: `<span class="capitalize mr-2">${$LL.modules.projects.entity.single()}</span>`
-						})
-					);
+				} else {
+					const response = await updateOne<ProjectType>({
+						apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.PROJECTS}`,
+						errorKey: $LL.errors.errorFetchingSomethingFromServer({
+							something: $LL.modules.projects.entity.single()
+						}),
+						id: form.data.id,
+						data: {
+							name: form.data.name,
+							...(form.data.description
+								? { description: form.data.description }
+								: {}),
+							manager: form.data.manager,
+							...(form.data.clients && form.data.clients.length > 0
+								? { clients: form.data.clients }
+								: {}),
+							...(form.data.workers && form.data.workers.length > 0
+								? { workers: form.data.workers }
+								: {})
+						}
+					});
+					if (!response.error) {
+						notifications.success(
+							$LL.notifications.somethingEditedSuccessfully({
+								something: `<span class="capitalize mr-2">${$LL.modules.projects.entity.single()}</span>`
+							})
+						);
+					}
 				}
 				open = false;
 			}
@@ -102,7 +139,11 @@
 
 {#if open}
 	<AddEditModal bind:open size="lg" {modalState} {entity}>
-		<form id="addForm" method="POST" use:enhance>
+		<form id="addEditForm" method="POST" use:enhance>
+			{#if $formData.id}
+				<Input {form} field="id" type="hidden" id="id" class="hidden" />
+			{/if}
+
 			<div class="flex flex-col gap-6">
 				<SuperDebug data={$formData} />
 
@@ -188,7 +229,7 @@
 						color="curious"
 						class="inline-flex items-center justify-center gap-2 px-4 py-2.5"
 						type="submit"
-						form="addForm"
+						form="addEditForm"
 						disabled={$delayed}
 						delayed={$delayed}
 					>

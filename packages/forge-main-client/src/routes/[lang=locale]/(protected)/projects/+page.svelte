@@ -24,7 +24,7 @@
 	import { formatEntityForModal } from '$lib/shared/components/general/modal/utils.js';
 	import { projectSchema } from './schema.js';
 	import Project from '$lib/shared/components/modules/projects/Project.svelte';
-	import AddProjectModal from '$lib/shared/components/modules/projects/AddProjectModal.svelte';
+	import AddEditProjectModal from '$lib/shared/components/modules/projects/AddEditProjectModal.svelte';
 	import { notifications } from '$stores/notifications.js';
 
 	export let data;
@@ -76,10 +76,15 @@
 	let modalState: ModalState = 'add';
 	let projectData: ProjectType | null = null;
 
-	const handleAction = (event: CustomEvent<{ project: ProjectType }>) => {
-		const { project } = event.detail;
+	const handleAction = (
+		event: CustomEvent<{ action: 'edit' | 'delete'; project: ProjectType }>
+	) => {
+		const { action, project } = event.detail;
 		projectData = structuredClone(project);
-		openDeleteModal = true;
+
+		if (action === 'delete') {
+			openDeleteModal = true;
+		}
 	};
 
 	// Setup for Delete Action -----------------------------------------------------------------
@@ -159,7 +164,7 @@
 </Box>
 
 {#if openAddModal}
-	<AddProjectModal
+	<AddEditProjectModal
 		bind:open={openAddModal}
 		modalState="add"
 		{users}
