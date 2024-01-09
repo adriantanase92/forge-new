@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ObjectId } from 'mongodb';
 
 export const createPermissionsObjectFromArray = (
@@ -41,4 +42,22 @@ export const escapeString = (str: string): string => {
             // eslint-disable-next-line no-useless-escape
             .replace(/[\`]/g, '&#96;')
     );
+};
+
+export const isValidObjectId = (id: string) => {
+    return /^[0-9a-fA-F]{24}$/.test(id);
+};
+
+export const convertToObjectId = (obj: any) => {
+    for (const key in obj) {
+        if (typeof obj[key] === 'string' && isValidObjectId(obj[key])) {
+            obj[key] = new ObjectId(obj[key]);
+        } else if (Array.isArray(obj[key])) {
+            obj[key] = obj[key].map((item: any) =>
+                typeof item === 'string' && isValidObjectId(item) ? new ObjectId(item) : item
+            );
+        } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+            convertToObjectId(obj[key]);
+        }
+    }
 };

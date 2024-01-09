@@ -29,7 +29,7 @@
 
 	export let data;
 
-	$: console.log('users: ', data.users.items);
+	$: console.log('projects: ', data.projects.items);
 
 	$: users =
 		data.users.items.map((user: UserType) => ({

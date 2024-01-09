@@ -2,7 +2,7 @@ import { Collection, ObjectId, Document, WithId, Filter, OptionalUnlessRequiredI
 import { formErrorObject, type Error } from './error-handling';
 import { ChangeLog, Db } from '../models';
 import { z } from 'zod';
-import { escapeString } from './helpers';
+import { convertToObjectId, escapeString } from './helpers';
 import { Modules } from '../enums';
 
 export type ResponseData<T> = {
@@ -264,6 +264,9 @@ export const createOne = async <T extends Document, B extends WithChangeLog>({
     newItemData: B;
 }): Promise<Response<T>> => {
     try {
+        // Convert string ObjectIds to ObjectId types in newItemData
+        convertToObjectId(newItemData);
+
         // Check if 'changeLog' exists and has a 'createdAt' property
         if (!newItemData.changeLog) {
             // If 'changeLog' doesn't exist, create it with the current date
@@ -305,6 +308,8 @@ export const updateOne = async <T extends Document>({
     dataToUpdate: Partial<T>;
 }): Promise<Response<T>> => {
     try {
+        convertToObjectId(dataToUpdate);
+
         const result = await collection.findOneAndUpdate(
             { _id: new ObjectId(id) } as Filter<T>,
             { $set: dataToUpdate },
