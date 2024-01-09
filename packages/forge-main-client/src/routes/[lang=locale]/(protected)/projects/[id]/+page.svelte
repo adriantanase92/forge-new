@@ -3,14 +3,14 @@
 	import LL from '$i18n/i18n-svelte';
 	import {
 		Modules,
-		TaskStatus,
 		capitalize,
 		colorOptionsPerColor,
 		colors,
 		type ProjectType,
 		deleteOne,
 		type TaskType,
-		type UserType
+		type UserType,
+		type EditTaskType
 	} from '$lib/shared/index.js';
 	import ProfileImage from '$lib/shared/components/general/profile-image/ProfileImage.svelte';
 	import Button from '$lib/shared/components/general/button/Button.svelte';
@@ -22,6 +22,9 @@
 	import { formatEntityForModal } from '$lib/shared/components/general/modal/utils.js';
 	import { projectSchema } from '../schema.js';
 	import AddEditProjectModal from '$lib/shared/components/modules/projects/AddEditProjectModal.svelte';
+	import Task from '$lib/shared/components/modules/tasks/Task.svelte';
+	import AddEditTaskModal from '$lib/shared/components/modules/tasks/AddEditTaskModal.svelte';
+	import { taskSchema } from './schema.js';
 
 	export let data;
 
@@ -34,23 +37,19 @@
 	$: project = data.project;
 	$: checkProjectTasks = project.tasks && project.tasks.length > 0;
 
-	const taskColorByStatys = (status: TaskStatus): string => {
-		let colorClasses = '';
-		if (status === TaskStatus.DONE) {
-			colorClasses = `${colorOptionsPerColor.successAlt.backGround}`;
-		} else if (status === TaskStatus.IN_PROGRESS) {
-			colorClasses = `${colorOptionsPerColor.warningAlt.backGround}`;
-		} else {
-			colorClasses = `${colorOptionsPerColor.errorAlt.backGround}`;
-		}
-
-		return colorClasses;
+	// Setup for Form --------------------------------------------------------------------------
+	const getFormDataFromTaskData = (taskData: TaskType): EditTaskType => {
+		const { _id: id, ...rest } = taskData;
+		return { ...rest, id };
 	};
+	let taskDataForEditForm: EditTaskType;
 
 	// Setup for Modals ------------------------------------------------------------------------
 	let openDeleteTaskModal: boolean = false;
 	let openDeleteProjectModal: boolean = false;
 	let openEditProjectModal: boolean = false;
+	let openAddEditTaskModal: boolean = false;
+	let taskModalState: ModalState = 'add';
 	let taskData: TaskType | null = null;
 
 	const getFormDataFromProjectData = (projectData: ProjectType) => {
@@ -59,6 +58,21 @@
 		const manager = projectData.manager._id;
 		const { _id: id, name, description } = projectData;
 		return { id, name, description, clients, workers, manager };
+	};
+
+	const handleTaskAction = (
+		event: CustomEvent<{ action: 'edit' | 'delete'; task: TaskType }>
+	) => {
+		const { action, task } = event.detail;
+		taskData = structuredClone(task);
+
+		if (action === 'edit') {
+			taskModalState = 'edit';
+			taskDataForEditForm = getFormDataFromTaskData(taskData as TaskType);
+			openAddEditTaskModal = true;
+		} else {
+			openDeleteTaskModal = true;
+		}
 	};
 
 	// Setup for Delete Actions -----------------------------------------------------------------
@@ -241,7 +255,7 @@
 							iconHeight="24"
 							iconWidth="24"
 							iconColor={colors.white}
-							on:click={() => {}}
+							on:click={() => (openAddEditTaskModal = !openAddEditTaskModal)}
 						>
 							{$LL.buttonsOrLinks.addSomething({
 								something: $LL.modules.tasks.entity.single()
@@ -251,46 +265,7 @@
 					{#if checkProjectTasks}
 						<div class="flex flex-col gap-2">
 							{#each project.tasks as task}
-								<div
-									class="py-2 px-4 rounded-xl flex justify-between items-center gap-8 {taskColorByStatys(
-										task.status
-									)}"
-								>
-									<div
-										class="w-2/3 line-clamp-1 font-medium font-secondary {task.status ===
-										TaskStatus.DONE
-											? 'line-through'
-											: ''}"
-										title={task.title}
-									>
-										{task.title}
-									</div>
-									<div class="w-1/3 flex items-center justify-between">
-										<div class="w-1/2 font-bold uppercase">{task.status}</div>
-										<div class="w-1/2 flex gap-2 justify-end items-center">
-											<Button
-												class="p-2"
-												kind="icon"
-												color="rhino"
-												icon="pencil"
-												iconHeight="18"
-												iconWidth="18"
-												iconColor={colors.white}
-												on:click={() => 'edit'}
-											/>
-											<Button
-												class="p-2"
-												kind="icon"
-												color="error"
-												icon="bin"
-												iconHeight="18"
-												iconWidth="18"
-												iconColor={colors.white}
-												on:click={() => 'delete'}
-											/>
-										</div>
-									</div>
-								</div>
+								<Task {task} on:clickActionTriggered={handleTaskAction} />
 							{/each}
 						</div>
 					{:else}
@@ -330,6 +305,22 @@
 			itemName: `${project.name}`
 		})}
 		on:clickConfirmBtnTriggered={deleteProjectItem}
+	/>
+{/if}
+
+{#if openAddEditTaskModal}
+	<AddEditTaskModal
+		bind:open={openAddEditTaskModal}
+		modalState={taskModalState}
+		dataForEditForm={taskDataForEditForm}
+		schema={taskSchema($LL)}
+		entity={taskModalState === 'add'
+			? $LL.modules.tasks.entity.single()
+			: formatEntityForModal({
+					modalType: 'edit',
+					entity: $LL.modules.tasks.entity.single(),
+					itemName: `${taskData?.title}`
+			  })}
 	/>
 {/if}
 

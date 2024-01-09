@@ -14,9 +14,15 @@ export const projectSchema = (t: TranslationFunctions) =>
 				})
 				.trim()
 				.min(2, t.errors.minCharacters({ number: 2 }))
-				.max(60, t.errors.maxCharacters({ number: 100 }))
+				.max(60, t.errors.maxCharacters({ number: 60 }))
 				.transform(escapeString),
-			description: z.string().trim().min(6).max(500).transform(escapeString).optional(),
+			description: z
+				.string()
+				.trim()
+				.min(6, t.errors.minCharacters({ number: 6 }))
+				.max(500, t.errors.maxCharacters({ number: 500 }))
+				.transform(escapeString)
+				.optional(),
 			clients: z.string().array().optional(),
 			workers: z.string().array().optional(),
 			manager: z.string(),
