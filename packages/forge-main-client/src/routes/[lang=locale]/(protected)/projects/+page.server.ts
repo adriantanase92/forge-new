@@ -28,11 +28,13 @@ export const load: PageServerLoad = (async ({ fetch, locals: { t } }) => {
 			excludeFields: [
 				'email',
 				'phone',
+				'address',
 				'preferredLanguage',
 				'projects',
 				'permissions',
 				'changeLog'
-			]
+			],
+			limit: '-1'
 		}
 	});
 

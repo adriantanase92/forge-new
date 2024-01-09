@@ -1,5 +1,5 @@
 import { PUBLIC_MAIN_SERVER_URL } from '$env/static/public';
-import { Modules, getOne } from '$lib/shared/index.js';
+import { Modules, getAll, getOne } from '$lib/shared/index.js';
 import type { Actions, PageServerLoad } from './$types.js';
 
 export const load: PageServerLoad = (async ({ fetch, locals: { t }, params: { id } }) => {
@@ -18,8 +18,29 @@ export const load: PageServerLoad = (async ({ fetch, locals: { t }, params: { id
 		]
 	});
 
+	const users = await getAll({
+		fetch,
+		apiUrl: `${PUBLIC_MAIN_SERVER_URL}/api/${Modules.USERS}`,
+		errorKey: t.errors.errorFetchingSomethingFromServer({
+			something: t.modules.users.entity.multiple()
+		}),
+		requestQuery: {
+			excludeFields: [
+				'email',
+				'phone',
+				'address',
+				'preferredLanguage',
+				'projects',
+				'permissions',
+				'changeLog'
+			],
+			limit: '-1'
+		}
+	});
+
 	return {
-		project: project.data ?? null
+		project: project.data ?? null,
+		users: users.data ?? { items: [], pagination: { totalItems: 0, page: 1 } }
 	};
 }) satisfies PageServerLoad;
 

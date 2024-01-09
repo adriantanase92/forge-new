@@ -91,8 +91,12 @@ export const getAll = async <T extends Document>({
         const currentPage: number = parseInt(page) || 1;
         const limitItems: number = parseInt(limit) || 10;
 
+        // Determine if all items should be fetched without pagination
+        const fetchAll = limit === '-1';
+
         // Calculate the number of items to skip
-        const skipItems: number = (currentPage - 1) * limitItems;
+        // Skip calculation is not needed if fetching all items
+        const skipItems: number = fetchAll ? 0 : (currentPage - 1) * limitItems;
 
         // Initialize query for MongoDB
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -140,13 +144,20 @@ export const getAll = async <T extends Document>({
             ? await collection.countDocuments(query)
             : await collection.estimatedDocumentCount();
 
-        // Fetch the users from the database with pagination
-        let items: WithId<T>[] = await collection
-            .find(query, { projection, collation: { locale: 'en', strength: 2 } })
-            .sort(sort)
-            .skip(skipItems)
-            .limit(limitItems)
-            .toArray();
+        let items: WithId<T>[];
+        if (fetchAll) {
+            items = await collection
+                .find(query, { projection, collation: { locale: 'en', strength: 2 } })
+                .sort(sort)
+                .toArray(); // No limit or skip if fetching all items
+        } else {
+            items = await collection
+                .find(query, { projection, collation: { locale: 'en', strength: 2 } })
+                .sort(sort)
+                .skip(skipItems)
+                .limit(limitItems)
+                .toArray();
+        }
 
         // Populate fields
         if (populateInstructions.length > 0) {

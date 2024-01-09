@@ -88,9 +88,9 @@ export type colorOptions = {
 	border: string;
 };
 
-export type colorOptionsPerColor = Record<string, colorOptions>;
+export type colorOptionsPerColorType = Record<string, colorOptions>;
 
-export const colorOptionsPerColor: colorOptionsPerColor = {
+export const colorOptionsPerColor: colorOptionsPerColorType = {
 	gallery: {
 		backGround: 'bg-gallery',
 		text: 'text-gallery',

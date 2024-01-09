@@ -29,8 +29,6 @@
 
 	export let data;
 
-	$: console.log('projects: ', data.projects.items);
-
 	$: users =
 		data.users.items.map((user: UserType) => ({
 			role: user.role,
